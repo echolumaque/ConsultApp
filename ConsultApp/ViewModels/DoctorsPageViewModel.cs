@@ -276,8 +276,10 @@ namespace ConsultApp.ViewModels
 
         private void AssignAvailabilityAndHospital()
         {
-            string[] hospitals = { "Saint Luke's Medical Center", "University of Santo Tomas Hospital", "Makati Medical Center", "The Medical City", "Manila Doctors Hospital" };
+            string[] hospitals = { "Saint Luke's Medical Center", "University of Santo Tomas Hospital", "Makati Medical Center", "The Medical City", "Manila Doctors Hospital" ,"Ospital ng makati"};
             string[] days = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "By appointment" };
+
+
 
             var rnd = new Random();
            
