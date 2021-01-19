@@ -18,9 +18,6 @@ using FFImageLoading;
 using System.Net.Http.Headers;
 using FFImageLoading.Config;
 using Xamarin.Essentials;
-using ConsultApp.Dialogs.Views;
-using ConsultApp.Dialogs.ViewModels;
-using Prism.Services.Dialogs;
 
 [assembly: ExportFont("Roboto-Bold.ttf", Alias = "Bold")]
 [assembly: ExportFont("Roboto-Regular.ttf", Alias = "Regular")]
@@ -28,14 +25,13 @@ using Prism.Services.Dialogs;
 [assembly: ExportFont("Font Awesome 5 Free-Regular-400.otf", Alias = "fa-reg")]
 [assembly: ExportFont("Font Awesome 5 Free-Solid-900.otf", Alias = "fa-solid")]
 
-
 namespace ConsultApp
 {
     public partial class App
     {
         public static readonly HttpClient httpClient = new HttpClient();
 
-        public static Location CurrentLcoation = new Location();
+        public static Location CurrentLocation = new Location();
 
         public App(IPlatformInitializer initializer) : base(initializer)
         {
@@ -48,7 +44,6 @@ namespace ConsultApp
 
             await NavigationService.NavigateAsync("CustomNavigationPage/HomePage");
             await GetToken();
-            await GetLocation();
 
             httpClient.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
             ImageService.Instance.Initialize(new Configuration
@@ -59,11 +54,11 @@ namespace ConsultApp
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
+            //base pages
             containerRegistry.RegisterSingleton<IAppInfo, AppInfoImplementation>();
             containerRegistry.RegisterForNavigation<CustomNavigationPage>();
 
-            containerRegistry.RegisterDialog<LocationError, LocationErrorViewModel>();
-
+            //views
             containerRegistry.RegisterForNavigation<HomePage, HomePageViewModel>();
             containerRegistry.RegisterForNavigation<ConsultPage, ConsultPageViewModel>();
             containerRegistry.RegisterForNavigation<DiagnosisPage, DiagnosisPageViewModel>();
@@ -96,21 +91,6 @@ namespace ConsultApp
             }
 
             return string.Concat(api_key, ":", computedHashString);
-        }
-
-        private async Task GetLocation()
-        {
-            try
-            {
-                CurrentLcoation = await Geolocation.GetLocationAsync(new GeolocationRequest
-                {
-                    DesiredAccuracy = GeolocationAccuracy.High,
-                    Timeout = TimeSpan.FromSeconds(10)
-                });
-            }
-            catch (Exception)
-            {
-            }
         }
     }
 }

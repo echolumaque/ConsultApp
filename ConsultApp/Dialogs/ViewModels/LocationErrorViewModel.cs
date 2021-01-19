@@ -1,43 +1,22 @@
 ﻿using System;
 using System.Threading.Tasks;
-using System.Linq;
 using Prism.Commands;
 using Prism.Mvvm;
-using Prism.Services.Dialogs;
 using Xamarin.Essentials;
 using ConsultApp.Helpers.Interfaces;
-using ConsultApp.Helpers;
+using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 
 namespace ConsultApp.Dialogs.ViewModels
 {
-    public class LocationErrorViewModel : BindableBase, IDialogAware
+    public class LocationErrorViewModel : BindableBase
     {
-        private readonly ILocation location;
-        private readonly ISetStatusBarColor setStatusBarColor;
-        public LocationErrorViewModel(ILocation location, ISetStatusBarColor setStatusBarColor)
+        //private ILocation location = DependencyService.Get<ILocation>();
+        public LocationErrorViewModel()
         {
-            this.location = location;
-
-            this.setStatusBarColor = setStatusBarColor;
-            this.setStatusBarColor.SetStatusBarColor(Color.White);
-
-            CloseDialog = new DelegateCommand(() => RequestClose(null));
+            CloseDialog = new DelegateCommand(async() => await PopupNavigation.Instance.PopAsync(true));
             RequestPermissionCommand = new DelegateCommand(async () => await RequestPermissions());
         }
-
-        public event Action<IDialogParameters> RequestClose;
-
-        public bool CanCloseDialog() => true;
-
-        public void OnDialogClosed() { }
-        
-
-        public void OnDialogOpened(IDialogParameters parameters)
-        {
-
-        }
-
 
         #region Properties
 
@@ -60,13 +39,40 @@ namespace ConsultApp.Dialogs.ViewModels
             await Permissions.RequestAsync<Permissions.NetworkState>();
             await Permissions.RequestAsync<Permissions.StorageWrite>();
 
-            if (DeviceInfo.Platform.Equals(DevicePlatform.Android))
-                await location.DisplayLocationSettingsRequest();
+            await Task.Run(async () =>
+            {
+                await DependencyService.Get<ILocation>().DisplayLocationSettingsRequest();
+            }).ContinueWith(async x => await SetLocation());
 
-            App.CurrentLcoation = await Geolocation.GetLocationAsync(new GeolocationRequest
+            //if (DeviceInfo.Platform.Equals(DevicePlatform.Android))
+            //{
+            //    await DependencyService.Get<ILocation>().DisplayLocationSettingsRequest();
+
+            //    App.CurrentLcoation = await Geolocation.GetLocationAsync(new GeolocationRequest
+            //    {
+            //        DesiredAccuracy = GeolocationAccuracy.High,
+            //        Timeout = TimeSpan.FromSeconds(10),
+            //    });
+            //    await PopupNavigation.Instance.PopAsync(true);
+            //        //App.CurrentLcoation = new Location(loc.Result.Latitude, loc.Result.Longitude);
+
+            //    //else TODO: FOR OTHER PLATFORMS
+            //    //{
+            //    //    App.CurrentLcoation = await Geolocation.GetLocationAsync(new GeolocationRequest
+            //    //    {
+            //    //        DesiredAccuracy = GeolocationAccuracy.High,
+            //    //        Timeout = TimeSpan.FromSeconds(10),
+            //    //    });
+            //    //}
+            //}
+        }
+
+        private async Task SetLocation()
+        {
+             App.CurrentLocation = await Geolocation.GetLocationAsync(new GeolocationRequest
             {
                 DesiredAccuracy = GeolocationAccuracy.High,
-                Timeout = TimeSpan.FromSeconds(10),
+                Timeout = TimeSpan.FromSeconds(10)
             });
         }
         #endregion

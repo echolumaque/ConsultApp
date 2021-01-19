@@ -270,13 +270,6 @@ namespace ConsultApp.ViewModels
             set { SetProperty(ref docsWithMajor, value); }
         }
 
-        private double distance;
-        public double Distance
-        {
-            get { return distance; }
-            set { SetProperty(ref distance, value); }
-        }
-
         #endregion
 
         #region Methods
@@ -295,33 +288,32 @@ namespace ConsultApp.ViewModels
 
                 if (Doctors.Hospital.Equals(hospitals[0]))
                 {
-                    var hosp = new Location(14.5549, -121.0482);
-                    var user = new Location(37.783333, -122.416667);
-                    double totalDistance = Location.CalculateDistance(hosp, user, DistanceUnits.Kilometers);
+                    var hosp = new Location(14.5549, 121.0482);
+                    Doctors.Distance = Location.CalculateDistance(hosp, App.CurrentLocation, DistanceUnits.Kilometers);
                 }
                 else if (Doctors.Hospital.Equals(hospitals[1]))
                 {
                     var hosp = new Location(14.6114, 120.9902);
-                    var user = new Location(37.783333, -122.416667);
-                    double totalDistance = Location.CalculateDistance(hosp, user, DistanceUnits.Kilometers);
+                    
+                    Doctors.Distance = Location.CalculateDistance(hosp, App.CurrentLocation, DistanceUnits.Kilometers);
                 }
                 else if (Doctors.Hospital.Equals(hospitals[2]))
                 {
                     var hosp = new Location(14.5590, 121.0146);
-                    var user = new Location(37.783333, -122.416667);
-                    double totalDistance = Location.CalculateDistance(hosp, user, DistanceUnits.Kilometers);
+                    
+                    Doctors.Distance = Location.CalculateDistance(hosp, App.CurrentLocation, DistanceUnits.Kilometers);
                 }
                 else if (Doctors.Hospital.Equals(hospitals[3]))
                 {
                     var hosp = new Location(14.5895, 121.0693);
-                    var user = new Location(37.783333, -122.416667);
-                    double totalDistance = Location.CalculateDistance(hosp, user, DistanceUnits.Kilometers);
+                    
+                    Doctors.Distance = Location.CalculateDistance(hosp, App.CurrentLocation, DistanceUnits.Kilometers);
                 }
                 else if (Doctors.Hospital.Equals(hospitals[4]))
                 {
                     var hosp = new Location(14.5820, 120.9829);
-                    var user = new Location(37.783333, -122.416667);
-                    double totalDistance = Location.CalculateDistance(hosp, user, DistanceUnits.Kilometers);
+                    
+                    Doctors.Distance = Location.CalculateDistance(hosp, App.CurrentLocation, DistanceUnits.Kilometers);
                 }
             }
 

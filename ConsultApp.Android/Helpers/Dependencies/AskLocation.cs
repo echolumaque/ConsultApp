@@ -16,8 +16,6 @@ namespace ConsultApp.Droid.Helpers.Dependencies
             var activity = Xamarin.Essentials.Platform.CurrentActivity;
             try
             {
-                //var googleApiClient = new GoogleApiClient.Builder(activity).AddApi(LocationServices.API).Build();
-                //googleApiClient.Connect();
                 var locationRequest = LocationRequest.Create();
                 locationRequest.SetPriority(LocationRequest.PriorityHighAccuracy);
                 locationRequest.SetInterval(10000);

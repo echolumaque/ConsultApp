@@ -9,5 +9,6 @@ namespace ConsultApp.API.Models
         public string DaysAvailable { get; set; }
         public string Hospital { get; set; }
         public bool IsAvailable => DaysAvailable.Contains(DateTime.Now.DayOfWeek.ToString()) ? true : false;
+        public double Distance { get; set; }
     }
 }

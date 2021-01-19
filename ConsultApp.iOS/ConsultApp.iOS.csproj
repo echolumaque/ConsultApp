@@ -204,6 +204,9 @@
     <PackageReference Include="Refit">
       <Version>5.2.4</Version>
     </PackageReference>
+    <PackageReference Include="Rg.Plugins.Popup">
+      <Version>2.0.0.10</Version>
+    </PackageReference>
     <PackageReference Include="Syncfusion.Xamarin.SfComboBox">
       <Version>18.4.0.33</Version>
     </PackageReference>

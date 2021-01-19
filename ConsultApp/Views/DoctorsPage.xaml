@@ -63,9 +63,18 @@
                                                FontFamily="Regular"
                                                FontSize="18"
                                                TextColor="White"/>
-                                        <Label Text="{Binding Hospital,StringFormat='Hospital: {0}'}"
-                                               FontFamily="Regular"
-                                               TextColor="White"/>
+                                        <Label>
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="{Binding Hospital, StringFormat='Hospital: {0}'}"
+                                                          FontFamily="Regular"
+                                                          TextColor="White"/>
+                                                    <Span Text="{Binding Distance, StringFormat=' ({0:F2} kM)'}"
+                                                          FontFamily="Regular"
+                                                          TextColor="White"/>
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
                                         <Label Text="{Binding DaysAvailable, StringFormat='Availability: {0}'}"
                                                FontFamily="Regular"
                                                TextColor="White"/>

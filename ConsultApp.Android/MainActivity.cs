@@ -27,8 +27,14 @@ namespace ConsultApp.Droid
 
             base.OnCreate(savedInstanceState);
 
+            Rg.Plugins.Popup.Popup.Init(this);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
-            InitFontScale();
+            Xamarin.Essentials.Platform.Init(this, savedInstanceState);
+            Xamarin.FormsMaps.Init(this, savedInstanceState);
+            Android.Glide.Forms.Init(this);
+            FFImageLoading.Forms.Platform.CachedImageRenderer.Init(true);
+            FFImageLoading.Forms.Platform.CachedImageRenderer.InitImageViewHandler();
+            global::Xamarin.Forms.FormsMaterial.Init(this, savedInstanceState);
 
             if (Build.VERSION.SdkInt >= BuildVersionCodes.P)
             {
@@ -37,14 +43,27 @@ namespace ConsultApp.Droid
                 Window.AddFlags(WindowManagerFlags.LayoutInScreen);
                 Window.ClearFlags(WindowManagerFlags.Fullscreen);
             }
-            Xamarin.Essentials.Platform.Init(this, savedInstanceState);
-            Xamarin.FormsMaps.Init(this, savedInstanceState);
-            Android.Glide.Forms.Init(this);
-            FFImageLoading.Forms.Platform.CachedImageRenderer.Init(true);
-            FFImageLoading.Forms.Platform.CachedImageRenderer.InitImageViewHandler();
-            global::Xamarin.Forms.FormsMaterial.Init(this, savedInstanceState);
+
+            InitFontScale();
+
             LoadApplication(new App(new AndroidInitializer()));
         }
+
+        protected override void OnStart()
+        {
+            base.OnStart();
+
+            if ((int)Build.VERSION.SdkInt >= 23)
+            {
+                if (CheckSelfPermission(Manifest.Permission.AccessFineLocation) != Permission.Granted)
+                {
+                    RequestPermissions(LocationPermissions, RequestLocationId);
+                }
+            }
+        }
+
+        public override void OnBackPressed() => Rg.Plugins.Popup.Popup.SendBackPressed(base.OnBackPressed);
+
 
         public override Resources Resources
         {
@@ -79,20 +98,6 @@ namespace ConsultApp.Droid
             Manifest.Permission.Internet,
             Manifest.Permission.WriteExternalStorage,
         };
-
-        protected override void OnStart()
-        {
-            base.OnStart();
-
-            if ((int)Build.VERSION.SdkInt >= 23)
-            {
-                if (CheckSelfPermission(Manifest.Permission.AccessFineLocation) != Permission.Granted)
-                {
-                    RequestPermissions(LocationPermissions, RequestLocationId);
-                }
-            }
-        }
-
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
         {

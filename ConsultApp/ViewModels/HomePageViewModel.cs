@@ -1,31 +1,31 @@
-﻿using ConsultApp.API;
-using ConsultApp.API.Models;
+﻿using ConsultApp.API.Models;
 using Prism.Commands;
 using Prism.Navigation;
 using System.Collections.ObjectModel;
 using ConsultApp.Helpers;
 using Xamarin.Forms;
-using Prism.Services.Dialogs;
-using Xamarin.Essentials;
-using System;
+using ConsultApp.Helpers.Interfaces;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
+using Rg.Plugins.Popup.Services;
+using System;
+using ConsultApp.Dialogs.Views;
 
 namespace ConsultApp.ViewModels
 {
     public class HomePageViewModel : ViewModelBase
     {
         private readonly INavigationService navigationService;
-        private readonly IDialogService dialogService;
-
         private ISetStatusBarColor setStatusBarColor { get; }
+        private ILocation location { get; }
 
-        public HomePageViewModel(INavigationService navigationService, ISetStatusBarColor setStatusBarColor, IDialogService dialogService) : base(navigationService)
+        public HomePageViewModel(INavigationService navigationService, ISetStatusBarColor setStatusBarColor, ILocation location) : base(navigationService)
         {
             this.setStatusBarColor = setStatusBarColor;
             this.setStatusBarColor.SetStatusBarColor(Color.FromHex("E6EDFF"));
+            this.location = location;
 
             this.navigationService = navigationService;
-            this.dialogService = dialogService;
 
             Buttons = new ObservableCollection<ButtonsModel>()
             {
@@ -39,7 +39,7 @@ namespace ConsultApp.ViewModels
                 {
                     Title = "Shots",
                     FontIcon = "\uf48e",
-                    Commands = new DelegateCommand(async () => await this.dialogService.ShowDialogAsync("LocationError")),
+                    Commands = new DelegateCommand(async () => await this.navigationService.NavigateAsync("")),
                 },
                 new ButtonsModel
                 {
@@ -68,13 +68,10 @@ namespace ConsultApp.ViewModels
             };
         }
 
-        public override void OnNavigatedTo(INavigationParameters parameters)
-        {
-            DependencyService.Get<ISetStatusBarColor>().SetStatusBarColor(Color.FromHex("E6EDFF"));
-        }
+        public override void OnNavigatedTo(INavigationParameters parameters) => setStatusBarColor.SetStatusBarColor(Color.FromHex("E6EDFF"));
 
-        
-
+        public override async void Initialize(INavigationParameters parameters) => await GetLocation();
+      
         #region Properties
 
         private ObservableCollection<ButtonsModel> buttons;
@@ -87,6 +84,53 @@ namespace ConsultApp.ViewModels
         #endregion
 
         #region Methods
+        private async Task GetLocation()
+        {
+            try
+            {
+                await Permissions.CheckStatusAsync<Permissions.LocationAlways>();
+                await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+                await Permissions.CheckStatusAsync<Permissions.NetworkState>();
+                await Permissions.CheckStatusAsync<Permissions.StorageWrite>();
+
+                await Permissions.RequestAsync<Permissions.LocationAlways>();
+                await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+                await Permissions.RequestAsync<Permissions.NetworkState>();
+                await Permissions.RequestAsync<Permissions.StorageWrite>();
+
+                await Task.Run(async () =>
+                {
+                    await location.DisplayLocationSettingsRequest();
+                }).ContinueWith(async x => await SetLocation());
+
+                //if (location.DisplayLocationSettingsRequest().IsCompleted)
+                //{
+                //    var loc =  Geolocation.GetLocationAsync(new GeolocationRequest
+                //    {
+                //        DesiredAccuracy = GeolocationAccuracy.High,
+                //        Timeout = TimeSpan.FromSeconds(10)
+                //    });
+                //    App.CurrentLcoation = new Location(loc.Result.Latitude, loc.Result.Longitude);
+                //}    
+                //else
+                //{
+                //    await PopupNavigation.Instance.PushAsync(new LocationError(), true);
+                //}
+            }
+            catch (Exception)
+            {
+                await PopupNavigation.Instance.PushAsync(new LocationError(), true);
+            }
+        }
+
+        private async Task SetLocation()
+        {
+            App.CurrentLocation = await Geolocation.GetLocationAsync(new GeolocationRequest
+            {
+                DesiredAccuracy = GeolocationAccuracy.High,
+                Timeout = TimeSpan.FromSeconds(10)
+            });
+        }
         #endregion
     }
 }
