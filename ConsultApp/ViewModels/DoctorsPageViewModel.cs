@@ -307,7 +307,7 @@ namespace ConsultApp.ViewModels
                             Address = "St. Luke’s Medical Center is recognized as the leading and most respected healthcare institution in the Philippines. Its two facilities in Quezon City and Global City, Taguig are at par with the most advanced hospitals around the world. A testament to St. Luke's world class quality medical service is its accreditation with, and affiliation to, prestigious international organizations."
                         }
                     };
-
+                     
                 }
                 else if (Doctors.Hospital.Equals(hospitals[1]))
                 {
