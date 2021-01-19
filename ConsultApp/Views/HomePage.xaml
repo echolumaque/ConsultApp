@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ffimage="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:fonts="clr-namespace:ConsultApp.Fonts"
+             xmlns:image="clr-namespace:ConsultApp.Helpers.Images"
+             xmlns:customentry="clr-namespace:ConsultApp.Helpers.CustomRenderers"
+             Visual="Material"
+             x:Class="ConsultApp.Views.HomePage">
+
+    <ContentPage.Content>
+        <Grid RowDefinitions=".65*,.45*,*">
+
+            <StackLayout Grid.Row="0"
+                         BackgroundColor="#E6EDFF"
+                         Padding="10">
+
+                <StackLayout VerticalOptions="CenterAndExpand">
+                    <Label Text="Hello, "
+                           FontFamily="Regular"
+                           FontSize="25"
+                           TextColor="Black"/>
+
+                    <Label>
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Echo! "
+                                      FontFamily="Bold"
+                                      FontSize="35"
+                                      TextColor="Black"/>
+                                <Span Text="&#x1FA7A;"
+                                      FontSize="35"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </StackLayout>
+
+                <Frame HasShadow="True"
+                       Padding="10"
+                       CornerRadius="25"
+                       Margin="0,0,0,-30"
+                       BackgroundColor="White"
+                       VerticalOptions="EndAndExpand"
+                       BorderColor="LightGray">
+                    <StackLayout Orientation="Horizontal">
+
+                        <Label Text="{x:Static fonts:FontAwesomeIcons.Search}"
+                               FontSize="20"
+                               VerticalTextAlignment="Center"
+                               TextColor="#6270DD"
+                               FontFamily="fa-solid"/>
+
+                        <customentry:CustomEntry Placeholder="Search"
+                                                 HorizontalOptions="FillAndExpand"
+                                                 BackgroundColor="White"
+                                                 TextColor="Black"
+                                                 PlaceholderColor="Gray"/>
+
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+
+            <Frame Padding="10"
+                   HasShadow="True"
+                   Grid.Row="1"
+                   CornerRadius="30"
+                   Margin="20,50,20,0"
+                   HorizontalOptions="FillAndExpand"
+                   BackgroundColor="#6B79E4">
+                <Grid ColumnDefinitions="*, Auto">
+
+                    <Label Grid.Column="0"
+                           VerticalTextAlignment="Center">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Stay Home!"
+                                      TextColor="White"
+                                      FontFamily="Bold"
+                                      FontSize="20"/>
+                                <Span Text="&#10; &#10;"/>
+                                <Span Text="Schedule an e-visit and discuss the plan with a doctor."
+                                      TextColor="White"
+                                      FontFamily="Regular"
+                                      FontSize="15"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+
+                    <ffimage:CachedImage Source="{image:ImageResource ConsultApp.Helpers.Images.maskboy.png}" 
+                                         BitmapOptimizations="True"
+                                         DownsampleToViewSize="True"
+                                         Aspect="AspectFill"
+                                         Grid.Column="1"/>
+
+                </Grid>
+            </Frame>
+
+            <Grid ColumnDefinitions="*"
+                  RowDefinitions="Auto,*"
+                  Grid.Row="2"
+                  HorizontalOptions="FillAndExpand"
+                  VerticalOptions="CenterAndExpand"
+                  Padding="20,0"
+                  Margin="0,30,0,0">
+
+                <Label Text="What servies do you need?"
+                       FontFamily="Bold"
+                       TextColor="Black"
+                       FontSize="20"
+                       Grid.Row="0"
+                       Grid.Column="0"/>
+
+                <CollectionView Grid.Column="0"
+                                    Grid.Row="1"
+                                    ItemsSource="{Binding Buttons}"
+                                    ItemSizingStrategy="MeasureAllItems"
+                                    x:Name="buttons"
+                                    SelectionMode="Single"
+                                    ItemsLayout="VerticalGrid, 3">
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout VerticalOptions="Center">
+                                <Frame Padding="15"
+                                            HasShadow="True"
+                                            CornerRadius="20"
+                                            Margin="5"
+                                            HeightRequest="90"
+                                            x:Name="mainFrame"
+                                            WidthRequest="90"
+                                            BackgroundColor="White"
+                                            BorderColor="LightGray">
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Commands}"/>
+                                    </Frame.GestureRecognizers>
+                                    <StackLayout VerticalOptions="CenterAndExpand">
+                                        <Label Text="{Binding FontIcon}"
+                                                    FontFamily="fa-solid"
+                                                    TextColor="#6270DD"
+                                                    HorizontalTextAlignment="Center"
+                                                    FontSize="20"/>
+
+                                        <Label Text="{Binding Title}"
+                                                    TextColor="Black"
+                                                    FontSize="15"
+                                                    FontFamily="Regular"
+                                                    HorizontalTextAlignment="Center"/>
+
+                                    </StackLayout>
+                                </Frame>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                </CollectionView>
+
+            </Grid>
+
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

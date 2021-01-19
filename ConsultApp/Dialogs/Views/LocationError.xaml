@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Frame xmlns="http://xamarin.com/schemas/2014/forms"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:prism="http://prismlibrary.com"
+       prism:ViewModelLocator.AutowireViewModel="True"
+       xmlns:svg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
+       BackgroundColor="White"
+       HorizontalOptions="CenterAndExpand"
+       VerticalOptions="CenterAndExpand"
+       Margin="20,100"
+       Visual="Material"
+       Padding="20"
+       xmlns:images="clr-namespace:ConsultApp.Helpers.Images"
+       xmlns:fonts="clr-namespace:ConsultApp.Fonts"
+       x:Class="ConsultApp.Dialogs.Views.LocationError">
+
+    <FlexLayout Direction="Column" JustifyContent="SpaceEvenly">
+        <svg:SvgCachedImage Source="{images:ImageResource ConsultApp.Helpers.Images.error2.gif}"
+                            BitmapOptimizations="True"
+                            DownsampleToViewSize="True"
+                            Aspect="AspectFit"
+                            VerticalOptions="CenterAndExpand"
+                            HorizontalOptions="CenterAndExpand"/>
+
+        <Label Text="Failed to obtain current location for hospital distance location functionality. Please enable location services first."
+               FontFamily="Bold"
+               FontSize="20"
+               TextColor="Black"/>
+
+        <Frame HasShadow="True"
+               Padding="15"
+               BackgroundColor="Black"
+               HorizontalOptions="CenterAndExpand">
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding RequestPermissionCommand}"/>
+            </Frame.GestureRecognizers>
+            <Label VerticalTextAlignment="Center"
+                   HorizontalTextAlignment="Center">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="{x:Static fonts:FontAwesomeIcons.LocationArrow}"
+                              FontFamily="fa-solid"
+                              TextColor="White"/>
+                        
+                        <Span Text=" Enable location services"
+                              FontFamily="Regular"
+                              TextColor="White"/>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+        </Frame>
+
+        <Frame HasShadow="True"
+               Padding="15"
+               BackgroundColor="#65A0E7"
+               HorizontalOptions="CenterAndExpand">
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding CloseDialog}"/>
+            </Frame.GestureRecognizers>
+            <Label VerticalTextAlignment="Center"
+                   HorizontalTextAlignment="Center">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="{x:Static fonts:FontAwesomeIcons.ArrowLeft}"
+                              FontFamily="fa-solid"
+                              TextColor="White"/>
+
+                        <Span Text=" Back"
+                              FontFamily="Regular"
+                              TextColor="White"/>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+        </Frame>
+
+
+    </FlexLayout>
+
+</Frame>

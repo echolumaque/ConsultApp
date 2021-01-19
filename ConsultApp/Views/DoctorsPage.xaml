@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="http://prismlibrary.com"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             BackgroundColor="White"
+             xmlns:fonts="clr-namespace:ConsultApp.Fonts"
+             xmlns:customrenderer="clr-namespace:ConsultApp.Helpers.CustomRenderers"
+             xmlns:ffimage="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:localimages="clr-namespace:ConsultApp.Helpers.Images"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:circle="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+             x:Class="ConsultApp.Views.DoctorsPage">
+
+    <ContentPage.Content>
+        <StackLayout Padding="25,30,25,0">
+            <Label Text="{Binding Major,StringFormat='Lets for a doctor with specialty in {0}'}"
+                   FontFamily="Bold"
+                   TextColor="Black"
+                   FontSize="25"/>
+
+            <Frame HasShadow="True"
+                   BorderColor="LightGray"
+                   BackgroundColor="White"
+                   CornerRadius="30"
+                   Padding="10,0">
+                <StackLayout Orientation="Horizontal"
+                             Padding="10,0,0,0">
+                    <Label Text="{x:Static fonts:FontAwesomeIcons.Search}"
+                           FontFamily="fa-solid"
+                           VerticalTextAlignment="Center"
+                           TextColor="#6B77E3"/>
+
+                    <customrenderer:CustomEntry Placeholder="Search for a doctor"
+                                                HorizontalOptions="FillAndExpand"
+                                                VerticalOptions="CenterAndExpand"
+                                                FontFamily="Regular"
+                                                HeightRequest="40"
+                                                FontSize="15"
+                                                TextColor="Black"
+                                                PlaceholderColor="LightGray"/>
+                </StackLayout>
+            </Frame>
+
+            <CollectionView ItemsSource="{Binding DocsWithMajor}"
+                            ItemSizingStrategy="MeasureAllItems"
+                            Margin="-10,0">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout>
+                            <Frame HasShadow="True"
+                                   BackgroundColor="#6B77E3"
+                                   Margin="0,5"
+                                   CornerRadius="20"
+                                   Padding="10">
+                                <Grid ColumnDefinitions="*,*">
+                                    <StackLayout Grid.Column="0">
+                                        <Label Text="{Binding Doctor}"
+                                               FontFamily="Bold"
+                                               FontSize="20"
+                                               TextColor="White"/>
+                                        <Label Text="{Binding Specialization}"
+                                               FontFamily="Regular"
+                                               FontSize="18"
+                                               TextColor="White"/>
+                                        <Label Text="{Binding Hospital,StringFormat='Hospital: {0}'}"
+                                               FontFamily="Regular"
+                                               TextColor="White"/>
+                                        <Label Text="{Binding DaysAvailable, StringFormat='Availability: {0}'}"
+                                               FontFamily="Regular"
+                                               TextColor="White"/>
+                                    </StackLayout>
+
+                                    <StackLayout Grid.Column="0"
+                                                 Grid.ColumnSpan="2"
+                                                 VerticalOptions="StartAndExpand"
+                                                 HorizontalOptions="EndAndExpand">
+
+                                        <RelativeLayout HorizontalOptions="CenterAndExpand"
+                                                        VerticalOptions="CenterAndExpand">
+                                            <ffimage:CachedImage Source="{localimages:ImageResource ConsultApp.Helpers.Images.maskgirl.jpg}"
+                                                                 BitmapOptimizations="True"
+                                                                 DownsampleToViewSize="True"
+                                                                 HeightRequest="100"
+                                                                 x:Name="pic"
+                                                                 Aspect="AspectFit">
+                                                <ffimage:CachedImage.Transformations>
+                                                    <circle:CircleTransformation/>
+                                                </ffimage:CachedImage.Transformations>
+                                            </ffimage:CachedImage>
+
+                                            <BoxView RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, 
+                                                Constant=25, 
+                                                Factor=0,
+                                                Property=X,
+                                                ElementName=pic}"
+                                                     BackgroundColor="Green"
+                                                     IsVisible="{Binding IsAvailable}"
+                                                     CornerRadius="100"
+                                                     Scale="0.5"/>
+
+                                        </RelativeLayout>
+
+                                        <Frame Padding="10"
+                                               HasShadow="True"
+                                               HorizontalOptions="EndAndExpand"
+                                               BackgroundColor="White"
+                                               VerticalOptions="StartAndExpand"
+                                               BorderColor="#646FD4">
+                                            <!--<Frame.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding DiagnoseCommand}"/>
+                                            </Frame.GestureRecognizers>-->
+                                            <Label HorizontalTextAlignment="End"
+                                                   VerticalTextAlignment="Center">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="{x:Static fonts:FontAwesomeIcons.Stethoscope}"
+                                                              FontFamily="fa-solid"
+                                                              TextColor="#8F9EFF"/>
+                                                        <Span Text=" Set an appointment"
+                                                              TextColor="#8F9EFF"
+                                                              FontFamily="Regular"/>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </Frame>
+
+                                    </StackLayout>
+                                </Grid>
+                            </Frame>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            
+        </StackLayout>
+    </ContentPage.Content>
+  
+</ContentPage>

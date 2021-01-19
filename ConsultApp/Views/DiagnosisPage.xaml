@@ -1,0 +1,190 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="http://prismlibrary.com"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             BackgroundColor="White"
+             Visual="Material"
+             xmlns:fonts="clr-namespace:ConsultApp.Fonts"
+             x:Class="ConsultApp.Views.DiagnosisPage">
+
+    <ContentPage.Content>
+        <StackLayout Padding="10,30,10,0">
+            
+            <Label Text="Based on your symptoms, you may have one of the following:"
+                   TextColor="Black"
+                   FontFamily="Bold"
+                   FontSize="25"/>
+
+            <FlexLayout Wrap="Wrap"
+                        JustifyContent="Start"
+                        BindableLayout.ItemsSource="{Binding Diseases}">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout>
+                            <Frame HasShadow="True"
+                                   Padding="10"
+                                   Margin="10"
+                                   CornerRadius="30"
+                                   BackgroundColor="#646FD4">
+                                <Label Text="{Binding Issue.Name}"
+                                       VerticalTextAlignment="Center"
+                                       HorizontalTextAlignment="Center"
+                                       TextColor="White"/>
+                            </Frame>
+                        </StackLayout>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </FlexLayout>
+
+            <Label Text="More details of possible disease:"
+                   TextColor="Black"
+                   FontFamily="Bold"
+                   FontSize="20"/>
+
+            <CollectionView ItemSizingStrategy="MeasureAllItems"
+                            ItemsSource="{Binding Diseases}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout>
+                            <xct:Expander>
+                                <xct:Expander.Header>
+                                    <Frame Padding="10"
+                                           HasShadow="True"
+                                           BackgroundColor="White"
+                                           BorderColor="LightGray"
+                                           Margin="0,5">
+                                        <Grid>
+                                            <Label Text="{Binding Issue.Name}"
+                                                   TextColor="Black"
+                                                   FontFamily="Bold"/>
+                                            <Label Text="{x:Static fonts:FontAwesomeIcons.ChevronDown}"
+                                                   HorizontalOptions="End"
+                                                   FontFamily="fa-solid"
+                                                   TextColor="Black"
+                                                   VerticalOptions="Center">
+                                                <Label.Triggers>
+                                                    <DataTrigger TargetType="Label"
+                                                                 Binding="{Binding Source={RelativeSource AncestorType={x:Type xct:Expander}}, Path=IsExpanded}"
+                                                                 Value="True">
+                                                        <Setter Property="Text"
+                                                                Value="{x:Static fonts:FontAwesomeIcons.ChevronUp}" />
+                                                        <Setter Property="FontFamily"
+                                                                Value="fa-solid" />
+                                                        <Setter Property="TextColor"
+                                                                Value="Black" />
+                                                    </DataTrigger>
+                                                </Label.Triggers>
+                                            </Label>
+                                        </Grid>
+                                    </Frame>
+                                </xct:Expander.Header>
+                                <xct:Expander.ContentTemplate>
+                                    <DataTemplate>
+                                        <Frame Padding="10"
+                                               HasShadow="True"
+                                               BackgroundColor="White"
+                                               BorderColor="LightGray">
+                                            <StackLayout>
+                                                <Label TextColor="Black">
+                                                    <Label.FormattedText>
+                                                        <FormattedString>
+                                                            <Span Text="Accuracy: "
+                                                                  FontFamily="Regular"/>
+                                                            <Span Text="{Binding Issue.Accuracy, StringFormat='{0}%'}"
+                                                                  FontFamily="Bold"/>
+                                                        </FormattedString>
+                                                    </Label.FormattedText>
+                                                </Label>
+                                                <Label TextColor="Black">
+                                                    <Label.FormattedText>
+                                                        <FormattedString>
+                                                            <Span Text="Rank based on most probable cause: "
+                                                                  FontFamily="Regular"/>
+                                                            <Span Text="{Binding Issue.Ranking}"
+                                                                  FontFamily="Bold"/>
+                                                        </FormattedString>
+                                                    </Label.FormattedText>
+                                                </Label>
+                                                <Label TextColor="Black">
+                                                    <Label.FormattedText>
+                                                        <FormattedString>
+                                                            <Span Text="ICD Name: "
+                                                                  FontFamily="Regular"/>
+                                                            <Span Text="{Binding Issue.IcdName}"
+                                                                  FontFamily="Bold"/>
+                                                        </FormattedString>
+                                                    </Label.FormattedText>
+                                                </Label>
+                                                <Label TextColor="Black">
+                                                    <Label.FormattedText>
+                                                        <FormattedString>
+                                                            <Span Text="Medical specialist that can help: "
+                                                                  FontFamily="Regular"/>
+                                                            <Span Text="{Binding Specialisation[0].Name}"
+                                                                  FontFamily="Bold"/>
+                                                        </FormattedString>
+                                                    </Label.FormattedText>
+                                                </Label>
+                                                <Frame HasShadow="True"
+                                                       HorizontalOptions="End"
+                                                       VerticalOptions="End"
+                                                       Padding="10"
+                                                       Margin="5,10,5,5"
+                                                       BackgroundColor="#6B77E3">
+                                                    <Frame.GestureRecognizers>
+                                                        <TapGestureRecognizer Command="{Binding DoctorsPageCommand}"
+                                                                              CommandParameter="{Binding Specialisation[0].Name}"/>
+                                                    </Frame.GestureRecognizers>
+                                                    <Label>
+                                                        <Label.FormattedText>
+                                                            <FormattedString>
+                                                                <Span Text="{x:Static fonts:FontAwesomeIcons.Stethoscope}"
+                                                                      FontFamily="fa-solid"
+                                                                      TextColor="White"/>
+                                                                <Span Text="{Binding Specialisation[0].Name, StringFormat='   Look for {0} specialist'}"
+                                                                      TextColor="White"
+                                                                      FontFamily="Regular"/>
+                                                            </FormattedString>
+                                                        </Label.FormattedText>
+                                                    </Label>
+                                                </Frame>
+                                            </StackLayout>
+                                        </Frame>
+                                    </DataTemplate>
+                                </xct:Expander.ContentTemplate>
+                            </xct:Expander>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+
+
+            <!--<Frame HasShadow="True"
+                   HorizontalOptions="End"
+                   VerticalOptions="End"
+                   Padding="10"
+                   Margin="5,10,5,5"
+                   BackgroundColor="#6B77E3">
+                --><!--<Frame.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding DoctorsPageCommand}"
+                                          CommandParameter="asasa gago"/>
+                </Frame.GestureRecognizers>--><!--
+                <Label>
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="{x:Static fonts:FontAwesomeIcons.Stethoscope}"
+                                  FontFamily="fa-solid"
+                                  TextColor="White"/>
+                            <Span Text="{Binding MajorPlaceHodler, StringFormat='   Look for {0} specialist'}"
+                                  TextColor="White"
+                                  FontFamily="Regular"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </Frame>-->
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

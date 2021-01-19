@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="http://prismlibrary.com" 
+             xmlns:combobox="clr-namespace:Syncfusion.XForms.ComboBox;assembly=Syncfusion.SfComboBox.XForms"
+             xmlns:ffimage="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:fonts="clr-namespace:ConsultApp.Fonts"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             Visual="Material"
+             BackgroundColor="White"
+             x:Class="ConsultApp.Views.ConsultPage">
+
+    <ContentPage.Content>
+        <StackLayout Padding="20,40,20,20">
+
+            <Label>
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="Hello Echo, "
+                              FontFamily="Regular"
+                              FontSize="20"
+                              TextColor="Black"/>
+                        <Span Text="&#10; &#10;"/>
+                        <Span Text="What seems to be wrong?"
+                              FontFamily="Bold"
+                              FontSize="30"
+                              TextColor="Black"/>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+
+            <combobox:SfComboBox HeightRequest="40"
+                                 MultiSelectMode="Token" 
+                                 x:Name="combobox"
+                                 TokensWrapMode="Wrap"
+                                 DataSource="{Binding Symptoms}"
+                                 SelectionChanged="SfComboBox_SelectionChanged"
+                                 SuggestionBoxPlacement="Bottom"
+                                 TextColor="Black"
+                                 FontFamily="Regular"
+                                 ShowClearButton="True"
+                                 ClearButtonColor="Red"
+                                 BorderColor="Black"
+                                 ShowBorder="True"
+                                 Watermark="Select symptom(s)"
+                                 DropDownCornerRadius="10"
+                                 DropDownItemFontFamily="Regular"
+                                 DropDownTextColor="Black"
+                                 DropDownBackgroundColor="#eee"
+                                 EnableAutoSize="True"
+                                 IsSelectedItemsVisibleInDropDown="True">
+                <combobox:SfComboBox.DropDownButtonSettings>
+                    <combobox:DropDownButtonSettings Width="0" Height="0"
+                                                     HighlightedBackgroundColor="Red"
+                                                     BackgroundColor="Red" 
+                                                     HighlightFontColor="Red"/>
+                </combobox:SfComboBox.DropDownButtonSettings>
+                <combobox:SfComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <Frame HasShadow="True"
+                               Padding="2,1,4,1"
+                               CornerRadius="5"
+                               Margin="5"
+                               BackgroundColor="Transparent">
+                            <Label Text="{Binding Name}"
+                                   TextColor="Black"
+                                   FontSize="15"
+                                   BackgroundColor="White"
+                                   VerticalTextAlignment="Center"
+                                   Padding="5,0,0,0"/>
+                        </Frame>
+                    </DataTemplate>
+                </combobox:SfComboBox.ItemTemplate>
+                <combobox:SfComboBox.TokenSettings>
+                    <combobox:TokenSettings FontSize="16"
+                                            BackgroundColor="#646FD4" 
+                                            TextColor="White"
+                                            IsCloseButtonVisible="False" 
+                                            CornerRadius="15">
+                    </combobox:TokenSettings>
+                </combobox:SfComboBox.TokenSettings>
+            </combobox:SfComboBox>
+
+            <CollectionView ItemsSource="{Binding SymptomID, Mode=TwoWay}"
+                            Margin="0,20,0,0"
+                            ItemSizingStrategy="MeasureFirstItem">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout>
+                            <Frame Padding="0"
+                                   Margin="0,5"
+                                   CornerRadius="10"
+                                   HasShadow="True"
+                                   BackgroundColor="White"
+                                   BorderColor="LightGray">
+                                <SwipeView>
+                                    <SwipeView.RightItems>
+                                        <SwipeItems Mode="Execute">
+                                            <SwipeItem Text="REMOVE"
+                                                       Invoked="SwipeItem_Invoked"
+                                                       BackgroundColor="Red"/>
+                                        </SwipeItems>
+                                    </SwipeView.RightItems>
+                                    <StackLayout Orientation="Horizontal"
+                                                    Padding="15">
+                                        <BoxView BackgroundColor="#646FD4"
+                                                    Margin="-15"
+                                                    WidthRequest="20"/>
+                                        <ffimage:CachedImage Source="{Binding Photo}"
+                                                             Aspect="AspectFill"
+                                                             Margin="15,0,0,0"
+                                                             BitmapOptimizations="True"
+                                                             HeightRequest="40"
+                                                             DownsampleToViewSize="True"/>
+
+                                        <Label Text="{Binding Name}"
+                                               TextColor="Black"
+                                               FontSize="20"
+                                               VerticalTextAlignment="Center"
+                                               FontFamily="Bold"/>
+
+                                    </StackLayout>
+                                </SwipeView>
+                            </Frame>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            
+            <Frame Padding="10"
+                   HasShadow="True"
+                   HorizontalOptions="EndAndExpand"
+                   BackgroundColor="White"
+                   IsEnabled="{Binding IsEnabled}"
+                   VerticalOptions="StartAndExpand"
+                   BorderColor="#646FD4">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding DiagnoseCommand}"/>
+                </Frame.GestureRecognizers>
+                <Label HorizontalTextAlignment="End"
+                       VerticalTextAlignment="Center">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Submit   "
+                                  TextColor="#8F9EFF"
+                                  FontFamily="Regular"/>
+                            <Span Text="{x:Static fonts:FontAwesomeIcons.PaperPlane}"
+                                  FontFamily="fa-solid"
+                                  TextColor="#8F9EFF"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </Frame>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
