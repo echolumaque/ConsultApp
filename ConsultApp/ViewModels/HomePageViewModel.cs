@@ -97,25 +97,11 @@ namespace ConsultApp.ViewModels
                 await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
                 await Permissions.RequestAsync<Permissions.NetworkState>();
                 await Permissions.RequestAsync<Permissions.StorageWrite>();
-
+                //TODO: ADD EACH PLATFORM IMPLEMENTATION
                 await Task.Run(async () =>
                 {
                     await location.DisplayLocationSettingsRequest();
                 }).ContinueWith(async x => await SetLocation());
-
-                //if (location.DisplayLocationSettingsRequest().IsCompleted)
-                //{
-                //    var loc =  Geolocation.GetLocationAsync(new GeolocationRequest
-                //    {
-                //        DesiredAccuracy = GeolocationAccuracy.High,
-                //        Timeout = TimeSpan.FromSeconds(10)
-                //    });
-                //    App.CurrentLcoation = new Location(loc.Result.Latitude, loc.Result.Longitude);
-                //}    
-                //else
-                //{
-                //    await PopupNavigation.Instance.PushAsync(new LocationError(), true);
-                //}
             }
             catch (Exception)
             {
