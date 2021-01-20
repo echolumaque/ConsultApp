@@ -76,7 +76,7 @@
                                             BackgroundColor="#646FD4" 
                                             TextColor="White"
                                             IsCloseButtonVisible="False" 
-                                            CornerRadius="15">
+                                            CornerRadius="12">
                     </combobox:TokenSettings>
                 </combobox:SfComboBox.TokenSettings>
             </combobox:SfComboBox>
@@ -104,7 +104,7 @@
                                     <StackLayout Orientation="Horizontal"
                                                     Padding="15">
                                         <BoxView BackgroundColor="#646FD4"
-                                                    Margin="-15"
+                                                    Margin="-16"
                                                     WidthRequest="20"/>
                                         <ffimage:CachedImage Source="{Binding Photo}"
                                                              Aspect="AspectFill"
