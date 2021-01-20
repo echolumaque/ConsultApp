@@ -16,7 +16,7 @@
                          Padding="10">
 
                 <StackLayout VerticalOptions="CenterAndExpand">
-                    <Label Text="Hello, "
+                    <Label Text="Hello,"
                            FontFamily="Regular"
                            FontSize="27"
                            TextColor="Black"/>
@@ -24,7 +24,7 @@
                     <Label>
                         <Label.FormattedText>
                             <FormattedString>
-                                <Span Text="Bits! "
+                                <Span Text="Bits!"
                                       FontFamily="Bold"
                                       FontSize="39"
                                       TextColor="Black"/>
@@ -37,7 +37,7 @@
 
                 <Frame HasShadow="True"
                        Padding="10"
-                       CornerRadius="25"
+                       CornerRadius="10"
                        Margin="0,0,0,-30"
                        BackgroundColor="White"
                        VerticalOptions="EndAndExpand"
@@ -53,9 +53,8 @@
                         <customentry:CustomEntry Placeholder="Search" Margin="10,0,0,2"
                                                  HorizontalOptions="FillAndExpand"
                                                  BackgroundColor="White"
-                                                 TextColor="Black"
+                                                TextColor="Black"
                                                  PlaceholderColor="Gray"/>
-
                     </StackLayout>
                 </Frame>
             </StackLayout>
@@ -70,7 +69,7 @@
                 <Grid ColumnDefinitions="*, Auto">
 
                     <Label Grid.Column="0" Margin="10,-19,0,-10"
-                           VerticalTextAlignment="Center" >
+                           VerticalTextAlignment="Center">
                         <Label.FormattedText>
                             <FormattedString>
                                 <Span Text="Stay Home!" 

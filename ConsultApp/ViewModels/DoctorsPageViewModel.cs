@@ -277,7 +277,8 @@ namespace ConsultApp.ViewModels
         private void AssignAvailabilityAndHospital()
         {
             string[] hospitals = { "Saint Luke's Medical Center", "University of Santo Tomas Hospital", "Makati Medical Center", "The Medical City", "Manila Doctors Hospital" ,"Ospital ng makati",
-            "Pasig General Hospital", "Rizal Medical Center", "Mandaluyong Medical Center"};
+            "Pasig General Hospital", "Rizal Medical Center", "Mandaluyong Medical Center","Asian Hospital and Medical Center", "Manila Doctors Hospital"
+            , "Olivarez General Hospital"};
             string[] days = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "By appointment", ""};
         
 
@@ -286,7 +287,7 @@ namespace ConsultApp.ViewModels
            
             foreach (var Doctors in Triage)
             {
-                Doctors.Hospital = hospitals[rnd.Next(9)];
+                Doctors.Hospital = hospitals[rnd.Next(12)];
                 Doctors.DaysAvailable = days[rnd.Next(7)];
 
                 if (Doctors.Hospital.Equals(hospitals[0]))
@@ -297,25 +298,82 @@ namespace ConsultApp.ViewModels
                 else if (Doctors.Hospital.Equals(hospitals[1]))
                 {
                     var hosp = new Location(14.6114, 120.9902);
-                    
+
                     Doctors.Distance = Location.CalculateDistance(hosp, App.CurrentLocation, DistanceUnits.Kilometers);
                 }
                 else if (Doctors.Hospital.Equals(hospitals[2]))
                 {
                     var hosp = new Location(14.5590, 121.0146);
-                    
+
                     Doctors.Distance = Location.CalculateDistance(hosp, App.CurrentLocation, DistanceUnits.Kilometers);
                 }
                 else if (Doctors.Hospital.Equals(hospitals[3]))
                 {
                     var hosp = new Location(14.5895, 121.0693);
-                    
+
                     Doctors.Distance = Location.CalculateDistance(hosp, App.CurrentLocation, DistanceUnits.Kilometers);
                 }
                 else if (Doctors.Hospital.Equals(hospitals[4]))
                 {
                     var hosp = new Location(14.5820, 120.9829);
-                    
+
+                    Doctors.Distance = Location.CalculateDistance(hosp, App.CurrentLocation, DistanceUnits.Kilometers);
+                }
+
+                else if (Doctors.Hospital.Equals(hospitals[5]))
+                {
+                    var hosp = new Location(14.5820, 120.9829);
+                    Doctors.Distance = Location.CalculateDistance(hosp, App.CurrentLocation, DistanceUnits.Kilometers);
+                }
+
+                else if (Doctors.Hospital.Equals(hospitals[6]))
+                {
+                    var hosp = new Location(14.5465, 121.0618);
+
+                    Doctors.Distance = Location.CalculateDistance(hosp, App.CurrentLocation, DistanceUnits.Kilometers);
+                }
+
+                else if (Doctors.Hospital.Equals(hospitals[7]))
+                {
+                    var hosp = new Location(14.5722, 121.0994);
+
+                    Doctors.Distance = Location.CalculateDistance(hosp, App.CurrentLocation, DistanceUnits.Kilometers);
+
+                }
+
+                else if (Doctors.Hospital.Equals(hospitals[8]))
+                {
+                    var hosp = new Location(14.5642, 121.0659);
+
+                    Doctors.Distance = Location.CalculateDistance(hosp, App.CurrentLocation, DistanceUnits.Kilometers);
+
+                }
+                else if (Doctors.Hospital.Equals(hospitals[9]))
+                {
+                    var hosp = new Location(14.5763, 121.0353);
+
+                    Doctors.Distance = Location.CalculateDistance(hosp, App.CurrentLocation, DistanceUnits.Kilometers);
+                }
+
+                else if (Doctors.Hospital.Equals(hospitals[10]))
+                {
+                    var hosp = new Location(14.4135, 121.0435);
+
+                    Doctors.Distance = Location.CalculateDistance(hosp, App.CurrentLocation, DistanceUnits.Kilometers);
+                }
+
+                else if (Doctors.Hospital.Equals(hospitals[11]))
+                {
+                    var hosp = new Location(14.5820, 120.9829);
+
+                    Doctors.Distance = Location.CalculateDistance(hosp, App.CurrentLocation, DistanceUnits.Kilometers);
+                }
+
+                else if (Doctors.Hospital.Equals(hospitals[12]))
+                {
+
+                    var hosp = new Location(14.4790582, 120.9968646);
+
                     Doctors.Distance = Location.CalculateDistance(hosp, App.CurrentLocation, DistanceUnits.Kilometers);
                 }
             }
