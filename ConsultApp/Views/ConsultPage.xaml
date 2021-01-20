@@ -16,7 +16,7 @@
             <Label>
                 <Label.FormattedText>
                     <FormattedString>
-                        <Span Text="Hello Echo, "
+                        <Span Text="Hello Bits, "
                               FontFamily="Regular"
                               FontSize="20"
                               TextColor="Black"/>
