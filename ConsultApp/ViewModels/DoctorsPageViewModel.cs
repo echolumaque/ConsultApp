@@ -280,6 +280,7 @@ namespace ConsultApp.ViewModels
             string[] days = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "By appointment", "manila hospital"};
         
 
+
             var rnd = new Random();
            
             foreach (var Doctors in Triage)
