@@ -4,12 +4,12 @@
              xmlns:ffimage="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              xmlns:fonts="clr-namespace:ConsultApp.Fonts"
              xmlns:image="clr-namespace:ConsultApp.Helpers.Images"
-             xmlns:customentry="clr-namespace:ConsultApp.Helpers.CustomRenderers"
+             xmlns:combobox="clr-namespace:Syncfusion.XForms.ComboBox;assembly=Syncfusion.SfComboBox.XForms"
              Visual="Material"
              x:Class="ConsultApp.Views.HomePage">
 
     <ContentPage.Content>
-        <Grid RowDefinitions=".65*,Auto,*">
+        <Grid RowDefinitions=".65*,.45*,*">
 
             <StackLayout Grid.Row="0"
                          BackgroundColor="#E6EDFF"
@@ -37,9 +37,7 @@
 
                 <Frame HasShadow="True"
                        Padding="10"
-                       CornerRadius="10"
-                       Margin="0,0,0,-30"
-                       CornerRadius="25"
+                       CornerRadius="20"
                        BackgroundColor="White"
                        VerticalOptions="EndAndExpand"
                        BorderColor="LightGray">
@@ -51,21 +49,52 @@
                                TextColor="#6270DD"
                                FontFamily="fa-solid"/>
 
-                        <customentry:CustomEntry Placeholder="Search" Margin="10,0,0,2"
-                                                 HorizontalOptions="FillAndExpand"
-                                                 BackgroundColor="White"
-                                                TextColor="Black"
-                                                 PlaceholderColor="Gray"/>
+                        <combobox:SfComboBox HeightRequest="40"
+                                             HorizontalOptions="FillAndExpand"
+                                             VerticalOptions="CenterAndExpand"
+                                             DataSource="{Binding Symptoms}"
+                                             SelectionChanged="SfComboBox_SelectionChanged"
+                                             SuggestionBoxPlacement="Bottom"
+                                             TextColor="Black"
+                                             FontFamily="Regular"
+                                             ShowClearButton="True"
+                                             ClearButtonColor="Red"
+                                             BorderColor="Black"
+                                             ShowBorder="False"
+                                             Watermark="Select symptom(s)"
+                                             DropDownCornerRadius="10"
+                                             DropDownItemFontFamily="Regular"
+                                             DropDownTextColor="Black"
+                                             DropDownBackgroundColor="#eee"
+                                             EnableAutoSize="True"
+                                             IsSelectedItemsVisibleInDropDown="False">
+                            <combobox:SfComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Frame HasShadow="True"
+                                           Padding="2,1,4,1"
+                                           CornerRadius="5"
+                                           Margin="5"
+                                           BackgroundColor="Transparent">
+                                        <Label Text="{Binding Name}"
+                                               TextColor="Black"
+                                               FontSize="15"
+                                               BackgroundColor="White"
+                                               VerticalTextAlignment="Center"
+                                               Padding="5,0,0,0"/>
+                                    </Frame>
+                                </DataTemplate>
+                            </combobox:SfComboBox.ItemTemplate>
+                        </combobox:SfComboBox>
                     </StackLayout>
                 </Frame>
             </StackLayout>
 
-            <Frame Padding="10"
+            <Frame Padding="10,20"
                    HasShadow="True"
                    Grid.Row="1"
                    CornerRadius="30"
                    Margin="20"
-                   VerticalOptions="CenterAndExpand"
+                   VerticalOptions="FillAndExpand"
                    HorizontalOptions="FillAndExpand"
                    BackgroundColor="#6B79E4">
                 <Grid ColumnDefinitions="*, Auto">
@@ -90,7 +119,7 @@
                     <ffimage:CachedImage Source="{image:ImageResource ConsultApp.Helpers.Images.maskboy.png}" 
                                          BitmapOptimizations="True"
                                          DownsampleToViewSize="True"
-                                         Aspect="AspectFill"
+                                         Aspect="AspectFit"
                                          Grid.Column="1"/>
 
                 </Grid>
@@ -100,9 +129,8 @@
                   RowDefinitions="Auto,*"
                   Grid.Row="2"
                   HorizontalOptions="FillAndExpand"
-                  VerticalOptions="CenterAndExpand"
-                  Padding="20,0"
-                  Margin="0,30,0,0">
+                  VerticalOptions="FillAndExpand"
+                  Padding="20,0">
 
                 <Label Text="What servies do you need?"
                        FontFamily="Bold"
@@ -152,11 +180,8 @@
                             </StackLayout>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
-
                 </CollectionView>
-
             </Grid>
-
         </Grid>
     </ContentPage.Content>
 </ContentPage>

@@ -10,6 +10,12 @@ using Xamarin.Essentials;
 using Rg.Plugins.Popup.Services;
 using System;
 using ConsultApp.Dialogs.Views;
+using Refit;
+using ConsultApp.API.Interfaces;
+using ConsultApp.API;
+using ConsultApp.API.Intefaces;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace ConsultApp.ViewModels
 {
@@ -18,6 +24,11 @@ namespace ConsultApp.ViewModels
         private readonly INavigationService navigationService;
         private ISetStatusBarColor setStatusBarColor { get; }
         private ILocation location { get; }
+
+        public DelegateCommand<NavigationParameters> PassDiseaseForInfo 
+        {
+            get => new DelegateCommand<NavigationParameters>(async (nav) => await navigationService.NavigateAsync("SymptomsInfo", nav));
+        }
 
         public HomePageViewModel(INavigationService navigationService, ISetStatusBarColor setStatusBarColor, ILocation location) : base(navigationService)
         {
@@ -70,7 +81,11 @@ namespace ConsultApp.ViewModels
 
         public override void OnNavigatedTo(INavigationParameters parameters) => setStatusBarColor.SetStatusBarColor(Color.FromHex("E6EDFF"));
 
-        public override async void Initialize(INavigationParameters parameters) => await GetLocation();
+        public override async void Initialize(INavigationParameters parameters)
+        {
+            await Task.Run(async () => await Authenticate().ContinueWith(async x => await GetSymptoms()));
+            await GetLocation();
+        }
       
         #region Properties
 
@@ -79,6 +94,13 @@ namespace ConsultApp.ViewModels
         {
             get { return buttons; }
             set { SetProperty(ref buttons, value); }
+        }
+
+        private ObservableCollection<SymptomsModel> symptoms;
+        public ObservableCollection<SymptomsModel> Symptoms
+        {
+            get { return symptoms; }
+            set { SetProperty(ref symptoms, value); }
         }
 
         #endregion
@@ -98,10 +120,7 @@ namespace ConsultApp.ViewModels
                 await Permissions.RequestAsync<Permissions.NetworkState>();
                 await Permissions.RequestAsync<Permissions.StorageWrite>();
                 //TODO: ADD EACH PLATFORM IMPLEMENTATION
-                await Task.Run(async () =>
-                {
-                    await location.DisplayLocationSettingsRequest();
-                }).ContinueWith(async x => await SetLocation());
+                await Task.Run(async () => await location.DisplayLocationSettingsRequest().ContinueWith(async x => await SetLocation()));
             }
             catch (Exception)
             {
@@ -116,6 +135,42 @@ namespace ConsultApp.ViewModels
                 DesiredAccuracy = GeolocationAccuracy.High,
                 Timeout = TimeSpan.FromSeconds(10)
             });
+        }
+
+        private async Task Authenticate()
+        {
+            var refitSettings = new RefitSettings()
+            {
+                AuthorizationHeaderValueGetter = () => Task.FromResult(CalculateHMACMD5())
+            };
+            var authApi = RestService.For<IAuthApi>(APIConfig.AuthApi, refitSettings);
+            var authResponse = await authApi.GetToken();
+            APIConfig.Token = authResponse.Token;
+        }
+
+        private string CalculateHMACMD5()
+        {
+            string uri = APIConfig.AuthApi + "/login";
+            string api_key = APIConfig.Username;
+            string secret_key = APIConfig.SecretKey;
+            byte[] secretBytes = Encoding.UTF8.GetBytes(secret_key);
+            string computedHashString = "";
+            using (var hmac = new HMACMD5(secretBytes))
+            {
+                byte[] dataBytes = Encoding.UTF8.GetBytes(uri);
+                byte[] computedHash = hmac.ComputeHash(dataBytes);
+                computedHashString = Convert.ToBase64String(computedHash);
+            }
+
+            return string.Concat(api_key, ":", computedHashString);
+        }
+
+        private async Task GetSymptoms()
+        {
+            var getSymptomsRequest = RestService.For<IGetSymptomsList>(APIConfig.HealthApi);
+            var response = await getSymptomsRequest.GetSymptoms(APIConfig.Token);
+
+            Symptoms = new ObservableCollection<SymptomsModel>(response);
         }
         #endregion
     }

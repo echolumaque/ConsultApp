@@ -43,7 +43,7 @@ namespace ConsultApp
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Mzc5NTU0QDMxMzgyZTM0MmUzMENkT0k5UnNDeHdPM1MzcFZSZVRYQWZCNDR4YnBmeW9wbktXNmNOODFlQTA9");
 
             await NavigationService.NavigateAsync("CustomNavigationPage/HomePage");
-            await GetToken();
+            //await GetToken();
 
             httpClient.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
             ImageService.Instance.Initialize(new Configuration
@@ -63,6 +63,7 @@ namespace ConsultApp
             containerRegistry.RegisterForNavigation<ConsultPage, ConsultPageViewModel>();
             containerRegistry.RegisterForNavigation<DiagnosisPage, DiagnosisPageViewModel>();
             containerRegistry.RegisterForNavigation<DoctorsPage, DoctorsPageViewModel>();
+            containerRegistry.RegisterForNavigation<SymptomsAndDiseaseInfo, SymptomsAndDiseaseInfoViewModel>("SymptomsInfo");
         }
 
         private async Task GetToken()

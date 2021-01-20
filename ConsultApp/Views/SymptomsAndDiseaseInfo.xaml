@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="http://prismlibrary.com"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             Padding="10,30"
+             Visual="Material"
+             x:Class="ConsultApp.Views.SymptomsAndDiseaseInfo">
+
+    <StackLayout>
+        <ScrollView>
+            <StackLayout>
+                <Label Text="" 
+                       TextColor="Black"
+                       FontFamily="Bold"
+                       FontSize="30"/> <!--diseasename known as professional diseasename-->
+
+                <BoxView BackgroundColor="Black"
+                         Margin="0,10"
+                         HeightRequest="2"/>
+
+                <Label Text="looooong desc"
+                       TextColor="Black"
+                       FontSize="22"
+                       FontFamily="Regular"/>
+
+                <Label Text="cause italics"
+                       TextColor="Black"
+                       FontSize="30"
+                       FontFamily="Regular"/>
+
+                <Label Text="explanation of cause"
+                       TextColor="Black"
+                       FontSize="22"
+                       FontFamily="Regular"/>
+
+                <Label Text="possible cause"
+                       TextColor="Black"
+                       FontSize="22"
+                       FontFamily="Regular"/>
+
+                <Button Text="go back"/>
+            </StackLayout>
+        </ScrollView>
+    </StackLayout>
+  
+</ContentPage>
