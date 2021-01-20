@@ -16,17 +16,17 @@
                          Padding="10">
 
                 <StackLayout VerticalOptions="CenterAndExpand">
-                    <Label Text="Hello, "
+                    <Label Text="Hello,"
                            FontFamily="Regular"
-                           FontSize="25"
+                           FontSize="27"
                            TextColor="Black"/>
 
                     <Label>
                         <Label.FormattedText>
                             <FormattedString>
-                                <Span Text="Echo! "
+                                <Span Text="Bits!"
                                       FontFamily="Bold"
-                                      FontSize="35"
+                                      FontSize="39"
                                       TextColor="Black"/>
                                 <Span Text="&#x1FA7A;"
                                       FontSize="35"/>
@@ -37,6 +37,8 @@
 
                 <Frame HasShadow="True"
                        Padding="10"
+                       CornerRadius="10"
+                       Margin="0,0,0,-30"
                        CornerRadius="25"
                        BackgroundColor="White"
                        VerticalOptions="EndAndExpand"
@@ -44,17 +46,16 @@
                     <StackLayout Orientation="Horizontal">
 
                         <Label Text="{x:Static fonts:FontAwesomeIcons.Search}"
-                               FontSize="20"
+                               FontSize="20" 
                                VerticalTextAlignment="Center"
                                TextColor="#6270DD"
                                FontFamily="fa-solid"/>
 
-                        <customentry:CustomEntry Placeholder="Search"
+                        <customentry:CustomEntry Placeholder="Search" Margin="10,0,0,2"
                                                  HorizontalOptions="FillAndExpand"
                                                  BackgroundColor="White"
-                                                 TextColor="Black"
+                                                TextColor="Black"
                                                  PlaceholderColor="Gray"/>
-
                     </StackLayout>
                 </Frame>
             </StackLayout>
@@ -69,12 +70,12 @@
                    BackgroundColor="#6B79E4">
                 <Grid ColumnDefinitions="*, Auto">
 
-                    <Label Grid.Column="0"
+                    <Label Grid.Column="0" Margin="10,-19,0,-10"
                            VerticalTextAlignment="Center">
                         <Label.FormattedText>
                             <FormattedString>
-                                <Span Text="Stay Home!"
-                                      TextColor="White"
+                                <Span Text="Stay Home!" 
+                                      TextColor="White"                                    
                                       FontFamily="Bold"
                                       FontSize="20"/>
                                 <Span Text="&#10; &#10;"/>
