@@ -277,15 +277,14 @@ namespace ConsultApp.ViewModels
         private void AssignAvailabilityAndHospital()
         {
             string[] hospitals = { "Saint Luke's Medical Center", "University of Santo Tomas Hospital", "Makati Medical Center", "The Medical City", "Manila Doctors Hospital" ,"Ospital ng makati"};
-            string[] days = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "By appointment" };
-
-
+            string[] days = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "By appointment", "manila hospital"};
+        
 
             var rnd = new Random();
            
             foreach (var Doctors in Triage)
             {
-                Doctors.Hospital = hospitals[rnd.Next(5)];
+                Doctors.Hospital = hospitals[rnd.Next(6)];
                 Doctors.DaysAvailable = days[rnd.Next(7)];
 
                 if (Doctors.Hospital.Equals(hospitals[0]))
