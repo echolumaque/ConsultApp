@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using Xamarin.Forms.Maps;
 
 namespace ConsultApp.API.Models
 {
@@ -10,5 +12,12 @@ namespace ConsultApp.API.Models
         public string Hospital { get; set; }
         public bool IsAvailable => DaysAvailable.Contains(DateTime.Now.DayOfWeek.ToString()) ? true : false;
         public double Distance { get; set; }
+        public ObservableCollection<MapPinModel> MapPins { get; set; }
+    }
+    public class MapPinModel
+    {
+        public Position Location { get; set; }
+        public string Label { get; set; }
+        public string Address { get; set; }
     }
 }

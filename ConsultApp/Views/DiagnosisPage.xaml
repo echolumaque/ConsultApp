@@ -26,6 +26,7 @@
                             <Frame HasShadow="True"
                                    Padding="10"
                                    Margin="10"
+                                   BorderColor="Transparent"
                                    CornerRadius="20"
                                    BackgroundColor="#646FD4">
                                 <Label Text="{Binding Issue.Name}"

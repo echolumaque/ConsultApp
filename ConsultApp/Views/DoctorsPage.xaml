@@ -9,7 +9,7 @@
              xmlns:ffimage="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              xmlns:localimages="clr-namespace:ConsultApp.Helpers.Images"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
-             xmlns:circle="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+             xmlns:circle="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations" xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
              x:Class="ConsultApp.Views.DoctorsPage">
 
     <ContentPage.Content>
@@ -53,8 +53,10 @@
                                    Margin="0,5"
                                    CornerRadius="20"
                                    Padding="10">
-                                <Grid ColumnDefinitions="*,*">
-                                    <StackLayout Grid.Column="0">
+                                <Grid ColumnDefinitions="*,*"
+                                      RowDefinitions=".5*,*">
+                                    <StackLayout Grid.Column="0"
+                                                 Grid.Row="0">
                                         <Label Text="{Binding Doctor}"
                                                FontFamily="Bold"
                                                FontSize="20"
@@ -69,7 +71,7 @@
                                                     <Span Text="{Binding Hospital, StringFormat='Hospital: {0}'}"
                                                           FontFamily="Regular"
                                                           TextColor="White"/>
-                                                    <Span Text="{Binding Distance, StringFormat=' ({0:F2} kM)'}"
+                                                    <Span Text="{Binding Distance, StringFormat=' ({0:N2} kM)'}"
                                                           FontFamily="Regular"
                                                           TextColor="White"/>
                                                 </FormattedString>
@@ -81,6 +83,7 @@
                                     </StackLayout>
 
                                     <StackLayout Grid.Column="0"
+                                                 Grid.Row="0"
                                                  Grid.ColumnSpan="2"
                                                  VerticalOptions="StartAndExpand"
                                                  HorizontalOptions="EndAndExpand">
@@ -133,16 +136,47 @@
                                                 </Label.FormattedText>
                                             </Label>
                                         </Frame>
-
                                     </StackLayout>
+
+                                    <maps:Map Grid.ColumnSpan="2"
+                                              Grid.Column="0"
+                                              Grid.Row="1"
+                                              IsShowingUser="True"
+                                              HasScrollEnabled="True"
+                                              HasZoomEnabled="True"
+                                              ItemsSource="{Binding MapPins}">
+                                        <x:Arguments>
+                                            <maps:MapSpan>
+                                                <x:Arguments>
+                                                    <maps:Position>
+                                                        <x:Arguments>
+                                                            <x:Double>12.8797</x:Double>
+                                                            <x:Double>121.7740</x:Double>
+                                                        </x:Arguments>
+                                                    </maps:Position>
+                                                    <x:Double>10</x:Double>
+                                                    <x:Double>10</x:Double>
+                                                </x:Arguments>
+                                            </maps:MapSpan>
+                                        </x:Arguments>
+                                        <maps:Map.ItemTemplate>
+                                            <DataTemplate>
+                                                <maps:Pin Position="{Binding Location}"
+                                                          Label="{Binding Label}"
+                                                          Address="{Binding Address}"
+                                                          Type="Place"/>
+                                            </DataTemplate>
+                                        </maps:Map.ItemTemplate>
+                                    </maps:Map>
                                 </Grid>
                             </Frame>
                         </StackLayout>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+
             
+
         </StackLayout>
     </ContentPage.Content>
-  
 </ContentPage>
