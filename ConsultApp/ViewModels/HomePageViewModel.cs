@@ -16,6 +16,9 @@ using ConsultApp.API;
 using ConsultApp.API.Intefaces;
 using System.Text;
 using System.Security.Cryptography;
+using ConsultApp.Helpers.Images;
+using System.Reflection;
+using ConsultApp.Helpers.CustomRenderers;
 
 namespace ConsultApp.ViewModels
 {
@@ -77,13 +80,44 @@ namespace ConsultApp.ViewModels
                     Commands = new DelegateCommand(async() => await navigationService.NavigateAsync(""))
                 },
             };
+
+            Carousel = new ObservableCollection<HomeCarouselModel>
+            {
+                new HomeCarouselModel
+                {
+                    Title = "Stay Home! Consult virtually via ConsultApp",
+                    Contents = "Use ConsultApp to virtually diagnose what you feel today.",
+                    DoctorImage = ImageSource.FromResource("ConsultApp.Helpers.Images.doc1.png", typeof(ImageResourceExtension).GetTypeInfo().Assembly),
+                },
+                new HomeCarouselModel
+                {
+                    Title = "Stay Home, Stay Safe, Stay Strong!",
+                    Contents = "Avoid crowded medical centers and gain ease of mind amidst of dangers nowadays.",
+                    DoctorImage = ImageSource.FromResource("ConsultApp.Helpers.Images.doc2.png", typeof(ImageResourceExtension).GetTypeInfo().Assembly),
+                },
+                new HomeCarouselModel
+                {
+                    Title = "Stay Bright!",
+                    Contents = "ConsultApp offers an array of informations about different diseases.",
+                    DoctorImage = ImageSource.FromResource("ConsultApp.Helpers.Images.doc3.png", typeof(ImageResourceExtension).GetTypeInfo().Assembly),
+                },
+                new HomeCarouselModel
+                {
+                    Title = "Stay Calm!",
+                    Contents = "Schedule an e-visit and discuss the plan with a doctor.",
+                    DoctorImage = ImageSource.FromResource("ConsultApp.Helpers.Images.doc4.png", typeof(ImageResourceExtension).GetTypeInfo().Assembly),
+                },
+            };
+            ChangeCarouselPosition();
+
+            Steth = new EmojiHelper(0x1FA7A).ToString();
         }
 
         public override void OnNavigatedTo(INavigationParameters parameters) => setStatusBarColor.SetStatusBarColor(Color.FromHex("E6EDFF"));
-
+       
         public override async void Initialize(INavigationParameters parameters)
         {
-            await Task.Run(async () => await Authenticate().ContinueWith(async x => await GetSymptoms()));
+            await Authenticate().ContinueWith(async x => await GetDisease());
             await GetLocation();
         }
       
@@ -96,11 +130,39 @@ namespace ConsultApp.ViewModels
             set { SetProperty(ref buttons, value); }
         }
 
-        private ObservableCollection<SymptomsModel> symptoms;
-        public ObservableCollection<SymptomsModel> Symptoms
+        private ObservableCollection<DiseaseInfoModel> disease;
+        public ObservableCollection<DiseaseInfoModel> Disease
         {
-            get { return symptoms; }
-            set { SetProperty(ref symptoms, value); }
+            get { return disease; }
+            set { SetProperty(ref disease, value); }
+        }
+
+        private string placeHolder;
+        public string Placeholder
+        {
+            get { return placeHolder; }
+            set { SetProperty(ref placeHolder, value); }
+        }
+
+        private ObservableCollection<HomeCarouselModel> carousel;
+        public ObservableCollection<HomeCarouselModel> Carousel
+        {
+            get { return carousel; }
+            set { SetProperty(ref carousel, value); }
+        }
+
+        private int position;
+        public int Position
+        {
+            get { return position; }
+            set { SetProperty(ref position, value); }
+        }
+
+        private string steth;
+        public string Steth
+        {
+            get { return steth; }
+            set { SetProperty(ref steth, value); }
         }
 
         #endregion
@@ -120,7 +182,7 @@ namespace ConsultApp.ViewModels
                 await Permissions.RequestAsync<Permissions.NetworkState>();
                 await Permissions.RequestAsync<Permissions.StorageWrite>();
                 //TODO: ADD EACH PLATFORM IMPLEMENTATION
-                await Task.Run(async () => await location.DisplayLocationSettingsRequest().ContinueWith(async x => await SetLocation()));
+                await location.DisplayLocationSettingsRequest().ContinueWith(async x => await SetLocation());
             }
             catch (Exception)
             {
@@ -165,12 +227,29 @@ namespace ConsultApp.ViewModels
             return string.Concat(api_key, ":", computedHashString);
         }
 
-        private async Task GetSymptoms()
+        private async Task GetDisease()
         {
-            var getSymptomsRequest = RestService.For<IGetSymptomsList>(APIConfig.HealthApi);
+            var getSymptomsRequest = RestService.For<IGetDiseaseList>(APIConfig.HealthApi);
             var response = await getSymptomsRequest.GetSymptoms(APIConfig.Token);
 
-            Symptoms = new ObservableCollection<SymptomsModel>(response);
+            Disease = new ObservableCollection<DiseaseInfoModel>(response);
+
+            var rnd = new Random();
+            var randomPlaceholder = response[rnd.Next(Disease.Count)].Name;
+            Placeholder = $"Get to know {randomPlaceholder} more {new EmojiHelper(0x1F50D)}..";
+        }
+
+        private void ChangeCarouselPosition()
+        {
+            Device.StartTimer(TimeSpan.FromSeconds(2.5), () =>
+            {
+                if (Position != Carousel.Count - 1)
+                    Position++;
+                else
+                    Position = 0;
+                return true;
+            });
+
         }
         #endregion
     }

@@ -3,13 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ffimage="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              xmlns:fonts="clr-namespace:ConsultApp.Fonts"
-             xmlns:image="clr-namespace:ConsultApp.Helpers.Images"
              xmlns:combobox="clr-namespace:Syncfusion.XForms.ComboBox;assembly=Syncfusion.SfComboBox.XForms"
              Visual="Material"
              x:Class="ConsultApp.Views.HomePage">
 
     <ContentPage.Content>
-        <Grid RowDefinitions=".65*,.45*,*">
+        <Grid RowDefinitions=".65*,.55*,*">
 
             <StackLayout Grid.Row="0"
                          BackgroundColor="#E6EDFF"
@@ -28,7 +27,7 @@
                                       FontFamily="Bold"
                                       FontSize="39"
                                       TextColor="Black"/>
-                                <Span Text="&#x1FA7A;"
+                                <Span Text="{Binding Steth}"
                                       FontSize="35"/>
                             </FormattedString>
                         </Label.FormattedText>
@@ -51,17 +50,17 @@
 
                         <combobox:SfComboBox HeightRequest="40"
                                              HorizontalOptions="FillAndExpand"
+                                             WidthRequest="10"
                                              VerticalOptions="CenterAndExpand"
-                                             DataSource="{Binding Symptoms}"
+                                             DataSource="{Binding Disease}"
                                              SelectionChanged="SfComboBox_SelectionChanged"
                                              SuggestionBoxPlacement="Bottom"
                                              TextColor="Black"
-                                             FontFamily="Regular"
                                              ShowClearButton="True"
                                              ClearButtonColor="Red"
                                              BorderColor="Black"
                                              ShowBorder="False"
-                                             Watermark="Select symptom(s)"
+                                             Watermark="{Binding Placeholder}"
                                              DropDownCornerRadius="10"
                                              DropDownItemFontFamily="Regular"
                                              DropDownTextColor="Black"
@@ -89,41 +88,56 @@
                 </Frame>
             </StackLayout>
 
-            <Frame Padding="10,20"
-                   HasShadow="True"
-                   Grid.Row="1"
-                   CornerRadius="30"
-                   Margin="20"
-                   VerticalOptions="FillAndExpand"
-                   HorizontalOptions="FillAndExpand"
-                   BackgroundColor="#6B79E4">
-                <Grid ColumnDefinitions="*, Auto">
+            <CarouselView ItemsSource="{Binding Carousel}"
+                          Grid.Row="1"
+                          Margin="20"
+                          Loop="True"
+                          IndicatorView="indicatorView"
+                          Position="{Binding Position}">
+                <CarouselView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Padding="10,20"
+                               HasShadow="True"
+                               CornerRadius="30"
+                               VerticalOptions="FillAndExpand"
+                               HorizontalOptions="FillAndExpand"
+                               BackgroundColor="#6B79E4">
+                            <Grid ColumnDefinitions=".70*,.30*">
+                                <Label Grid.Column="0"
+                                       VerticalTextAlignment="Center">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="{Binding Title}" 
+                                                  TextColor="White"                                    
+                                                  FontFamily="Bold"
+                                                  FontSize="20"/>
+                                            <Span Text="&#10; &#10;"/>
+                                            <Span Text="{Binding Contents}"
+                                                  TextColor="White"
+                                                  FontFamily="Regular"
+                                                  FontSize="15"/>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
 
-                    <Label Grid.Column="0" Margin="10,-19,0,-10"
-                           VerticalTextAlignment="Center">
-                        <Label.FormattedText>
-                            <FormattedString>
-                                <Span Text="Stay Home!" 
-                                      TextColor="White"                                    
-                                      FontFamily="Bold"
-                                      FontSize="20"/>
-                                <Span Text="&#10; &#10;"/>
-                                <Span Text="Schedule an e-visit and discuss the plan with a doctor."
-                                      TextColor="White"
-                                      FontFamily="Regular"
-                                      FontSize="15"/>
-                            </FormattedString>
-                        </Label.FormattedText>
-                    </Label>
+                                <ffimage:CachedImage Source="{Binding DoctorImage}"
+                                                     BitmapOptimizations="True"
+                                                     DownsampleToViewSize="True"
+                                                     Aspect="AspectFit"
+                                                     Grid.Column="1"/>
 
-                    <ffimage:CachedImage Source="{image:ImageResource ConsultApp.Helpers.Images.maskboy.png}" 
-                                         BitmapOptimizations="True"
-                                         DownsampleToViewSize="True"
-                                         Aspect="AspectFit"
-                                         Grid.Column="1"/>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CarouselView.ItemTemplate>
+            </CarouselView>
 
-                </Grid>
-            </Frame>
+            <IndicatorView Grid.Row="1"
+                           x:Name="indicatorView"
+                           IndicatorColor="LightGray"
+                           SelectedIndicatorColor="Gray"
+                           HorizontalOptions="CenterAndExpand"
+                           VerticalOptions="EndAndExpand"/>
 
             <Grid ColumnDefinitions="*"
                   RowDefinitions="Auto,*"
@@ -140,40 +154,39 @@
                        Grid.Column="0"/>
 
                 <CollectionView Grid.Column="0"
-                                    Grid.Row="1"
-                                    ItemsSource="{Binding Buttons}"
-                                    ItemSizingStrategy="MeasureAllItems"
-                                    x:Name="buttons"
-                                    SelectionMode="Single"
-                                    ItemsLayout="VerticalGrid, 3">
+                                Grid.Row="1"
+                                ItemsSource="{Binding Buttons}"
+                                ItemSizingStrategy="MeasureAllItems"
+                                x:Name="buttons"
+                                SelectionMode="Single"
+                                ItemsLayout="VerticalGrid, 3">
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <StackLayout VerticalOptions="Center">
                                 <Frame Padding="15"
-                                            HasShadow="True"
-                                            CornerRadius="20"
-                                            Margin="5"
-                                            HeightRequest="90"
-                                            x:Name="mainFrame"
-                                            WidthRequest="90"
-                                            BackgroundColor="White"
-                                            BorderColor="LightGray">
+                                       HasShadow="True"
+                                       CornerRadius="20"
+                                       Margin="5"
+                                       HeightRequest="90"
+                                       WidthRequest="90"
+                                       BackgroundColor="White"
+                                       BorderColor="LightGray">
                                     <Frame.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding Commands}"/>
                                     </Frame.GestureRecognizers>
                                     <StackLayout VerticalOptions="CenterAndExpand">
                                         <Label Text="{Binding FontIcon}"
-                                                    FontFamily="fa-solid"
-                                                    TextColor="#6270DD"
-                                                    HorizontalTextAlignment="Center"
-                                                    FontSize="20"/>
+                                               FontFamily="fa-solid"
+                                               TextColor="#6270DD"
+                                               HorizontalTextAlignment="Center"
+                                               FontSize="20"/>
 
                                         <Label Text="{Binding Title}"
-                                                    TextColor="Black"
-                                                    FontSize="15"
-                                                    FontFamily="Regular"
-                                                    HorizontalTextAlignment="Center"/>
+                                               TextColor="Black"
+                                               FontSize="15"
+                                               FontFamily="Regular"
+                                               HorizontalTextAlignment="Center"/>
 
                                     </StackLayout>
                                 </Frame>

@@ -4,12 +4,13 @@
                 x:Class="ConsultApp.Helpers.CustomNavigationPage"
                 xmlns:iOS="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
                 iOS:NavigationPage.IsNavigationBarTranslucent="True"
-                BarTextColor="White">
+                BarTextColor="Black">
     
     <NavigationPage.BarBackgroundColor>
         <OnPlatform x:TypeArguments="Color">
             <On Platform="Android, iOS" Value="Transparent" />
         </OnPlatform>
     </NavigationPage.BarBackgroundColor>
+    
     
 </NavigationPage>

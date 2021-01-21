@@ -10,7 +10,7 @@
              x:Class="ConsultApp.Views.DiagnosisPage">
 
     <ContentPage.Content>
-        <StackLayout Padding="10,30,10,0">
+        <StackLayout Padding="10,50,10,0">
             
             <Label Text="Based on your symptoms, you may have one of the following:"
                    TextColor="Black"

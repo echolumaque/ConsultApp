@@ -22,11 +22,13 @@
     <None Remove="Helpers\Images\chestpain.png" />
     <None Remove="Helpers\Images\cough.png" />
     <None Remove="Helpers\Images\dizziness.png" />
+    <None Remove="Helpers\Images\doc1.png" />
+    <None Remove="Helpers\Images\doc2.png" />
+    <None Remove="Helpers\Images\doc3.png" />
+    <None Remove="Helpers\Images\doc4.png" />
     <None Remove="Helpers\Images\error2.gif" />
     <None Remove="Helpers\Images\fever.png" />
     <None Remove="Helpers\Images\headache.png" />
-    <None Remove="Helpers\Images\maskboy.png" />
-    <None Remove="Helpers\Images\maskgirl.jpg" />
     <None Remove="Helpers\Images\sweat.png" />
     <None Remove="Helpers\Images\tired.png" />
     <None Remove="Helpers\Images\weak.png" />
@@ -46,11 +48,13 @@
     <EmbeddedResource Include="Helpers\Images\chestpain.png" />
     <EmbeddedResource Include="Helpers\Images\cough.png" />
     <EmbeddedResource Include="Helpers\Images\dizziness.png" />
+    <EmbeddedResource Include="Helpers\Images\doc1.png" />
+    <EmbeddedResource Include="Helpers\Images\doc2.png" />
+    <EmbeddedResource Include="Helpers\Images\doc3.png" />
+    <EmbeddedResource Include="Helpers\Images\doc4.png" />
     <EmbeddedResource Include="Helpers\Images\error2.gif" />
     <EmbeddedResource Include="Helpers\Images\fever.png" />
     <EmbeddedResource Include="Helpers\Images\headache.png" />
-    <EmbeddedResource Include="Helpers\Images\maskboy.png" />
-    <EmbeddedResource Include="Helpers\Images\maskgirl.jpg" />
     <EmbeddedResource Include="Helpers\Images\sweat.png" />
     <EmbeddedResource Include="Helpers\Images\tired.png" />
     <EmbeddedResource Include="Helpers\Images\weak.png" />
@@ -59,16 +63,17 @@
   <ItemGroup>
     <PackageReference Include="Refit" Version="5.2.4" />
     <PackageReference Include="Rg.Plugins.Popup" Version="2.0.0.10" />
-    <PackageReference Include="Syncfusion.Xamarin.SfComboBox" Version="18.4.0.33" />
-    <PackageReference Include="Xamarin.CommunityToolkit" Version="1.0.1" />
+    <PackageReference Include="Syncfusion.Xamarin.SfCalendar" Version="18.4.0.35" />
+    <PackageReference Include="Syncfusion.Xamarin.SfComboBox" Version="18.4.0.35" />
+    <PackageReference Include="Xamarin.CommunityToolkit" Version="1.0.2" />
     <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.11.982" />
     <PackageReference Include="Xamarin.FFImageLoading.Svg.Forms" Version="2.4.11.982" />
     <PackageReference Include="Xamarin.FFImageLoading.Transformations" Version="2.4.11.982" />
-    <PackageReference Include="Xamarin.Forms" Version="5.0.0.1874" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.1905" />
     <PackageReference Include="Xamarin.Essentials.Interfaces" Version="1.6.0" />
     <PackageReference Include="Prism.DryIoc.Forms" Version="8.0.0.1909" />
-    <PackageReference Include="Xamarin.Forms.Maps" Version="5.0.0.1874" />
-    <PackageReference Include="Xamarin.Forms.Visual.Material" Version="5.0.0.1874" />
+    <PackageReference Include="Xamarin.Forms.Maps" Version="5.0.0.1905" />
+    <PackageReference Include="Xamarin.Forms.Visual.Material" Version="5.0.0.1905" />
   </ItemGroup>
 
   <ItemGroup>
@@ -82,6 +87,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\DiagnosisPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\DoctorsAvailability.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\DoctorsPage.xaml">

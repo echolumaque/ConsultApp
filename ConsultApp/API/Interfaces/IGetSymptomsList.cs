@@ -1,6 +1,6 @@
 ﻿using Refit;
-using ConsultApp.API.Models;
 using System.Threading.Tasks;
+using ConsultApp.API.Models;
 using System.Collections.ObjectModel;
 
 namespace ConsultApp.API.Interfaces

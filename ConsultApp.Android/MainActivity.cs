@@ -17,7 +17,8 @@ using Prism.Services.Dialogs;
 namespace ConsultApp.Droid
 {
     [Activity(Theme = "@style/MainTheme",
-              ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize)]
+              ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize,
+              ScreenOrientation = ScreenOrientation.Portrait, ResizeableActivity = false)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         protected override void OnCreate(Bundle savedInstanceState)

@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="http://prismlibrary.com"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             Padding="20,50,20,10"
+             xmlns:ffcached="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:images="clr-namespace:ConsultApp.Helpers.Images"
+             xmlns:transformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+             xmlns:calendar="clr-namespace:Syncfusion.SfCalendar.XForms;assembly=Syncfusion.SfCalendar.XForms"
+             Visual="Material"
+             xmlns:fonts="clr-namespace:ConsultApp.Fonts"
+             x:Class="ConsultApp.Views.DoctorsAvailability">
+
+    <Grid RowDefinitions="Auto,*,Auto"
+          ColumnDefinitions=".45*,*">
+
+        <RelativeLayout Grid.Column="0"
+                        Grid.Row="0"
+                        VerticalOptions="CenterAndExpand"
+                        Margin="0,20">
+            <ffcached:CachedImage Source="{images:ImageResource ConsultApp.Helpers.Images.doc2.png}"
+                                  BitmapOptimizations="True"
+                                  x:Name="pic"
+                                  VerticalOptions="StartAndExpand"
+                                  Aspect="AspectFit">
+                <ffcached:CachedImage.Transformations>
+                    <transformations:CircleTransformation/>
+                </ffcached:CachedImage.Transformations>
+            </ffcached:CachedImage>
+
+            <BoxView RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent,
+                    Constant=65, 
+                    Factor=0,
+                    Property=X,
+                    ElementName=pic}"
+                     RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent,
+                    Constant=-15, 
+                    Factor=0,
+                    Property=Y,
+                    ElementName=pic}"
+                         BackgroundColor="Green"
+                         IsVisible="true"
+                         CornerRadius="100"
+                         Scale="0.5"/>
+
+        </RelativeLayout>
+
+        <StackLayout Grid.Column="1"
+                     Grid.Row="0"
+                     VerticalOptions="CenterAndExpand"
+                     Margin="0,20">
+
+            <Label Text="{Binding Doctor}"
+                   FontFamily="Bold"
+                   TextColor="Black"
+                   FontSize="20"/>
+
+            <Label Text="{Binding Specialization}"
+                   FontFamily="Bold"
+                   TextColor="Black"
+                   FontSize="18"/>
+
+            <StackLayout Orientation="Horizontal">
+                <Label>
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="{Binding Hospital, StringFormat='Hospital: {0}'}"
+                                  FontFamily="Regular"
+                                  TextColor="Black"/>
+                            <Span Text="{Binding Distance, StringFormat=' ({0:N2} kM)'}"
+                                  FontFamily="Regular"
+                                  TextColor="Black"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </StackLayout>
+
+            <Label Text="{Binding DaysAvailable, StringFormat='Availability: {0}'}"
+                   FontFamily="Regular"
+                   TextColor="Black"/>
+        </StackLayout>
+
+        <calendar:SfCalendar Grid.Row="1"
+                             Grid.Column="0"
+                             Grid.ColumnSpan="2"
+                             BlackoutDatesViewMode="Stripes"
+                             OnMonthCellLoaded="SfCalendar_OnMonthCellLoaded"
+                             x:Name="calendar"
+                             ViewMode="MonthView">
+            <calendar:SfCalendar.MonthViewSettings>
+                <calendar:MonthViewSettings WeekEndTextColor="Red"
+		                                    TodaySelectionTextColor="White"
+                                            HeaderFontFamily="Bold"
+                                            TodayBorderColor="#8F9EFF"
+		                                    DayHeaderTextColor="Black"/>
+            </calendar:SfCalendar.MonthViewSettings>
+        </calendar:SfCalendar>
+        
+        <!--after button click, may llabas na popup for confirmation then add sa model ng pending consulation tab then pop to root-->
+        <Frame Grid.Row="2"
+               HasShadow="True"
+               Padding="15"
+               HorizontalOptions="EndAndExpand"
+               VerticalOptions="EndAndExpand"
+               BackgroundColor="#5B00DB"
+               Grid.Column="1">
+            <Label>
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="{x:Static fonts:FontAwesomeIcons.CalendarDay}"
+                              FontFamily="fa-solid"
+                              TextColor="White"/>
+
+                        <Span Text="   Confirm appointment"
+                              FontFamily="Regular"
+                              TextColor="White"/>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+        </Frame>
+    </Grid>
+</ContentPage>

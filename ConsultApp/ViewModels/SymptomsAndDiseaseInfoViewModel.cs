@@ -27,7 +27,7 @@ namespace ConsultApp.ViewModels
 
         public override async void OnNavigatedTo(INavigationParameters parameters)
         {
-            var disease = parameters["disease"] as SymptomsModel;
+            var disease = parameters["disease"] as DiseaseInfoModel;
             await GetInfo(disease.ID);
         }
 

@@ -11,7 +11,7 @@
              x:Class="ConsultApp.Views.ConsultPage">
 
     <ContentPage.Content>
-        <StackLayout Padding="20,40,20,20">
+        <StackLayout Padding="20,50,20,20">
 
             <Label>
                 <Label.FormattedText>

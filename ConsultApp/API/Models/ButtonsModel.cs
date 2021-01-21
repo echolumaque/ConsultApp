@@ -1,5 +1,4 @@
-﻿using Xamarin.Forms;
-using Prism.Commands;
+﻿using Prism.Commands;
 
 namespace ConsultApp.API.Models
 {

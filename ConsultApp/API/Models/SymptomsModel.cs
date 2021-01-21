@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ConsultApp.API.Models
+﻿namespace ConsultApp.API.Models
 {
     public class SymptomsModel
     {

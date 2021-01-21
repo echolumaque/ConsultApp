@@ -8,12 +8,12 @@
              xmlns:customrenderer="clr-namespace:ConsultApp.Helpers.CustomRenderers"
              xmlns:ffimage="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              xmlns:localimages="clr-namespace:ConsultApp.Helpers.Images"
-             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
-             xmlns:circle="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations" xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
+             xmlns:circle="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations" 
+             xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
              x:Class="ConsultApp.Views.DoctorsPage">
 
     <ContentPage.Content>
-        <StackLayout Padding="25,30,25,0">
+        <StackLayout Padding="25,50,25,0">
             <Label Text="{Binding Major,StringFormat='Lets for a doctor with specialty in {0}'}"
                    FontFamily="Bold"
                    TextColor="Black"
@@ -90,7 +90,7 @@
 
                                         <RelativeLayout HorizontalOptions="CenterAndExpand"
                                                         VerticalOptions="CenterAndExpand">
-                                            <ffimage:CachedImage Source="{localimages:ImageResource ConsultApp.Helpers.Images.maskgirl.jpg}"
+                                            <ffimage:CachedImage Source="{localimages:ImageResource ConsultApp.Helpers.Images.doc2.png}"
                                                                  BitmapOptimizations="True"
                                                                  DownsampleToViewSize="True"
                                                                  HeightRequest="100"
@@ -119,9 +119,10 @@
                                                BackgroundColor="White"
                                                VerticalOptions="StartAndExpand"
                                                BorderColor="#646FD4">
-                                            <!--<Frame.GestureRecognizers>
-                                                <TapGestureRecognizer Command="{Binding DiagnoseCommand}"/>
-                                            </Frame.GestureRecognizers>-->
+                                            <Frame.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding DoctorsSchedule}"
+                                                                      CommandParameter="{Binding DocsWithMajor[0]}"/>
+                                            </Frame.GestureRecognizers>
                                             <Label HorizontalTextAlignment="End"
                                                    VerticalTextAlignment="Center">
                                                 <Label.FormattedText>
@@ -142,7 +143,7 @@
                                               Grid.Column="0"
                                               Grid.Row="1"
                                               IsShowingUser="True"
-                                              HasScrollEnabled="True"
+                                              HasScrollEnabled="False"
                                               HasZoomEnabled="True"
                                               ItemsSource="{Binding MapPins}">
                                         <x:Arguments>

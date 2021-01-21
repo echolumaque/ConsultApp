@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using Xamarin.Forms.Maps;
+using Prism.Commands;
+using ConsultApp.API.Models;
 
 namespace ConsultApp.API.Models
 {
@@ -13,6 +15,7 @@ namespace ConsultApp.API.Models
         public bool IsAvailable => DaysAvailable.Contains(DateTime.Now.DayOfWeek.ToString()) ? true : false;
         public double Distance { get; set; }
         public ObservableCollection<MapPinModel> MapPins { get; set; }
+        public DelegateCommand DoctorsSchedule { get; set; }
     }
     public class MapPinModel
     {
