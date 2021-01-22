@@ -29,7 +29,7 @@ namespace ConsultApp.ViewModels
             this.navigationService = navigationService;
         }
 
-        public override void OnNavigatedTo(INavigationParameters parameters)
+        public override void Initialize(INavigationParameters parameters)
         {
             var items = parameters["Diseases"] as ObservableCollection<DiagnosisModel>;
             Diseases = new ObservableCollection<DiagnosisModel>(items);

@@ -19,6 +19,7 @@ using System.Security.Cryptography;
 using ConsultApp.Helpers.Images;
 using System.Reflection;
 using ConsultApp.Helpers.CustomRenderers;
+using ConsultApp.Fonts;
 
 namespace ConsultApp.ViewModels
 {
@@ -46,19 +47,19 @@ namespace ConsultApp.ViewModels
                 new ButtonsModel
                 {
                     Title = "Diagnostic",
-                    FontIcon = "\uf0f1",
+                    FontIcon = FontAwesomeIcons.Stethoscope,
                     Commands = new DelegateCommand(async() => await this.navigationService.NavigateAsync("ConsultPage")),
                 },
                 new ButtonsModel
                 {
-                    Title = "Shots",
-                    FontIcon = "\uf48e",
+                    Title = "Pending Consultations",
+                    FontIcon = FontAwesomeIcons.CalendarCheck,
                     Commands = new DelegateCommand(async () => await this.navigationService.NavigateAsync("")),
                 },
                 new ButtonsModel
                 {
-                    Title = "Consultation",
-                    FontIcon = "\uf095",
+                    Title = "Doctors",
+                    FontIcon = FontAwesomeIcons.UserMd,
                     Commands = new DelegateCommand(async() => await navigationService.NavigateAsync(""))
                 },
                 new ButtonsModel
@@ -69,14 +70,8 @@ namespace ConsultApp.ViewModels
                 },
                 new ButtonsModel
                 {
-                    Title = "Nurse",
-                    FontIcon = "\uf0f0",
-                    Commands = new DelegateCommand(async() => await navigationService.NavigateAsync(""))
-                },
-                new ButtonsModel
-                {
-                    Title = "Lab Work",
-                    FontIcon = "\uf0f8",
+                    Title = "About Us",
+                    FontIcon = FontAwesomeIcons.Question,
                     Commands = new DelegateCommand(async() => await navigationService.NavigateAsync(""))
                 },
             };

@@ -10,9 +10,9 @@ namespace ConsultApp.API.Models
     {
         public string Doctor { get; set; }
         public string Specialization { get; set; }
-        public string DaysAvailable { get; set; }
+        public DayOfWeek DaysAvailable { get; set; }
         public string Hospital { get; set; }
-        public bool IsAvailable => DaysAvailable.Contains(DateTime.Now.DayOfWeek.ToString()) ? true : false;
+        public bool IsAvailable => DaysAvailable.Equals(DateTime.Now.DayOfWeek) ? true : false;
         public double Distance { get; set; }
         public ObservableCollection<MapPinModel> MapPins { get; set; }
         public DelegateCommand DoctorsSchedule { get; set; }

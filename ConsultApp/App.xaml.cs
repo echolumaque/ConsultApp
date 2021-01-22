@@ -57,6 +57,6 @@ namespace ConsultApp
             containerRegistry.RegisterForNavigation<DoctorsPage, DoctorsPageViewModel>();
             containerRegistry.RegisterForNavigation<SymptomsAndDiseaseInfo, SymptomsAndDiseaseInfoViewModel>("SymptomsInfo");
             containerRegistry.RegisterForNavigation<DoctorsAvailability, DoctorsAvailabilityViewModel>();
-        }
+        }        
     }
 }

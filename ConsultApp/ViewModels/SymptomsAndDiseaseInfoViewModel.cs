@@ -25,7 +25,7 @@ namespace ConsultApp.ViewModels
             GoBack = new DelegateCommand(async () => await this.navigationService.GoBackAsync());
         }
 
-        public override async void OnNavigatedTo(INavigationParameters parameters)
+        public override async void Initialize(INavigationParameters parameters)
         {
             var disease = parameters["disease"] as DiseaseInfoModel;
             await GetInfo(disease.ID);

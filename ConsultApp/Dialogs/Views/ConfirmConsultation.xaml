@@ -10,10 +10,10 @@
               CloseWhenBackgroundIsClicked="False"
               xmlns:rg="http://rotorgames.com"
               xmlns:vm="clr-namespace:ConsultApp.Dialogs.ViewModels"
-              x:Class="ConsultApp.Dialogs.Views.LocationError">
+              x:Class="ConsultApp.Dialogs.Views.ConfirmConsultation">
 
     <rg:PopupPage.BindingContext>
-        <vm:LocationErrorViewModel/>
+        <vm:ConfirmConsultationViewModel/>
     </rg:PopupPage.BindingContext>
 
     <rg:PopupPage.Animation>

@@ -3,28 +3,23 @@ using System.Linq;
 using ConsultApp.API.Models;
 using Prism.Navigation;
 using Prism.Commands;
-using Prism.Events;
 using ConsultApp.Helpers;
 using Xamarin.Forms;
 using System;
 using System.Threading.Tasks;
 using Xamarin.Forms.Maps;
 using Xamarin.Essentials;
-using ConsultApp.Helpers.Events;
 
 namespace ConsultApp.ViewModels
 {
     public class DoctorsPageViewModel : ViewModelBase
     {
         private readonly INavigationService navigationService;
-        private readonly IEventAggregator eventAggregator;
         private ISetStatusBarColor setStatusBarColor { get; }
 
-        public DoctorsPageViewModel(INavigationService navigationService, ISetStatusBarColor setStatusBarColor, IEventAggregator eventAggregator) : base(navigationService)
+        public DoctorsPageViewModel(INavigationService navigationService, ISetStatusBarColor setStatusBarColor) : base(navigationService)
         {
             this.navigationService = navigationService;
-
-            this.eventAggregator = eventAggregator;
 
             this.setStatusBarColor = setStatusBarColor;
             this.setStatusBarColor.SetStatusBarColor(Color.White);
@@ -252,15 +247,14 @@ namespace ConsultApp.ViewModels
                     Specialization = "Reconstructive dentistry",
                 },
             };
-
-            AssignAvailabilityAndHospital();
         }
 
-        public override void OnNavigatedTo(INavigationParameters parameters)
+        public override void Initialize(INavigationParameters parameters)
         {
             var specialty = parameters["Major"] as string;
             Major = specialty;
             DocsWithMajor = new ObservableCollection<DoctorsAndSpecializationsModel>(Triage.Where(x => x.Specialization.Equals(specialty)));
+            AssignAvailabilityAndHospital();
         }
         #region Properties
 
@@ -291,20 +285,20 @@ namespace ConsultApp.ViewModels
         #endregion
 
         #region Methods
-
+     
         private void AssignAvailabilityAndHospital()
         {
             string[] hospitals = { "Saint Luke's Medical Center", "University of Santo Tomas Hospital", "Makati Medical Center", "The Medical City", "Manila Doctors Hospital" ,"Ospital ng Makati",
             "Pasig General Hospital", "Rizal Medical Center", "Mandaluyong Medical Center", "Asian Hospital and Medical Center", "Olivarez General Hospital"};
             
-            string[] days = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "By appointment"};
-        
+            DayOfWeek[] days = { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday};
+
             var rnd = new Random();
 
             foreach (var Doctors in Triage)
             {
                 Doctors.Hospital = hospitals[rnd.Next(11)];
-                Doctors.DaysAvailable = days[rnd.Next(7)];
+                Doctors.DaysAvailable = days[rnd.Next(6)];
                 Doctors.DoctorsSchedule = new DelegateCommand(async () => await GotoDoctorsAvailabilityPage());
 
                 switch (Doctors.Hospital)
@@ -475,7 +469,6 @@ namespace ConsultApp.ViewModels
                 { "doctor", DocsWithMajor }
             };
             await navigationService.NavigateAsync("DoctorsAvailability", parameters);
-            eventAggregator.GetEvent<PassAvailableDay>().Publish(DocsWithMajor[0].DaysAvailable);
         }
         #endregion
     }

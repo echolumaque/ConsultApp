@@ -11,7 +11,6 @@ namespace ConsultApp.Dialogs.ViewModels
 {
     public class LocationErrorViewModel : BindableBase
     {
-        //private ILocation location = DependencyService.Get<ILocation>();
         public LocationErrorViewModel()
         {
             CloseDialog = new DelegateCommand(async() => await PopupNavigation.Instance.PopAsync(true));
@@ -39,32 +38,7 @@ namespace ConsultApp.Dialogs.ViewModels
             await Permissions.RequestAsync<Permissions.NetworkState>();
             await Permissions.RequestAsync<Permissions.StorageWrite>();
 
-            await Task.Run(async () =>
-            {
-                await DependencyService.Get<ILocation>().DisplayLocationSettingsRequest();
-            }).ContinueWith(async x => await SetLocation());
-
-            //if (DeviceInfo.Platform.Equals(DevicePlatform.Android))
-            //{
-            //    await DependencyService.Get<ILocation>().DisplayLocationSettingsRequest();
-
-            //    App.CurrentLcoation = await Geolocation.GetLocationAsync(new GeolocationRequest
-            //    {
-            //        DesiredAccuracy = GeolocationAccuracy.High,
-            //        Timeout = TimeSpan.FromSeconds(10),
-            //    });
-            //    await PopupNavigation.Instance.PopAsync(true);
-            //        //App.CurrentLcoation = new Location(loc.Result.Latitude, loc.Result.Longitude);
-
-            //    //else TODO: FOR OTHER PLATFORMS
-            //    //{
-            //    //    App.CurrentLcoation = await Geolocation.GetLocationAsync(new GeolocationRequest
-            //    //    {
-            //    //        DesiredAccuracy = GeolocationAccuracy.High,
-            //    //        Timeout = TimeSpan.FromSeconds(10),
-            //    //    });
-            //    //}
-            //}
+            await DependencyService.Get<ILocation>().DisplayLocationSettingsRequest().ContinueWith(async x => await SetLocation());           
         }
 
         private async Task SetLocation()

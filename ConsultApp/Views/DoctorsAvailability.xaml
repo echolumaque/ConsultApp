@@ -9,6 +9,7 @@
              xmlns:transformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
              xmlns:calendar="clr-namespace:Syncfusion.SfCalendar.XForms;assembly=Syncfusion.SfCalendar.XForms"
              Visual="Material"
+             BackgroundColor="White"
              xmlns:fonts="clr-namespace:ConsultApp.Fonts"
              x:Class="ConsultApp.Views.DoctorsAvailability">
 
@@ -85,8 +86,13 @@
                              Grid.Column="0"
                              Grid.ColumnSpan="2"
                              BlackoutDatesViewMode="Stripes"
+                             SelectionMode="SingleSelection"
                              OnMonthCellLoaded="SfCalendar_OnMonthCellLoaded"
                              x:Name="calendar"
+                             EnableDatesInPast="False"
+                             SelectedDate="{Binding SelectedDate, Mode=TwoWay}"
+                             SelectionChangedCommand="{Binding SelectedDateChanged}"
+                             NavigationDirection="Vertical"
                              ViewMode="MonthView">
             <calendar:SfCalendar.MonthViewSettings>
                 <calendar:MonthViewSettings WeekEndTextColor="Red"
@@ -104,7 +110,12 @@
                HorizontalOptions="EndAndExpand"
                VerticalOptions="EndAndExpand"
                BackgroundColor="#5B00DB"
+               IsEnabled="{Binding Enabled}"
                Grid.Column="1">
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding AddToPendingCommand}"
+                                      CommandParameter="{Binding SelectedDate}"/>
+            </Frame.GestureRecognizers>
             <Label>
                 <Label.FormattedText>
                     <FormattedString>

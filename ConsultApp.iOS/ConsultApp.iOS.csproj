@@ -207,6 +207,9 @@
     <PackageReference Include="Rg.Plugins.Popup">
       <Version>2.0.0.10</Version>
     </PackageReference>
+    <PackageReference Include="sqlite-net-pcl">
+      <Version>1.7.335</Version>
+    </PackageReference>
     <PackageReference Include="Syncfusion.Xamarin.SfCalendar">
       <Version>18.4.0.35</Version>
     </PackageReference>
