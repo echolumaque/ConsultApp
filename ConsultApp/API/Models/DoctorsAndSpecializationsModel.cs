@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using Xamarin.Forms.Maps;
 using Prism.Commands;
 using ConsultApp.API.Models;
+using System.Threading;
 
 namespace ConsultApp.API.Models
 {

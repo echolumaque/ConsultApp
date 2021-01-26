@@ -61,11 +61,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Polly" Version="7.2.1" />
     <PackageReference Include="Refit" Version="5.2.4" />
     <PackageReference Include="Rg.Plugins.Popup" Version="2.0.0.10" />
     <PackageReference Include="sqlite-net-pcl" Version="1.7.335" />
-    <PackageReference Include="Syncfusion.Xamarin.SfCalendar" Version="18.4.0.35" />
-    <PackageReference Include="Syncfusion.Xamarin.SfComboBox" Version="18.4.0.35" />
+    <PackageReference Include="Syncfusion.Xamarin.SfCalendar" Version="18.4.0.30" />
+    <PackageReference Include="Syncfusion.Xamarin.SfComboBox" Version="18.4.0.30" />
     <PackageReference Include="Xamarin.CommunityToolkit" Version="1.0.2" />
     <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.11.982" />
     <PackageReference Include="Xamarin.FFImageLoading.Svg.Forms" Version="2.4.11.982" />
@@ -93,13 +94,16 @@
     <EmbeddedResource Update="Views\DiagnosisPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\DoctorsAvailability.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Update="Views\DoctorsPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Views\DoctorsSchedule.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Views\HomePage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\PendingConsultationPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\SymptomsAndDiseaseInfo.xaml">

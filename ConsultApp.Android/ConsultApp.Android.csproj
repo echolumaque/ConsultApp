@@ -68,6 +68,9 @@
     <PackageReference Include="glidex.forms">
       <Version>2.1.0.470</Version>
     </PackageReference>
+    <PackageReference Include="Polly">
+      <Version>7.2.1</Version>
+    </PackageReference>
     <PackageReference Include="Refit">
       <Version>5.2.4</Version>
     </PackageReference>
@@ -81,10 +84,10 @@
       <Version>1.7.335</Version>
     </PackageReference>
     <PackageReference Include="Syncfusion.Xamarin.SfCalendar">
-      <Version>18.4.0.35</Version>
+      <Version>18.4.0.30</Version>
     </PackageReference>
     <PackageReference Include="Syncfusion.Xamarin.SfComboBox">
-      <Version>18.4.0.35</Version>
+      <Version>18.4.0.30</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.CommunityToolkit">
       <Version>1.0.2</Version>
@@ -116,6 +119,7 @@
     <Compile Include="Helpers\CustomRenderers\CustomEntryRendererDroid.cs" />
     <Compile Include="Helpers\Dependencies\AskLocation.cs" />
     <Compile Include="Helpers\Dependencies\SetStatusBarColorDroid.cs" />
+    <Compile Include="Helpers\Dependencies\Toast.cs" />
     <Compile Include="MainApplication.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="SplashActivity.cs" />

@@ -29,7 +29,7 @@ namespace ConsultApp.ViewModels
             this.navigationService = navigationService;
         }
 
-        public override void Initialize(INavigationParameters parameters)
+        public override void OnNavigatedTo(INavigationParameters parameters)
         {
             var items = parameters["Diseases"] as ObservableCollection<DiagnosisModel>;
             Diseases = new ObservableCollection<DiagnosisModel>(items);
@@ -55,20 +55,11 @@ namespace ConsultApp.ViewModels
         {
             try
             {
-                await Permissions.CheckStatusAsync<Permissions.LocationAlways>();
-                await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
-                await Permissions.CheckStatusAsync<Permissions.NetworkState>();
-                await Permissions.CheckStatusAsync<Permissions.StorageWrite>();
-
-                await Permissions.RequestAsync<Permissions.LocationAlways>();
                 await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
                 await Permissions.RequestAsync<Permissions.NetworkState>();
                 await Permissions.RequestAsync<Permissions.StorageWrite>();
 
-                await Task.Run(async () =>
-                {
-                    await location.DisplayLocationSettingsRequest();
-                }).ContinueWith(async x => await SetLocation());
+                await location.DisplayLocationSettingsRequest().ContinueWith(async x => await SetLocation());
 
                 var parameters = new NavigationParameters
                 {
@@ -84,11 +75,12 @@ namespace ConsultApp.ViewModels
 
         private async Task SetLocation()
         {
-            App.CurrentLocation = await Geolocation.GetLocationAsync(new GeolocationRequest
-            {
-                DesiredAccuracy = GeolocationAccuracy.High,
-                Timeout = TimeSpan.FromSeconds(10)
-            });
+            //App.CurrentLocation = await Geolocation.GetLocationAsync(new GeolocationRequest
+            //{
+            //    DesiredAccuracy = GeolocationAccuracy.High,
+            //    Timeout = TimeSpan.FromSeconds(5)
+            //});
+            App.CurrentLocation = await Geolocation.GetLastKnownLocationAsync();
         }
         #endregion
     }

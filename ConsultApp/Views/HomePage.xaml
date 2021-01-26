@@ -5,6 +5,7 @@
              xmlns:fonts="clr-namespace:ConsultApp.Fonts"
              xmlns:combobox="clr-namespace:Syncfusion.XForms.ComboBox;assembly=Syncfusion.SfComboBox.XForms"
              Visual="Material"
+             Padding="0,0,0,10"
              x:Class="ConsultApp.Views.HomePage">
 
     <ContentPage.Content>
@@ -159,7 +160,7 @@
                                 ItemSizingStrategy="MeasureAllItems"
                                 x:Name="buttons"
                                 SelectionMode="Single"
-                                ItemsLayout="VerticalGrid, 3">
+                                ItemsLayout="VerticalGrid, 2">
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
@@ -168,8 +169,8 @@
                                        HasShadow="True"
                                        CornerRadius="20"
                                        Margin="5"
-                                       HeightRequest="90"
-                                       WidthRequest="90"
+                                       VerticalOptions="FillAndExpand"
+                                       HeightRequest="100"
                                        BackgroundColor="White"
                                        BorderColor="LightGray">
                                     <Frame.GestureRecognizers>

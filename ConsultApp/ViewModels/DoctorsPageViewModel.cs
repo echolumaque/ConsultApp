@@ -20,11 +20,22 @@ namespace ConsultApp.ViewModels
         public DoctorsPageViewModel(INavigationService navigationService, ISetStatusBarColor setStatusBarColor) : base(navigationService)
         {
             this.navigationService = navigationService;
+            //this.eventAggregator = eventAggregator;
 
             this.setStatusBarColor = setStatusBarColor;
-            this.setStatusBarColor.SetStatusBarColor(Color.White);
+            this.setStatusBarColor.SetStatusBarColor(Color.White);   
+        }
 
-            Triage = new ObservableCollection<DoctorsAndSpecializationsModel>()
+        public override void OnNavigatedTo(INavigationParameters parameters)
+        {
+            var specialty = parameters["Major"] as string;
+            Major = specialty;
+            DocsWithMajor = new ObservableCollection<DoctorsAndSpecializationsModel>(Triage.Where(x => x.Specialization.Equals(specialty)));
+            AssignAvailabilityAndHospital();
+        }
+        #region Properties
+
+        private ObservableCollection<DoctorsAndSpecializationsModel> Triage = new ObservableCollection<DoctorsAndSpecializationsModel>()
             {
                 new DoctorsAndSpecializationsModel
                 {
@@ -74,72 +85,72 @@ namespace ConsultApp.ViewModels
                 new DoctorsAndSpecializationsModel
                 {
                     Doctor = "Dr. BACCAY, Michael Martin C.",
-                    Specialization =  "Endocrinology",
+                    Specialization = "Endocrinology",
                 },
                 new DoctorsAndSpecializationsModel
                 {
                     Doctor = "Dr. CERCADO, Ephraim",
-                    Specialization =  "Forensic medicine",
+                    Specialization = "Forensic medicine",
                 },
                 new DoctorsAndSpecializationsModel
                 {
                     Doctor = "Dr. DELA CRUZ, Juan",
-                    Specialization =  "Gastroenterology",
+                    Specialization = "Gastroenterology",
                 },
                 new DoctorsAndSpecializationsModel
                 {
                     Doctor = "Dr. DESALES, Rey A.",
-                    Specialization =  "General practice",
+                    Specialization = "General practice",
                 },
                 new DoctorsAndSpecializationsModel
                 {
                     Doctor = "Dr.ESTIOCO, Francis Irving S.",
-                    Specialization =  "Geriatric medicine",
+                    Specialization = "Geriatric medicine",
                 },
                 new DoctorsAndSpecializationsModel
                 {
                     Doctor = "BAYLON, HONORATA G.",
-                    Specialization =  "Gynecology",
+                    Specialization = "Gynecology",
                 },
                 new DoctorsAndSpecializationsModel
                 {
                     Doctor = "Dr. BONIFACIO, LYNN BAQUIRAN",
-                    Specialization =  "Internal medicine",
+                    Specialization = "Internal medicine",
                 },
                 new DoctorsAndSpecializationsModel
                 {
                     Doctor = "Dr. BAYLON, HONORATA G.",
-                    Specialization =  "Hand surgery",
+                    Specialization = "Hand surgery",
                 },
                 new DoctorsAndSpecializationsModel
                 {
                     Doctor = "Dr. CAGUIOA, LESLIE G.",
-                    Specialization =  "Hematology",
+                    Specialization = "Hematology",
                 },
                 new DoctorsAndSpecializationsModel
                 {
                     Doctor = "Dr. ALCANTARA, DANILO G.",
-                    Specialization =  "Homeopathy",
+                    Specialization = "Homeopathy",
                 },
                 new DoctorsAndSpecializationsModel
                 {
                     Doctor = "Dr. SELUDO, BERNADETTE T.",
-                    Specialization =  "Infectiology",
+                    Specialization = "Infectiology",
                 },
                 new DoctorsAndSpecializationsModel
                 {
-                    Doctor =  "Dr. VERGARA, NONILON",
-                    Specialization =  "Manual medicine",
+                    Doctor = "Dr. VERGARA, NONILON",
+                    Specialization = "Manual medicine",
                 },
                 new DoctorsAndSpecializationsModel
                 {
                     Doctor = "Dr. AMPARO, JOSE ROBERT",
-                    Specialization =  "Maxillo Surgery"
+                    Specialization = "Maxillo Surgery"
                 },
                 new DoctorsAndSpecializationsModel
                 {
-                    Doctor =  "Dr. AGRAVA, MA. AMPARO C.",
-                    Specialization =  "Nephrology"
+                    Doctor = "Dr. AGRAVA, MA. AMPARO C.",
+                    Specialization = "Nephrology"
                 },
                 new DoctorsAndSpecializationsModel
                 {
@@ -158,7 +169,7 @@ namespace ConsultApp.ViewModels
                 },
                 new DoctorsAndSpecializationsModel
                 {
-                    Doctor =  "Dr. PINE, FLORENCIO J.",
+                    Doctor = "Dr. PINE, FLORENCIO J.",
                     Specialization = "Ophthalmology",
                 },
                 new DoctorsAndSpecializationsModel
@@ -168,7 +179,7 @@ namespace ConsultApp.ViewModels
                 },
                 new DoctorsAndSpecializationsModel
                 {
-                    Doctor =  "Dr. VILLANUEVA, MARLENE E.",
+                    Doctor = "Dr. VILLANUEVA, MARLENE E.",
                     Specialization = "Otolaryngology",
                 },
                 new DoctorsAndSpecializationsModel
@@ -188,18 +199,18 @@ namespace ConsultApp.ViewModels
                 },
                 new DoctorsAndSpecializationsModel
                 {
-                    Doctor =  "Dr. VERGARA, NONILON",
-                    Specialization =  "Psychiatry",
+                    Doctor = "Dr. VERGARA, NONILON",
+                    Specialization = "Psychiatry",
                 },
                 new DoctorsAndSpecializationsModel
                 {
                     Doctor = "Dr. AMPARO, JOSE ROBERT",
-                    Specialization =  "Tropical medicine"
+                    Specialization = "Tropical medicine"
                 },
                 new DoctorsAndSpecializationsModel
                 {
-                    Doctor =  "Dr. AGRAVA, MA. AMPARO C.",
-                    Specialization =  "Sports medicine"
+                    Doctor = "Dr. AGRAVA, MA. AMPARO C.",
+                    Specialization = "Sports medicine"
                 },
                 new DoctorsAndSpecializationsModel
                 {
@@ -218,7 +229,7 @@ namespace ConsultApp.ViewModels
                 },
                 new DoctorsAndSpecializationsModel
                 {
-                    Doctor =  "Dr. PINE, FLORENCIO J.",
+                    Doctor = "Dr. PINE, FLORENCIO J.",
                     Specialization = "Urology",
                 },
                 new DoctorsAndSpecializationsModel
@@ -228,7 +239,7 @@ namespace ConsultApp.ViewModels
                 },
                 new DoctorsAndSpecializationsModel
                 {
-                    Doctor =  "Dr. VILLANUEVA, MARLENE E.",
+                    Doctor = "Dr. VILLANUEVA, MARLENE E.",
                     Specialization = "Orthodontics",
                 },
                 new DoctorsAndSpecializationsModel
@@ -247,18 +258,6 @@ namespace ConsultApp.ViewModels
                     Specialization = "Reconstructive dentistry",
                 },
             };
-        }
-
-        public override void Initialize(INavigationParameters parameters)
-        {
-            var specialty = parameters["Major"] as string;
-            Major = specialty;
-            DocsWithMajor = new ObservableCollection<DoctorsAndSpecializationsModel>(Triage.Where(x => x.Specialization.Equals(specialty)));
-            AssignAvailabilityAndHospital();
-        }
-        #region Properties
-
-        private ObservableCollection<DoctorsAndSpecializationsModel> Triage;
 
 
         private string major;
@@ -297,9 +296,9 @@ namespace ConsultApp.ViewModels
 
             foreach (var Doctors in Triage)
             {
-                Doctors.Hospital = hospitals[rnd.Next(11)];
-                Doctors.DaysAvailable = days[rnd.Next(6)];
-                Doctors.DoctorsSchedule = new DelegateCommand(async () => await GotoDoctorsAvailabilityPage());
+                Doctors.Hospital = hospitals[rnd.Next(hospitals.Length)];
+                Doctors.DaysAvailable = days[rnd.Next(days.Length)];
+                Doctors.DoctorsSchedule = new DelegateCommand (async () => await GotoDoctorsAvailabilityPage());
 
                 switch (Doctors.Hospital)
                 {
@@ -468,7 +467,7 @@ namespace ConsultApp.ViewModels
             {
                 { "doctor", DocsWithMajor }
             };
-            await navigationService.NavigateAsync("DoctorsAvailability", parameters);
+            await navigationService.NavigateAsync("DoctorsSchedule", parameters);
         }
         #endregion
     }

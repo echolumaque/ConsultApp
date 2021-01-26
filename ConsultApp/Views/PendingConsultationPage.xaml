@@ -1,0 +1,188 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="http://prismlibrary.com"
+             xmlns:ffimage="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms" 
+             xmlns:circle="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+             xmlns:localimages="clr-namespace:ConsultApp.Helpers.Images"
+             xmlns:fonts="clr-namespace:ConsultApp.Fonts"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             Padding="20,50,20,10"
+             Visual="Material"
+             xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
+             x:Class="ConsultApp.Views.PendingConsultationPage">
+
+    <StackLayout>
+
+        <Label Text="Your pending consultations:"
+               FontFamily="Bold"
+               FontSize="25"
+               TextColor="Black"/>
+
+        <CollectionView ItemsSource="{Binding Pendings}"
+                        ItemSizingStrategy="MeasureAllItems"
+                        VerticalOptions="FillAndExpand"
+                        HorizontalOptions="FillAndExpand">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout>
+                        <Frame HasShadow="True"
+                               BackgroundColor="#6B77E3"
+                               CornerRadius="20"
+                               Margin="0,10"
+                               Padding="10">
+                            <Grid ColumnDefinitions=".75*,.25*"
+                                  RowDefinitions="*">
+                                <StackLayout Grid.Column="0"
+                                             Grid.Row="0">
+                                    <Label Text="{Binding Name}"
+                                           FontFamily="Bold"
+                                           FontSize="20"
+                                           TextColor="White"/>
+                                    <Label Text="{Binding Specialization}"
+                                           FontFamily="Regular"
+                                           FontSize="18"
+                                           TextColor="White"/>
+                                    <Label>
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="{Binding Hospital, StringFormat='Hospital: {0}'}"
+                                                      FontFamily="Regular"
+                                                      TextColor="White"/>
+                                                <Span Text="{Binding Distance, StringFormat=' ({0:N2} kM)'}"
+                                                      FontFamily="Regular"
+                                                      TextColor="White"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                    <Label Text="{Binding AvailableDay, StringFormat='Availability: {0}'}"
+                                           FontFamily="Regular"
+                                           TextColor="White"/>
+                                    <Label>
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="Consultation Date: "
+                                                      TextColor="White"
+                                                      FontFamily="Regular"/>
+                                                <Span Text="{Binding SelectedDay}"
+                                                      TextColor="White"
+                                                      FontFamily="Bold"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                    <Label>
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="Created on: "
+                                                      TextColor="White"
+                                                      FontFamily="Regular"/>
+                                                <Span Text="{Binding CreationDate}"
+                                                      TextColor="White"
+                                                      FontFamily="Bold"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                </StackLayout>
+
+                                <StackLayout Grid.Column="0"
+                                             Grid.Row="0"
+                                             Grid.ColumnSpan="2"
+                                             VerticalOptions="StartAndExpand"
+                                             HorizontalOptions="EndAndExpand">
+
+                                    <RelativeLayout HorizontalOptions="CenterAndExpand"
+                                                    VerticalOptions="CenterAndExpand">
+                                        <ffimage:CachedImage Source="{localimages:ImageResource ConsultApp.Helpers.Images.doc2.png}"
+                                                             BitmapOptimizations="True"
+                                                             DownsampleToViewSize="True"
+                                                             HeightRequest="100"
+                                                             HorizontalOptions="CenterAndExpand"
+                                                             VerticalOptions="CenterAndExpand"
+                                                             x:Name="pic"
+                                                             Aspect="AspectFit">
+                                            <ffimage:CachedImage.Transformations>
+                                                <circle:CircleTransformation/>
+                                            </ffimage:CachedImage.Transformations>
+                                        </ffimage:CachedImage>
+
+                                        <BoxView RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, 
+                                            Constant=25, 
+                                            Factor=0,
+                                            Property=X,
+                                            ElementName=pic}"
+                                                 BackgroundColor="Green"
+                                                 IsVisible="{Binding IsAvailable}"
+                                                 CornerRadius="100"
+                                                 Scale="0.5"/>
+
+                                    </RelativeLayout>
+
+                                    <!--<Frame Padding="10"
+                                           HasShadow="True"
+                                           HorizontalOptions="EndAndExpand"
+                                           BackgroundColor="White"
+                                           VerticalOptions="StartAndExpand"
+                                           BorderColor="#646FD4">
+                                        <Frame.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding DoctorsSchedule}"/>
+                                        </Frame.GestureRecognizers>
+                                        <Label HorizontalTextAlignment="End"
+                                               VerticalTextAlignment="Center">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="{x:Static fonts:FontAwesomeIcons.Stethoscope}"
+                                                          FontFamily="fa-solid"
+                                                          TextColor="#8F9EFF"/>
+                                                    <Span Text=" Set an appointment"
+                                                          TextColor="#8F9EFF"
+                                                          FontFamily="Regular"/>
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                    </Frame>-->
+                                </StackLayout>
+
+                                <maps:Map Grid.ColumnSpan="2"
+                                          Grid.Column="0"
+                                          Grid.Row="1"
+                                          IsShowingUser="True"
+                                          HasScrollEnabled="False"
+                                          HasZoomEnabled="True"
+                                          ItemsSource="{Binding Pins}">
+                                    <x:Arguments>
+                                        <maps:MapSpan>
+                                            <x:Arguments>
+                                                <maps:Position>
+                                                    <x:Arguments>
+                                                        <x:Double>12.8797</x:Double>
+                                                        <x:Double>121.7740</x:Double>
+                                                    </x:Arguments>
+                                                </maps:Position>
+                                                <x:Double>10</x:Double>
+                                                <x:Double>10</x:Double>
+                                            </x:Arguments>
+                                        </maps:MapSpan>
+                                    </x:Arguments>
+                                    
+                                <!--<maps:Map.Pins>
+                                        <maps:Pin Position="{Binding Location}"
+                                                  Address="{Binding Address}"
+                                                  Label="{Binding Label}"/>
+                                    </maps:Map.Pins>-->
+                                    <maps:Map.ItemTemplate>
+                                        <DataTemplate>
+                                            <maps:Pin Position="{Binding Position}"
+                                                      Label="{Binding Label}"
+                                                      Address="{Binding Address}"
+                                                      Type="Place"/>
+                                        </DataTemplate>
+                                    </maps:Map.ItemTemplate>
+                                </maps:Map>
+                            </Grid>
+                        </Frame>
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </StackLayout>
+</ContentPage>

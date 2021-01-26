@@ -15,7 +15,6 @@ namespace ConsultApp.Views
 
         private void SfComboBox_SelectionChanged(object sender, Syncfusion.XForms.ComboBox.SelectionChangedEventArgs e)
         {
-            var combobox = sender as Syncfusion.XForms.ComboBox.SfComboBox;
             var vm = BindingContext as HomePageViewModel;
             vm.PassDiseaseForInfo.Execute(new NavigationParameters
             {

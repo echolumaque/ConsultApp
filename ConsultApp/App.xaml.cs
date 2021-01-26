@@ -11,6 +11,12 @@ using FFImageLoading;
 using System.Net.Http.Headers;
 using FFImageLoading.Config;
 using Xamarin.Essentials;
+using ConsultApp.Database;
+using ConsultApp.Helpers.Interfaces;
+using SQLite;
+using System;
+using System.Threading.Tasks;
+using System.Linq;
 
 [assembly: ExportFont("Roboto-Bold.ttf", Alias = "Bold")]
 [assembly: ExportFont("Roboto-Regular.ttf", Alias = "Regular")]
@@ -22,18 +28,17 @@ namespace ConsultApp
 {
     public partial class App
     {
-        public static readonly HttpClient httpClient = new HttpClient();
-
-        public static Location CurrentLocation = new Location();
+        private ILocation location { get; }
 
         public App(IPlatformInitializer initializer) : base(initializer)
         {
+            //this.location = location;
         }
 
         protected override async void OnInitialized()
         {
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Mzg4MTg2QDMxMzgyZTM0MmUzMGhsWmVpcHBNcUVkZzlIRXVsNHNEcE5rNEJPclMwKzVvaWVwZHp1L0VxTVk9");
             InitializeComponent();
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Mzg3MDkwQDMxMzgyZTM0MmUzMEdWa2p2MG1GbXJRbGJrQjVicUJUc2FIL2wrOUFzbWU2OE1DMENIR3FZdDg9");
 
             await NavigationService.NavigateAsync("CustomNavigationPage/HomePage");
 
@@ -56,7 +61,60 @@ namespace ConsultApp
             containerRegistry.RegisterForNavigation<DiagnosisPage, DiagnosisPageViewModel>();
             containerRegistry.RegisterForNavigation<DoctorsPage, DoctorsPageViewModel>();
             containerRegistry.RegisterForNavigation<SymptomsAndDiseaseInfo, SymptomsAndDiseaseInfoViewModel>("SymptomsInfo");
-            containerRegistry.RegisterForNavigation<DoctorsAvailability, DoctorsAvailabilityViewModel>();
-        }        
+            containerRegistry.RegisterForNavigation<DoctorsSchedule, DoctorsScheduleViewModel>();
+            containerRegistry.RegisterForNavigation<PendingConsultationPage, PendingConsultationPageViewModel>();
+        }
+
+        //static properties and methods
+
+        public static readonly HttpClient httpClient = new HttpClient();
+
+        public static Location CurrentLocation = new Location();
+
+        private static readonly Lazy<SQLiteAsyncConnection> dbConnection =
+            new Lazy<SQLiteAsyncConnection>(() => new SQLiteAsyncConnection(SQLiteConstants.DatabasePath, SQLiteConstants.Flags));
+
+        public static SQLiteAsyncConnection ConnectionString = dbConnection.Value;
+
+        public static async Task<SQLiteAsyncConnection> CreateDatabaseTable<T>()
+        {
+            if (!ConnectionString.TableMappings.Any(x => x.MappedType == typeof(T)))
+            {
+                await ConnectionString.EnableWriteAheadLoggingAsync();
+                await ConnectionString.CreateTablesAsync(CreateFlags.None, typeof(T));
+            }
+            return ConnectionString;
+        }
+
+        //private async Task GetLocation()
+        //{
+        //    try
+        //    {
+        //        await Permissions.CheckStatusAsync<Permissions.LocationAlways>();
+        //        await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+        //        await Permissions.CheckStatusAsync<Permissions.NetworkState>();
+        //        await Permissions.CheckStatusAsync<Permissions.StorageWrite>();
+
+        //        await Permissions.RequestAsync<Permissions.LocationAlways>();
+        //        await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+        //        await Permissions.RequestAsync<Permissions.NetworkState>();
+        //        await Permissions.RequestAsync<Permissions.StorageWrite>();
+        //        //TODO: ADD EACH PLATFORM IMPLEMENTATION
+        //        await location.DisplayLocationSettingsRequest().ContinueWith(async x => await SetLocation());
+        //    }
+        //    catch (Exception)
+        //    {
+        //        await PopupNavigation.Instance.PushAsync(new LocationError(), true);
+        //    }
+        //}
+
+        //private async Task SetLocation()
+        //{
+        //    App.CurrentLocation = await Geolocation.GetLocationAsync(new GeolocationRequest
+        //    {
+        //        DesiredAccuracy = GeolocationAccuracy.High,
+        //        Timeout = TimeSpan.FromSeconds(10)
+        //    });
+        //}
     }
 }

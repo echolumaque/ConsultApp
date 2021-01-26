@@ -1,10 +1,11 @@
 ﻿using ConsultApp.Helpers;
+using ConsultApp.Helpers.Interfaces;
 using ConsultApp.iOS.Helpers;
 using Foundation;
 using Prism;
 using Prism.Ioc;
 using UIKit;
-
+using Syncfusion.SfCalendar.XForms.iOS;
 
 namespace ConsultApp.iOS
 {
@@ -27,6 +28,8 @@ namespace ConsultApp.iOS
             global::Xamarin.Forms.Forms.Init();
             FFImageLoading.Forms.Platform.CachedImageRenderer.Init();
             FFImageLoading.Forms.Platform.CachedImageRenderer.InitImageSourceHandler();
+            new Syncfusion.XForms.iOS.ComboBox.SfComboBoxRenderer();
+            SfCalendarRenderer.Init();
             global::Xamarin.Forms.FormsMaterial.Init();
             Xamarin.FormsMaps.Init();
             LoadApplication(new App(new iOSInitializer()));
@@ -40,6 +43,7 @@ namespace ConsultApp.iOS
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.Register<ISetStatusBarColor, SetStatusBarColoriOS>();
+            containerRegistry.Register<IToast, Toast>();
         }
     }
 }

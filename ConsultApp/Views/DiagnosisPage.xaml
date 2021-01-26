@@ -123,7 +123,7 @@
                                                         <FormattedString>
                                                             <Span Text="Medical specialist that can help: "
                                                                   FontFamily="Regular"/>
-                                                            <Span Text="{Binding Specialisation[0].Name}"
+                                                            <Span Text="{Binding Specialisation[0].Name}}"
                                                                   FontFamily="Bold"/>
                                                         </FormattedString>
                                                     </Label.FormattedText>

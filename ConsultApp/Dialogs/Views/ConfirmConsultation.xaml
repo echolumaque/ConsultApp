@@ -41,7 +41,7 @@
                                 VerticalOptions="CenterAndExpand"
                                 HorizontalOptions="CenterAndExpand"/>
 
-            <Label Text="Failed to obtain current location for hospital distance location functionality. Please enable location services first."
+            <Label Text="{Binding SelectedDate}"
                    FontFamily="Bold"
                    FontSize="20"
                    TextColor="Black"/>

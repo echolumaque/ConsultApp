@@ -120,8 +120,7 @@
                                                VerticalOptions="StartAndExpand"
                                                BorderColor="#646FD4">
                                             <Frame.GestureRecognizers>
-                                                <TapGestureRecognizer Command="{Binding DoctorsSchedule}"
-                                                                      CommandParameter="{Binding DocsWithMajor[0]}"/>
+                                                <TapGestureRecognizer Command="{Binding DoctorsSchedule}"/>
                                             </Frame.GestureRecognizers>
                                             <Label HorizontalTextAlignment="End"
                                                    VerticalTextAlignment="Center">
@@ -175,9 +174,6 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-
-            
-
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

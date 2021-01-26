@@ -1,11 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <prism:PrismApplication xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:prism="http://prismlibrary.com"
-             x:Class="ConsultApp.App">
-  <Application.Resources>
+                        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                        xmlns:prism="http://prismlibrary.com"
+                        xmlns:converter="clr-namespace:ConsultApp.Helpers.Converters"
+                        x:Class="ConsultApp.App">
 
-    <!-- Application resource dictionary -->
-
-  </Application.Resources>
+    <Application.Resources>
+        <ResourceDictionary>
+            <converter:TitleCaseConverter x:Key="TitleCaseConverter"/>
+        </ResourceDictionary>
+    </Application.Resources>
 </prism:PrismApplication>

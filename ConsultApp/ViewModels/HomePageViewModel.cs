@@ -46,26 +46,20 @@ namespace ConsultApp.ViewModels
             {
                 new ButtonsModel
                 {
-                    Title = "Diagnostic",
+                    Title = "Consultations",
                     FontIcon = FontAwesomeIcons.Stethoscope,
                     Commands = new DelegateCommand(async() => await this.navigationService.NavigateAsync("ConsultPage")),
                 },
                 new ButtonsModel
                 {
-                    Title = "Pending Consultations",
+                    Title = "Pending\nConsultations",
                     FontIcon = FontAwesomeIcons.CalendarCheck,
-                    Commands = new DelegateCommand(async () => await this.navigationService.NavigateAsync("")),
+                    Commands = new DelegateCommand(async () => await this.navigationService.NavigateAsync("PendingConsultationPage")),
                 },
                 new ButtonsModel
                 {
-                    Title = "Doctors",
+                    Title = "ConsultApp\nDoctors",
                     FontIcon = FontAwesomeIcons.UserMd,
-                    Commands = new DelegateCommand(async() => await navigationService.NavigateAsync(""))
-                },
-                new ButtonsModel
-                {
-                    Title = "Ambulance",
-                    FontIcon = "\uf0f9",
                     Commands = new DelegateCommand(async() => await navigationService.NavigateAsync(""))
                 },
                 new ButtonsModel
@@ -113,7 +107,6 @@ namespace ConsultApp.ViewModels
         public override async void Initialize(INavigationParameters parameters)
         {
             await Authenticate().ContinueWith(async x => await GetDisease());
-            await GetLocation();
         }
       
         #region Properties
@@ -163,6 +156,7 @@ namespace ConsultApp.ViewModels
         #endregion
 
         #region Methods
+
         private async Task GetLocation()
         {
             try

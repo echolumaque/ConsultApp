@@ -102,6 +102,7 @@
     <Compile Include="Helpers\CustomRenderers\CustomEntryRenderer.cs" />
     <Compile Include="Helpers\CustomRenderers\CustomNavigationPageRenderer.cs" />
     <Compile Include="Helpers\SetStatusBarColoriOS.cs" />
+    <Compile Include="Helpers\Toast.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <None Include="Entitlements.plist" />
@@ -201,6 +202,9 @@
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Polly">
+      <Version>7.2.1</Version>
+    </PackageReference>
     <PackageReference Include="Refit">
       <Version>5.2.4</Version>
     </PackageReference>
@@ -211,10 +215,10 @@
       <Version>1.7.335</Version>
     </PackageReference>
     <PackageReference Include="Syncfusion.Xamarin.SfCalendar">
-      <Version>18.4.0.35</Version>
+      <Version>18.4.0.30</Version>
     </PackageReference>
     <PackageReference Include="Syncfusion.Xamarin.SfComboBox">
-      <Version>18.4.0.35</Version>
+      <Version>18.4.0.30</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.FFImageLoading.Forms">
       <Version>2.4.11.982</Version>

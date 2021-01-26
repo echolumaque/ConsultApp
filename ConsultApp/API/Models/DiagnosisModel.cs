@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using Newtonsoft.Json;
 using Prism.Commands;
+using System.Threading;
 
 namespace ConsultApp.API.Models
 {

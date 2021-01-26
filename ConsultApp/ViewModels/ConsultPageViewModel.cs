@@ -73,7 +73,7 @@ namespace ConsultApp.ViewModels
 
         private void ButtonEnabled(bool enabled) => IsEnabled = enabled;
 
-        public override async void Initialize(INavigationParameters parameters)
+        public override async void OnNavigatedTo(INavigationParameters parameters)
         {
             var getSymptomsRequest = RestService.For<IGetSymptomsList>(APIConfig.HealthApi);
             var response = await getSymptomsRequest.GetSymptoms(APIConfig.Token);

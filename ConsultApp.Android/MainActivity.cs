@@ -12,7 +12,6 @@ using ConsultApp.Helpers;
 using ConsultApp.Helpers.Interfaces;
 using Prism;
 using Prism.Ioc;
-using Prism.Services.Dialogs;
 
 namespace ConsultApp.Droid
 {
@@ -56,9 +55,10 @@ namespace ConsultApp.Droid
 
             if ((int)Build.VERSION.SdkInt >= 23)
             {
-                if (CheckSelfPermission(Manifest.Permission.AccessFineLocation) != Permission.Granted)
+                if (CheckSelfPermission(Manifest.Permission.AccessFineLocation) != Permission.Granted
+                    || CheckSelfPermission(Manifest.Permission.AccessCoarseLocation) != Permission.Granted)
                 {
-                    RequestPermissions(LocationPermissions, RequestLocationId);
+                    RequestPermissions(Permissions, RequestLocationId);
                 }
             }
         }
@@ -91,13 +91,14 @@ namespace ConsultApp.Droid
         }
 
         private const int RequestLocationId = 0;
-        private readonly string[] LocationPermissions =
+        private readonly string[] Permissions =
         {
             Manifest.Permission.AccessCoarseLocation,
             Manifest.Permission.AccessFineLocation,
             Manifest.Permission.LocationHardware,
             Manifest.Permission.Internet,
             Manifest.Permission.WriteExternalStorage,
+            Manifest.Permission.ReadExternalStorage,
         };
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
@@ -114,6 +115,7 @@ namespace ConsultApp.Droid
         {
             containerRegistry.Register<ISetStatusBarColor, SetStatusBarColorDroid>();
             containerRegistry.Register<ILocation, AskLocation>();
+            containerRegistry.Register<IToast, Toast>();
         }
     }
 }
