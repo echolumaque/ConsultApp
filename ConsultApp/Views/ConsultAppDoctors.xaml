@@ -2,19 +2,23 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="http://prismlibrary.com"
-             prism:ViewModelLocator.AutowireViewModel="True"
-             BackgroundColor="White"
-             xmlns:fonts="clr-namespace:ConsultApp.Fonts"
              xmlns:customrenderer="clr-namespace:ConsultApp.Helpers.CustomRenderers"
              xmlns:ffimage="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
-             xmlns:localimages="clr-namespace:ConsultApp.Helpers.Images"
-             xmlns:circle="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations" 
+             xmlns:circle="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
              xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
-             x:Class="ConsultApp.Views.DoctorsPage">
+             xmlns:localimages="clr-namespace:ConsultApp.Helpers.Images"
+             xmlns:fonts="clr-namespace:ConsultApp.Fonts"
+             xmlns:combobox="clr-namespace:Syncfusion.XForms.ComboBox;assembly=Syncfusion.SfComboBox.XForms"
+             xmlns:list="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             xmlns:vm="clr-namespace:ConsultApp.ViewModels"
+             x:DataType="vm:ConsultAppDoctorsViewModel"
+             xmlns:model="clr-namespace:ConsultApp.API.Models"
+             x:Class="ConsultApp.Views.ConsultAppDoctors">
 
     <ContentPage.Content>
-        <StackLayout Padding="25,50,25,0"><!--babaguhin magigng '-->
-            <Label Text="{Binding Major,StringFormat='Lets for a doctor with specialty in {0}'}"
+        <StackLayout Padding="25,50,25,0">
+            <Label Text="ConsultApp Accreditted Doctors"
                    FontFamily="Bold"
                    TextColor="Black"
                    FontSize="25"/>
@@ -24,36 +28,62 @@
                    BackgroundColor="White"
                    CornerRadius="30"
                    Padding="10,0">
-                <StackLayout Orientation="Horizontal"
-                             Padding="10,0,0,0">
+                <Grid ColumnDefinitions="Auto,Auto,*">
                     <Label Text="{x:Static fonts:FontAwesomeIcons.Search}"
                            FontFamily="fa-solid"
+                           Grid.Column="0"
                            VerticalTextAlignment="Center"
                            TextColor="#6B77E3"/>
 
-                    <customrenderer:CustomEntry Placeholder="Search for a doctor"
-                                                HorizontalOptions="FillAndExpand"
+                    <customrenderer:CustomEntry HorizontalOptions="FillAndExpand"
                                                 VerticalOptions="CenterAndExpand"
                                                 FontFamily="Regular"
+                                                Grid.Column="1"
+                                                WidthRequest="170"
                                                 HeightRequest="40"
                                                 FontSize="15"
+                                                ClearButtonVisibility="WhileEditing"
+                                                Text="{Binding SearchQuery}"
                                                 TextColor="Black"
                                                 PlaceholderColor="LightGray"/>
-                </StackLayout>
+
+                    <combobox:SfComboBox HeightRequest="50"
+                                         VerticalOptions="CenterAndExpand"
+                                         HorizontalOptions="EndAndExpand"
+                                         ShowBorder="False"
+                                         Grid.Column="2"
+                                         Watermark="Search for.."
+                                         FontFamily="Regular"
+                                         SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}"
+                                         TextColor="Black"
+                                         TokensWrapMode="Wrap"
+                                         IsSelectedItemsVisibleInDropDown="True"
+                                         DropDownBorderColor="LightGray"
+                                         DropDownItemFontFamily="Regular"
+                                         DropDownWidth="120">
+                        <combobox:SfComboBox.ComboBoxSource>
+                            <list:List x:TypeArguments="x:String">
+                                <x:String>Doctor</x:String>
+                                <x:String>Specialization</x:String>
+                                <x:String>Hospital</x:String>
+                            </list:List>
+                        </combobox:SfComboBox.ComboBoxSource>
+                    </combobox:SfComboBox>
+                </Grid>
             </Frame>
 
-            <CollectionView ItemsSource="{Binding DocsWithMajor}"
+            <CollectionView ItemsSource="{Binding ConsultAppDoctors}"
                             ItemSizingStrategy="MeasureAllItems"
                             Margin="-10,0">
                 <CollectionView.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate x:DataType="model:DoctorsAndSpecializationsModel">
                         <StackLayout>
                             <Frame HasShadow="True"
                                    BackgroundColor="#6B77E3"
                                    Margin="0,5"
                                    CornerRadius="20"
-                                   Padding="10">
-                                <Grid ColumnDefinitions="*,*"
+                                   Padding="10,10,10,15">
+                                <Grid ColumnDefinitions=".75*,.25*"
                                       RowDefinitions=".5*,*">
                                     <StackLayout Grid.Column="0"
                                                  Grid.Row="0">
@@ -62,7 +92,7 @@
                                                FontSize="20"
                                                TextColor="White"/>
                                         <Label Text="{Binding Specialization}"
-                                               FontFamily="Regular"
+                                               FontFamily="Bold"
                                                FontSize="18"
                                                TextColor="White"/>
                                         <Label>
@@ -82,61 +112,35 @@
                                                TextColor="White"/>
                                     </StackLayout>
 
-                                    <StackLayout Grid.Column="0"
-                                                 Grid.Row="0"
-                                                 Grid.ColumnSpan="2"
-                                                 VerticalOptions="StartAndExpand"
-                                                 HorizontalOptions="EndAndExpand">
+                                    <RelativeLayout HorizontalOptions="EndAndExpand"
+                                                    VerticalOptions="CenterAndExpand"
+                                                    Grid.Column="0"
+                                                    Grid.Row="0"
+                                                    Grid.ColumnSpan="2">
+                                        <ffimage:CachedImage Source="{localimages:ImageResource ConsultApp.Helpers.Images.doc2.png}"
+                                                                BitmapOptimizations="True"
+                                                                DownsampleToViewSize="True"
+                                                                HeightRequest="100"
+                                                                x:Name="pic"
+                                                                Aspect="AspectFit">
+                                            <ffimage:CachedImage.Transformations>
+                                                <circle:CircleTransformation/>
+                                            </ffimage:CachedImage.Transformations>
+                                        </ffimage:CachedImage>
 
-                                        <RelativeLayout HorizontalOptions="CenterAndExpand"
-                                                        VerticalOptions="CenterAndExpand">
-                                            <ffimage:CachedImage Source="{localimages:ImageResource ConsultApp.Helpers.Images.doc2.png}"
-                                                                 BitmapOptimizations="True"
-                                                                 DownsampleToViewSize="True"
-                                                                 HeightRequest="100"
-                                                                 x:Name="pic"
-                                                                 Aspect="AspectFit">
-                                                <ffimage:CachedImage.Transformations>
-                                                    <circle:CircleTransformation/>
-                                                </ffimage:CachedImage.Transformations>
-                                            </ffimage:CachedImage>
+                                        <BoxView RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, 
+                                            Constant=25, 
+                                            Factor=0,
+                                            Property=X,
+                                            ElementName=pic}"
+                                                    BackgroundColor="Green"
+                                                    IsVisible="{Binding IsAvailable}"
+                                                    CornerRadius="100"
+                                                    Scale="0.5"/>
 
-                                            <BoxView RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, 
-                                                Constant=25, 
-                                                Factor=0,
-                                                Property=X,
-                                                ElementName=pic}"
-                                                     BackgroundColor="Green"
-                                                     IsVisible="{Binding IsAvailable}"
-                                                     CornerRadius="100"
-                                                     Scale="0.5"/>
+                                    </RelativeLayout>
 
-                                        </RelativeLayout>
-
-                                        <Frame Padding="10"
-                                               HasShadow="True"
-                                               HorizontalOptions="EndAndExpand"
-                                               BackgroundColor="White"
-                                               VerticalOptions="StartAndExpand"
-                                               BorderColor="#646FD4">
-                                            <Frame.GestureRecognizers>
-                                                <TapGestureRecognizer Command="{Binding DoctorsSchedule}"/>
-                                            </Frame.GestureRecognizers>
-                                            <Label HorizontalTextAlignment="End"
-                                                   VerticalTextAlignment="Center">
-                                                <Label.FormattedText>
-                                                    <FormattedString>
-                                                        <Span Text="{x:Static fonts:FontAwesomeIcons.Stethoscope}"
-                                                              FontFamily="fa-solid"
-                                                              TextColor="#8F9EFF"/>
-                                                        <Span Text=" Set an appointment"
-                                                              TextColor="#8F9EFF"
-                                                              FontFamily="Regular"/>
-                                                    </FormattedString>
-                                                </Label.FormattedText>
-                                            </Label>
-                                        </Frame>
-                                    </StackLayout>
+                                
 
                                     <maps:Map Grid.ColumnSpan="2"
                                               Grid.Column="0"
@@ -160,7 +164,7 @@
                                             </maps:MapSpan>
                                         </x:Arguments>
                                         <maps:Map.ItemTemplate>
-                                            <DataTemplate>
+                                            <DataTemplate x:DataType="model:MapPinModel">
                                                 <maps:Pin Position="{Binding Location}"
                                                           Label="{Binding Label}"
                                                           Address="{Binding Address}"
@@ -176,4 +180,5 @@
             </CollectionView>
         </StackLayout>
     </ContentPage.Content>
+
 </ContentPage>

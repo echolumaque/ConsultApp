@@ -63,6 +63,7 @@ namespace ConsultApp
             containerRegistry.RegisterForNavigation<SymptomsAndDiseaseInfo, SymptomsAndDiseaseInfoViewModel>("SymptomsInfo");
             containerRegistry.RegisterForNavigation<DoctorsSchedule, DoctorsScheduleViewModel>();
             containerRegistry.RegisterForNavigation<PendingConsultationPage, PendingConsultationPageViewModel>();
+            containerRegistry.RegisterForNavigation<ConsultAppDoctors, ConsultAppDoctorsViewModel>();
         }
 
         //static properties and methods

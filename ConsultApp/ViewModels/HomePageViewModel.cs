@@ -4,22 +4,22 @@ using Prism.Navigation;
 using System.Collections.ObjectModel;
 using ConsultApp.Helpers;
 using Xamarin.Forms;
-using ConsultApp.Helpers.Interfaces;
 using System.Threading.Tasks;
-using Xamarin.Essentials;
-using Rg.Plugins.Popup.Services;
 using System;
-using ConsultApp.Dialogs.Views;
 using Refit;
 using ConsultApp.API.Interfaces;
 using ConsultApp.API;
 using ConsultApp.API.Intefaces;
-using System.Text;
-using System.Security.Cryptography;
 using ConsultApp.Helpers.Images;
 using System.Reflection;
 using ConsultApp.Helpers.CustomRenderers;
 using ConsultApp.Fonts;
+using Xamarin.Essentials;
+using Rg.Plugins.Popup.Services;
+using ConsultApp.Dialogs.Views;
+using ConsultApp.Helpers.Interfaces;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace ConsultApp.ViewModels
 {
@@ -33,42 +33,19 @@ namespace ConsultApp.ViewModels
         {
             get => new DelegateCommand<NavigationParameters>(async (nav) => await navigationService.NavigateAsync("SymptomsInfo", nav));
         }
+        public DelegateCommand ConsultationCommand { get; }
+        public DelegateCommand PendingConsultationCommand { get; }
+        public DelegateCommand ConsultAppDoctorsCommand { get; }
+        public DelegateCommand AboutUsCommand { get; }
+
 
         public HomePageViewModel(INavigationService navigationService, ISetStatusBarColor setStatusBarColor, ILocation location) : base(navigationService)
         {
             this.setStatusBarColor = setStatusBarColor;
             this.setStatusBarColor.SetStatusBarColor(Color.FromHex("E6EDFF"));
+
             this.location = location;
-
             this.navigationService = navigationService;
-
-            Buttons = new ObservableCollection<ButtonsModel>()
-            {
-                new ButtonsModel
-                {
-                    Title = "Consultations",
-                    FontIcon = FontAwesomeIcons.Stethoscope,
-                    Commands = new DelegateCommand(async() => await this.navigationService.NavigateAsync("ConsultPage")),
-                },
-                new ButtonsModel
-                {
-                    Title = "Pending\nConsultations",
-                    FontIcon = FontAwesomeIcons.CalendarCheck,
-                    Commands = new DelegateCommand(async () => await this.navigationService.NavigateAsync("PendingConsultationPage")),
-                },
-                new ButtonsModel
-                {
-                    Title = "ConsultApp\nDoctors",
-                    FontIcon = FontAwesomeIcons.UserMd,
-                    Commands = new DelegateCommand(async() => await navigationService.NavigateAsync(""))
-                },
-                new ButtonsModel
-                {
-                    Title = "About Us",
-                    FontIcon = FontAwesomeIcons.Question,
-                    Commands = new DelegateCommand(async() => await navigationService.NavigateAsync(""))
-                },
-            };
 
             Carousel = new ObservableCollection<HomeCarouselModel>
             {
@@ -99,7 +76,12 @@ namespace ConsultApp.ViewModels
             };
             ChangeCarouselPosition();
 
-            Steth = new EmojiHelper(0x1FA7A).ToString();
+            Steth = new EmojiHelper(0x1FA7A).ToString(); //babaguhin dahil di kita sa iba
+
+            ConsultationCommand = new DelegateCommand(async () => await this.navigationService.NavigateAsync("ConsultPage"));
+            PendingConsultationCommand = new DelegateCommand(async () => await this.navigationService.NavigateAsync("PendingConsultationPage"));
+            ConsultAppDoctorsCommand = new DelegateCommand(async () => await this.navigationService.NavigateAsync("ConsultAppDoctors"));
+            AboutUsCommand = new DelegateCommand(async () => await this.navigationService.NavigateAsync(""));
         }
 
         public override void OnNavigatedTo(INavigationParameters parameters) => setStatusBarColor.SetStatusBarColor(Color.FromHex("E6EDFF"));
@@ -107,16 +89,10 @@ namespace ConsultApp.ViewModels
         public override async void Initialize(INavigationParameters parameters)
         {
             await Authenticate().ContinueWith(async x => await GetDisease());
+            await GetLocation();
         }
       
         #region Properties
-
-        private ObservableCollection<ButtonsModel> buttons;
-        public ObservableCollection<ButtonsModel> Buttons
-        {
-            get { return buttons; }
-            set { SetProperty(ref buttons, value); }
-        }
 
         private ObservableCollection<DiseaseInfoModel> disease;
         public ObservableCollection<DiseaseInfoModel> Disease
@@ -156,38 +132,6 @@ namespace ConsultApp.ViewModels
         #endregion
 
         #region Methods
-
-        private async Task GetLocation()
-        {
-            try
-            {
-                await Permissions.CheckStatusAsync<Permissions.LocationAlways>();
-                await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
-                await Permissions.CheckStatusAsync<Permissions.NetworkState>();
-                await Permissions.CheckStatusAsync<Permissions.StorageWrite>();
-
-                await Permissions.RequestAsync<Permissions.LocationAlways>();
-                await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
-                await Permissions.RequestAsync<Permissions.NetworkState>();
-                await Permissions.RequestAsync<Permissions.StorageWrite>();
-                //TODO: ADD EACH PLATFORM IMPLEMENTATION
-                await location.DisplayLocationSettingsRequest().ContinueWith(async x => await SetLocation());
-            }
-            catch (Exception)
-            {
-                await PopupNavigation.Instance.PushAsync(new LocationError(), true);
-            }
-        }
-
-        private async Task SetLocation()
-        {
-            App.CurrentLocation = await Geolocation.GetLocationAsync(new GeolocationRequest
-            {
-                DesiredAccuracy = GeolocationAccuracy.High,
-                Timeout = TimeSpan.FromSeconds(10)
-            });
-        }
-
         private async Task Authenticate()
         {
             var refitSettings = new RefitSettings()
@@ -224,13 +168,12 @@ namespace ConsultApp.ViewModels
             Disease = new ObservableCollection<DiseaseInfoModel>(response);
 
             var rnd = new Random();
-            var randomPlaceholder = response[rnd.Next(Disease.Count)].Name;
-            Placeholder = $"Get to know {randomPlaceholder} more {new EmojiHelper(0x1F50D)}..";
+            Placeholder = $"Get to know {response[rnd.Next(Disease.Count)].Name.ToLower()} more {new EmojiHelper(0x1F50D)}..";
         }
 
         private void ChangeCarouselPosition()
         {
-            Device.StartTimer(TimeSpan.FromSeconds(2.5), () =>
+            Device.StartTimer(TimeSpan.FromSeconds(4.0), () =>
             {
                 if (Position != Carousel.Count - 1)
                     Position++;
@@ -238,7 +181,31 @@ namespace ConsultApp.ViewModels
                     Position = 0;
                 return true;
             });
+        }
 
+        private async Task GetLocation()
+        {
+            try
+            {
+                await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+                await Permissions.RequestAsync<Permissions.NetworkState>();
+                await Permissions.RequestAsync<Permissions.StorageWrite>();
+
+                await location.DisplayLocationSettingsRequest().ContinueWith(async x => await SetLocation());
+            }
+            catch (Exception)
+            {
+                await PopupNavigation.Instance.PushAsync(new LocationError(), true);
+            }
+        }
+
+        private async Task SetLocation()
+        {
+            App.CurrentLocation = await Geolocation.GetLocationAsync(new GeolocationRequest
+            {
+                DesiredAccuracy = GeolocationAccuracy.High,
+                Timeout = TimeSpan.FromSeconds(5)
+            });
         }
         #endregion
     }

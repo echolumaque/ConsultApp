@@ -12,6 +12,11 @@ using Prism.Events;
 using Prism.Navigation;
 using Refit;
 using Xamarin.Forms;
+using Xamarin.Essentials;
+using Rg.Plugins.Popup.Services;
+using ConsultApp.Dialogs.Views;
+using System;
+using ConsultApp.Helpers.Interfaces;
 
 namespace ConsultApp.ViewModels
 {
@@ -28,11 +33,15 @@ namespace ConsultApp.ViewModels
         }
         public DelegateCommand DiagnoseCommand { get; set; }
         private ISetStatusBarColor setStatusBarColor { get; }
+        private ILocation location { get; }
 
-        public ConsultPageViewModel(INavigationService navigationService, IEventAggregator eventAggregator, ISetStatusBarColor setStatusBarColor) : base(navigationService)
+        public ConsultPageViewModel(INavigationService navigationService, IEventAggregator eventAggregator,
+            ISetStatusBarColor setStatusBarColor, ILocation location) : base(navigationService)
         {
             this.setStatusBarColor = setStatusBarColor;
             this.setStatusBarColor.SetStatusBarColor(Color.White);
+
+            this.location = location;
 
             this.navigationService = navigationService;
             eventAggregator.GetEvent<PassSymptom>().Subscribe(IDs);
@@ -77,6 +86,8 @@ namespace ConsultApp.ViewModels
         {
             var getSymptomsRequest = RestService.For<IGetSymptomsList>(APIConfig.HealthApi);
             var response = await getSymptomsRequest.GetSymptoms(APIConfig.Token);
+
+            //await GetLocation();
 
             var symptomsWithPic = new ObservableCollection<SymptomsModel>()
             {
@@ -140,6 +151,31 @@ namespace ConsultApp.ViewModels
             };
             await navigationService.NavigateAsync("DiagnosisPage", parameters);
         }
+
+        //private async Task GetLocation()
+        //{
+        //    try
+        //    {
+        //        await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+        //        await Permissions.RequestAsync<Permissions.NetworkState>();
+        //        await Permissions.RequestAsync<Permissions.StorageWrite>();
+
+        //        await location.DisplayLocationSettingsRequest().ContinueWith(async x => await SetLocation());
+        //    }
+        //    catch (Exception)
+        //    {
+        //        await PopupNavigation.Instance.PushAsync(new LocationError(), true);
+        //    }
+        //}
+
+        //private async Task SetLocation()
+        //{
+        //    App.CurrentLocation = await Geolocation.GetLocationAsync(new GeolocationRequest
+        //    {
+        //        DesiredAccuracy = GeolocationAccuracy.High,
+        //        Timeout = TimeSpan.FromSeconds(5)
+        //    });
+        //}
 
         #endregion
     }

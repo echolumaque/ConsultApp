@@ -140,21 +140,139 @@
                            HorizontalOptions="CenterAndExpand"
                            VerticalOptions="EndAndExpand"/>
 
-            <Grid ColumnDefinitions="*"
-                  RowDefinitions="Auto,*"
+            <Grid ColumnDefinitions="*,*"
+                  RowDefinitions="Auto,*,*"
                   Grid.Row="2"
                   HorizontalOptions="FillAndExpand"
                   VerticalOptions="FillAndExpand"
                   Padding="20,0">
 
-                <Label Text="What servies do you need?"
+                <Label Text="What services do you need?"
                        FontFamily="Bold"
                        TextColor="Black"
+                       Grid.ColumnSpan="2"
                        FontSize="20"
                        Grid.Row="0"
                        Grid.Column="0"/>
 
-                <CollectionView Grid.Column="0"
+                <Frame Padding="15"
+                       HasShadow="True"
+                       CornerRadius="20"
+                       Grid.Column="0"
+                       Grid.Row="1"
+                       Margin="5"
+                       VerticalOptions="FillAndExpand"
+                       HorizontalOptions="FillAndExpand"
+                       BackgroundColor="White"
+                       BorderColor="LightGray">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ConsultationCommand}"/>
+                    </Frame.GestureRecognizers>
+                    <StackLayout VerticalOptions="CenterAndExpand">
+                        <Label Text="{x:Static fonts:FontAwesomeIcons.Stethoscope}"
+                               FontFamily="fa-solid"
+                               TextColor="#6270DD"
+                               HorizontalTextAlignment="Center"
+                               FontSize="20"/>
+
+                        <Label Text="Consultation"
+                               TextColor="Black"
+                               FontSize="15"
+                               FontFamily="Regular"
+                               HorizontalTextAlignment="Center"/>
+
+                    </StackLayout>
+                </Frame>
+
+
+                <Frame Padding="15"
+                       HasShadow="True"
+                       CornerRadius="20"
+                       Margin="5"
+                       Grid.Column="1"
+                       Grid.Row="1"
+                       VerticalOptions="FillAndExpand"
+                       HorizontalOptions="FillAndExpand"
+                       BackgroundColor="White"
+                       BorderColor="LightGray">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding PendingConsultationCommand}"/>
+                    </Frame.GestureRecognizers>
+                    <StackLayout VerticalOptions="CenterAndExpand">
+                        <Label Text="{x:Static fonts:FontAwesomeIcons.CalendarDay}"
+                               FontFamily="fa-solid"
+                               TextColor="#6270DD"
+                               HorizontalTextAlignment="Center"
+                               FontSize="20"/>
+
+                        <Label Text="Pending&#10;Consultations"
+                               TextColor="Black"
+                               FontSize="15"
+                               FontFamily="Regular"
+                               HorizontalTextAlignment="Center"/>
+
+                    </StackLayout>
+                </Frame>
+
+                <Frame Padding="15"
+                       HasShadow="True"
+                       CornerRadius="20"
+                       Margin="5"
+                       Grid.Column="0"
+                       Grid.Row="2"
+                       VerticalOptions="FillAndExpand"
+                       HorizontalOptions="FillAndExpand"
+                       BackgroundColor="White"
+                       BorderColor="LightGray">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ConsultAppDoctorsCommand}"/>
+                    </Frame.GestureRecognizers>
+                    <StackLayout VerticalOptions="CenterAndExpand">
+                        <Label Text="{x:Static fonts:FontAwesomeIcons.UserMd}"
+                               FontFamily="fa-solid"
+                               TextColor="#6270DD"
+                               HorizontalTextAlignment="Center"
+                               FontSize="20"/>
+
+                        <Label Text="ConsultApp&#10;Doctors"
+                               TextColor="Black"
+                               FontSize="15"
+                               FontFamily="Regular"
+                               HorizontalTextAlignment="Center"/>
+
+                    </StackLayout>
+                </Frame>
+
+                <Frame Padding="15"
+                       HasShadow="True"
+                       CornerRadius="20"
+                       Margin="5"
+                       Grid.Column="1"
+                       Grid.Row="2"
+                       VerticalOptions="FillAndExpand"
+                       HorizontalOptions="FillAndExpand"
+                       BackgroundColor="White"
+                       BorderColor="LightGray">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding AboutUsCommand}"/>
+                    </Frame.GestureRecognizers>
+                    <StackLayout VerticalOptions="CenterAndExpand">
+                        <Label Text="{x:Static fonts:FontAwesomeIcons.Question}"
+                               FontFamily="fa-solid"
+                               TextColor="#6270DD"
+                               HorizontalTextAlignment="Center"
+                               FontSize="20"/>
+
+                        <Label Text="About Us"
+                               TextColor="Black"
+                               FontSize="15"
+                               FontFamily="Regular"
+                               HorizontalTextAlignment="Center"/>
+
+                    </StackLayout>
+                </Frame>
+
+                <!--<CollectionView Grid.Column="0"
                                 Grid.Row="1"
                                 ItemsSource="{Binding Buttons}"
                                 ItemSizingStrategy="MeasureAllItems"
@@ -194,7 +312,7 @@
                             </StackLayout>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
-                </CollectionView>
+                </CollectionView>-->
             </Grid>
         </Grid>
     </ContentPage.Content>

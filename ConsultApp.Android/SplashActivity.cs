@@ -1,8 +1,11 @@
 using System.IO;
 using System.Timers;
+using Android;
 using Android.App;
 using Android.Content;
+using Android.Content.PM;
 using Android.OS;
+using Android.Runtime;
 using AndroidX.AppCompat.App;
 using Felipecsl.GifImageViewLibrary;
 
@@ -12,6 +15,16 @@ namespace ConsultApp.Droid
     public class SplashActivity : AppCompatActivity
     {
         private GifImageView gifImageView;
+
+        private readonly string[] Permissions =
+        {
+            Manifest.Permission.AccessCoarseLocation,
+            Manifest.Permission.AccessFineLocation,
+            Manifest.Permission.LocationHardware,
+            Manifest.Permission.Internet,
+            Manifest.Permission.WriteExternalStorage,
+            Manifest.Permission.ReadExternalStorage,
+        };
 
         protected override void OnResume()
         {
@@ -24,6 +37,15 @@ namespace ConsultApp.Droid
             gifImageView.SetBytes(bytes);
             gifImageView.StartAnimation();
 
+            if ((int)Build.VERSION.SdkInt >= 23)
+            {
+                if (CheckSelfPermission(Manifest.Permission.AccessFineLocation) != Permission.Granted
+                    || CheckSelfPermission(Manifest.Permission.AccessCoarseLocation) != Permission.Granted)
+                {
+                    RequestPermissions(Permissions, 0);
+                }
+            }
+
             var timer = new Timer
             {
                 Interval = 1500,
@@ -31,6 +53,12 @@ namespace ConsultApp.Droid
             };
             timer.Elapsed += Timer_Elapsed;
             timer.Start();
+        }
+
+        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Permission[] grantResults)
+        {
+            Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)

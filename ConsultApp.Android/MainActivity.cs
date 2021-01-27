@@ -49,19 +49,19 @@ namespace ConsultApp.Droid
             LoadApplication(new App(new AndroidInitializer()));
         }
 
-        protected override void OnStart()
-        {
-            base.OnStart();
+        //protected override void OnStart()
+        //{
+        //    base.OnStart();
 
-            if ((int)Build.VERSION.SdkInt >= 23)
-            {
-                if (CheckSelfPermission(Manifest.Permission.AccessFineLocation) != Permission.Granted
-                    || CheckSelfPermission(Manifest.Permission.AccessCoarseLocation) != Permission.Granted)
-                {
-                    RequestPermissions(Permissions, RequestLocationId);
-                }
-            }
-        }
+        //    if ((int)Build.VERSION.SdkInt >= 23)
+        //    {
+        //        if (CheckSelfPermission(Manifest.Permission.AccessFineLocation) != Permission.Granted
+        //            || CheckSelfPermission(Manifest.Permission.AccessCoarseLocation) != Permission.Granted)
+        //        {
+        //            RequestPermissions(Permissions, RequestLocationId);
+        //        }
+        //    }
+        //}
 
         public override void OnBackPressed() => Rg.Plugins.Popup.Popup.SendBackPressed(base.OnBackPressed);
 
@@ -90,23 +90,23 @@ namespace ConsultApp.Droid
             BaseContext.Resources.DisplayMetrics.SetTo(metrics);
         }
 
-        private const int RequestLocationId = 0;
-        private readonly string[] Permissions =
-        {
-            Manifest.Permission.AccessCoarseLocation,
-            Manifest.Permission.AccessFineLocation,
-            Manifest.Permission.LocationHardware,
-            Manifest.Permission.Internet,
-            Manifest.Permission.WriteExternalStorage,
-            Manifest.Permission.ReadExternalStorage,
-        };
+        //private const int RequestLocationId = 0;
+        //private readonly string[] Permissions =
+        //{
+        //    Manifest.Permission.AccessCoarseLocation,
+        //    Manifest.Permission.AccessFineLocation,
+        //    Manifest.Permission.LocationHardware,
+        //    Manifest.Permission.Internet,
+        //    Manifest.Permission.WriteExternalStorage,
+        //    Manifest.Permission.ReadExternalStorage,
+        //};
 
-        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
-        {
-            Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        //public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
+        //{
+        //    Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 
-            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
+        //    base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        //}
     }
 
     public class AndroidInitializer : IPlatformInitializer
