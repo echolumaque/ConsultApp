@@ -10,14 +10,27 @@
              xmlns:calendar="clr-namespace:Syncfusion.SfCalendar.XForms;assembly=Syncfusion.SfCalendar.XForms"
              Visual="Material"
              BackgroundColor="White"
-             xmlns:fonts="clr-namespace:ConsultApp.Fonts"
+             Title="Schedule an appointment"
+             xmlns:fonts="clr-namespace:ConsultApp.Fonts" 
+             xmlns:loading="clr-namespace:ConsultApp.Helpers.Loading"
              x:Class="ConsultApp.Views.DoctorsSchedule">
 
     <Grid RowDefinitions="Auto,*,Auto"
           ColumnDefinitions=".45*,*">
 
+        <loading:Loading IsVisible="{Binding Loading}"
+                         Scale="2"
+                         VerticalOptions="CenterAndExpand"
+                         Grid.Row="0"
+                         Grid.Column="0"
+                         Grid.ColumnSpan="2"
+                         Grid.RowSpan="3"
+                         HorizontalOptions="CenterAndExpand"/>
+
+
         <RelativeLayout Grid.Column="0"
                         Grid.Row="0"
+                        IsVisible="{Binding ViewsLoaded}"
                         VerticalOptions="CenterAndExpand"
                         Margin="0,20">
             <ffcached:CachedImage Source="{images:ImageResource ConsultApp.Helpers.Images.doc2.png}"
@@ -41,7 +54,7 @@
                     Property=Y,
                     ElementName=pic}"
                          BackgroundColor="Green"
-                         IsVisible="true"
+                         IsVisible="{Binding Online}"
                          CornerRadius="100"
                          Scale="0.5"/>
 
@@ -49,6 +62,7 @@
 
         <StackLayout Grid.Column="1"
                      Grid.Row="0"
+                     IsVisible="{Binding ViewsLoaded}"
                      VerticalOptions="CenterAndExpand"
                      Margin="0,20">
 
@@ -87,6 +101,7 @@
                              Grid.ColumnSpan="2"
                              BlackoutDatesViewMode="Stripes"
                              x:Name="calendar"
+                             IsVisible="{Binding ViewsLoaded}"
                              OnMonthCellLoaded="calendar_OnMonthCellLoaded"
                              SelectionMode="SingleSelection"
                              TapCommand="{Binding SelectDateCommand}"
@@ -109,6 +124,7 @@
                HorizontalOptions="EndAndExpand"
                VerticalOptions="EndAndExpand"
                BackgroundColor="#5B00DB"
+               IsVisible="{Binding ViewsLoaded}"
                Grid.Column="1">
             <Frame.GestureRecognizers>
                 <TapGestureRecognizer Command="{Binding AddToPendingConsultationCommand}"/>

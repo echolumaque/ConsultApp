@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Reflection;
@@ -12,36 +13,30 @@ using Prism.Events;
 using Prism.Navigation;
 using Refit;
 using Xamarin.Forms;
-using Xamarin.Essentials;
-using Rg.Plugins.Popup.Services;
-using ConsultApp.Dialogs.Views;
-using System;
 using ConsultApp.Helpers.Interfaces;
+using Xamarin.Essentials;
+using Microsoft.AppCenter.Analytics;
+using System.Collections.Generic;
 
 namespace ConsultApp.ViewModels
 {
     public class ConsultPageViewModel : ViewModelBase
     {
         private readonly INavigationService navigationService;
-        public DelegateCommand<object> RemoveSymptom
-        {
-            get => new DelegateCommand<object>(symptom => SymptomID.Remove(symptom));   
-        }
         public DelegateCommand<object> RemoveAllSymptom
         {
             get => new DelegateCommand<object>(symptom => SymptomID.Clear());
         }
         public DelegateCommand DiagnoseCommand { get; set; }
         private ISetStatusBarColor setStatusBarColor { get; }
-        private ILocation location { get; }
-
+        private IToast toast;
         public ConsultPageViewModel(INavigationService navigationService, IEventAggregator eventAggregator,
-            ISetStatusBarColor setStatusBarColor, ILocation location) : base(navigationService)
+            ISetStatusBarColor setStatusBarColor, IToast toast) : base(navigationService)
         {
             this.setStatusBarColor = setStatusBarColor;
             this.setStatusBarColor.SetStatusBarColor(Color.White);
 
-            this.location = location;
+            this.toast = toast;
 
             this.navigationService = navigationService;
             eventAggregator.GetEvent<PassSymptom>().Subscribe(IDs);
@@ -74,6 +69,20 @@ namespace ConsultApp.ViewModels
             get { return isEnabled; }
             set { SetProperty(ref isEnabled, value); }
         }
+
+        private bool loading;
+        public bool Loading
+        {
+            get { return loading; }
+            set { SetProperty(ref loading, value); }
+        }
+
+        private bool viewsLoaded;
+        public bool ViewsLoaded
+        {
+            get { return viewsLoaded; }
+            set { SetProperty(ref viewsLoaded, value); }
+        }
         #endregion
 
         #region Methods
@@ -84,10 +93,22 @@ namespace ConsultApp.ViewModels
 
         public override async void OnNavigatedTo(INavigationParameters parameters)
         {
+            ViewsLoaded = false;
+            Loading = true;
+            await App.RetryPolicy(async () => await GetSymptoms());
+            Loading = false;
+            ViewsLoaded = true;
+
+            Analytics.TrackEvent("ConsultPage", new Dictionary<string, string>
+            {
+                    { "Value", "ConsultPage Visits" }
+            });
+        }
+
+        private async Task GetSymptoms()
+        {
             var getSymptomsRequest = RestService.For<IGetSymptomsList>(APIConfig.HealthApi);
             var response = await getSymptomsRequest.GetSymptoms(APIConfig.Token);
-
-            //await GetLocation();
 
             var symptomsWithPic = new ObservableCollection<SymptomsModel>()
             {
@@ -138,45 +159,30 @@ namespace ConsultApp.ViewModels
 
         private async Task Diagnose()
         {
-            var casting = SymptomID.Cast<SymptomsModel>();
-            var IDs = casting.Select(id => id.ID).ToList();
-            string symptoms = string.Concat("[", string.Join(",", IDs), "]");
-
-            var diagnosisRequest = RestService.For<IDiagnosis>(APIConfig.HealthApi);
-            var response = await diagnosisRequest.GetDisease(APIConfig.Token, symptoms);
-
-            var parameters = new NavigationParameters()
+            try
             {
-                { "Diseases", response }
-            };
-            await navigationService.NavigateAsync("DiagnosisPage", parameters);
+                await App.RetryPolicy(async () =>
+                {
+                    var casting = SymptomID.Cast<SymptomsModel>();
+                    var IDs = casting.Select(id => id.ID).ToList();
+                    string symptoms = string.Concat("[", string.Join(",", IDs), "]");
+                    var birthYear = DateTime.FromBinary(Preferences.Get("birth", new DateTime(2000, 1, 1).ToBinary()));
+
+                    var diagnosisRequest = RestService.For<IDiagnosis>(APIConfig.HealthApi);
+                    var response = await diagnosisRequest.GetDisease(APIConfig.Token, Preferences.Get("gender", "male"), birthYear.Year, symptoms);
+
+                    var parameters = new NavigationParameters()
+                    {
+                        { "Diseases", response }
+                    };
+                    await navigationService.NavigateAsync("DiagnosisPage", parameters);
+                });
+            }
+            catch (Exception)
+            {
+                toast.ShowToast("Please select symptoms that you feel in order to proceed");
+            }
         }
-
-        //private async Task GetLocation()
-        //{
-        //    try
-        //    {
-        //        await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
-        //        await Permissions.RequestAsync<Permissions.NetworkState>();
-        //        await Permissions.RequestAsync<Permissions.StorageWrite>();
-
-        //        await location.DisplayLocationSettingsRequest().ContinueWith(async x => await SetLocation());
-        //    }
-        //    catch (Exception)
-        //    {
-        //        await PopupNavigation.Instance.PushAsync(new LocationError(), true);
-        //    }
-        //}
-
-        //private async Task SetLocation()
-        //{
-        //    App.CurrentLocation = await Geolocation.GetLocationAsync(new GeolocationRequest
-        //    {
-        //        DesiredAccuracy = GeolocationAccuracy.High,
-        //        Timeout = TimeSpan.FromSeconds(5)
-        //    });
-        //}
-
         #endregion
     }
 }

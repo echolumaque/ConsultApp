@@ -28,26 +28,27 @@ namespace ConsultApp.Dialogs.ViewModels
 
         private async Task RequestPermissions()
         {
-            await Permissions.CheckStatusAsync<Permissions.LocationAlways>();
-            await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
-            await Permissions.CheckStatusAsync<Permissions.NetworkState>();
-            await Permissions.CheckStatusAsync<Permissions.StorageWrite>();
-
             await Permissions.RequestAsync<Permissions.LocationAlways>();
             await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
             await Permissions.RequestAsync<Permissions.NetworkState>();
             await Permissions.RequestAsync<Permissions.StorageWrite>();
 
-            await DependencyService.Get<ILocation>().DisplayLocationSettingsRequest().ContinueWith(async x => await SetLocation());           
+            await DependencyService.Get<ILocation>().DisplayLocationSettingsRequest().ContinueWith(async x => await SetLocation());
+            await PopupNavigation.Instance.PopAsync(true);
         }
 
         private async Task SetLocation()
         {
-             App.CurrentLocation = await Geolocation.GetLocationAsync(new GeolocationRequest
+            App.CurrentLocation = await Geolocation.GetLocationAsync(new GeolocationRequest
             {
                 DesiredAccuracy = GeolocationAccuracy.High,
-                Timeout = TimeSpan.FromSeconds(10)
+                Timeout = TimeSpan.FromSeconds(5)
             });
+
+            if (App.CurrentLocation == null)
+            {
+                App.CurrentLocation = await Geolocation.GetLastKnownLocationAsync();
+            }
         }
         #endregion
     }

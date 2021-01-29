@@ -12,6 +12,7 @@ namespace ConsultApp.API.Models
         public int Id { get; set; }
         [Indexed]
         public string Name { get; set; }
+        [Indexed]
         public string Specialization { get; set; }
         [Indexed]
         public string AvailableDay { get; set; }
@@ -21,18 +22,10 @@ namespace ConsultApp.API.Models
         public double Distance { get; set; }
         [Indexed]
         public string SelectedDay { get; set; }
+        [Indexed]
         public bool IsAvailable => AvailableDay.Equals(DateTime.Now.DayOfWeek.ToString()) ? true : false;
         [Indexed]
         public string CreationDate { get; set; }
-        [Ignore]
-        public ObservableCollection<Pins> Pins { get; set; }
-        [Ignore]
-        public DelegateCommand<PendingConsultationsModel> RemoveConsultation { get; set; }
-    }
-    public class Pins
-    {
-        [PrimaryKey, AutoIncrement]
-        public int Id { get; set; }
         [Indexed]
         public double Latitude { get; set; }
         [Indexed]
@@ -42,6 +35,21 @@ namespace ConsultApp.API.Models
         [Indexed]
         public string Address { get; set; }
         [Ignore]
-        public Position Position => new Position(Latitude, Longitude);
+        public ObservableCollection<Pins> Pins { get; set; }
+        [Ignore]
+        public DelegateCommand<PendingConsultationsModel> RemoveConsultation { get; set; }
+    }
+    public class Pins
+    {
+        [Ignore]
+        public string Label { get; set; }
+        [Ignore]
+        public string Address { get; set; }
+        [Ignore]
+        public double Latitude { get; set; }
+        [Ignore]
+        public double Longitude { get; set; }
+        [Ignore]
+        public Position Position { get; set; }
     }
 }

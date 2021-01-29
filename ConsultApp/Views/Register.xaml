@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="http://prismlibrary.com"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             Visual="Material"
+             BackgroundColor="White"
+             Padding="20,50,20,10"
+             xmlns:ffimage="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:images="clr-namespace:ConsultApp.Helpers.Images"
+             Title="ConsultApp Patient Registration"
+             xmlns:list="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+             xmlns:fotns="clr-namespace:ConsultApp.Fonts"
+             x:Class="ConsultApp.Views.Register">
+
+    <FlexLayout Direction="Column"
+                JustifyContent="SpaceAround">
+        <ffimage:CachedImage Source="{images:ImageResource ConsultApp.Helpers.Images.icon.png}"
+                             BitmapOptimizations="True"
+                             Scale="0.70"
+                             Aspect="AspectFit"/>
+
+        <Label Text="Patient Registration"
+               FontFamily="Bold"
+               FontSize="25"
+               TextColor="Black"/>
+
+        <Entry Placeholder="Name"
+               BackgroundColor="White"
+               Text="{Binding Name}"/>
+
+        <Label Text="Your name is required!"
+               TextColor="Red"
+               FontFamily="Regular"
+               IsVisible="{Binding NameError}"/>
+
+        <Picker Title="Gender"
+                SelectedItem="{Binding Gender, Mode=TwoWay}"
+                BackgroundColor="White">
+            <Picker.ItemsSource>
+                <list:List x:TypeArguments="x:String">
+                    <x:String>Male</x:String>
+                    <x:String>Female</x:String>
+                </list:List>
+            </Picker.ItemsSource>
+        </Picker>
+
+        <Label Text="Your gender is required!"
+               TextColor="Red"
+               FontFamily="Regular"
+               IsVisible="{Binding GenderError}"/>
+
+        <StackLayout>
+            <Label Text="Date of birth:"
+                   FontFamily="Regular"
+                   TextColor="Black"/>
+            <DatePicker Date="{Binding Birth}"
+                        BackgroundColor="White"
+                        MaximumDate="{Binding MaxDate}"
+                        Format="D"/>
+        </StackLayout>
+
+        <Frame Padding="15"
+               BackgroundColor="#1DC9B2"
+               HasShadow="True">
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding RegisterCommand}"/>
+            </Frame.GestureRecognizers>
+            <Label HorizontalTextAlignment="Center">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="{x:Static fotns:FontAwesomeIcons.Check}"
+                              TextColor="White"
+                              FontFamily="fa-solid"/>
+                        <Span Text="   Register"
+                              FontFamily="Regular"
+                              TextColor="White"/>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+        </Frame>
+        
+    </FlexLayout>
+  
+</ContentPage>

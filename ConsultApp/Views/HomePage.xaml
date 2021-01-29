@@ -5,31 +5,33 @@
              xmlns:fonts="clr-namespace:ConsultApp.Fonts"
              xmlns:combobox="clr-namespace:Syncfusion.XForms.ComboBox;assembly=Syncfusion.SfComboBox.XForms"
              Visual="Material"
+             BackgroundColor="White"
              Padding="0,0,0,10"
              x:Class="ConsultApp.Views.HomePage">
 
     <ContentPage.Content>
-        <Grid RowDefinitions=".65*,.55*,*">
+        <Grid RowDefinitions=".65*,.55*,*"
+              ColumnDefinitions=".80*,.20*">
 
             <StackLayout Grid.Row="0"
+                         Grid.Column="0"
+                         Grid.ColumnSpan="2"
                          BackgroundColor="#E6EDFF"
                          Padding="10">
-
+                
                 <StackLayout VerticalOptions="CenterAndExpand">
-                    <Label Text="Hello,"
+                    <Label Text="{Binding Time}"
                            FontFamily="Regular"
-                           FontSize="27"
+                           FontSize="20"
                            TextColor="Black"/>
 
-                    <Label>
+                    <Label LineBreakMode="TailTruncation">
                         <Label.FormattedText>
                             <FormattedString>
-                                <Span Text="Bits!"
+                                <Span Text="{Binding Name, StringFormat='{0}!'}"
                                       FontFamily="Bold"
-                                      FontSize="39"
+                                      FontSize="30"
                                       TextColor="Black"/>
-                                <Span Text="{Binding Steth}"
-                                      FontSize="35"/>
                             </FormattedString>
                         </Label.FormattedText>
                     </Label>
@@ -91,6 +93,8 @@
 
             <CarouselView ItemsSource="{Binding Carousel}"
                           Grid.Row="1"
+                          Grid.Column="0"
+                          Grid.ColumnSpan="2"
                           Margin="20"
                           Loop="True"
                           IndicatorView="indicatorView"
@@ -135,6 +139,8 @@
 
             <IndicatorView Grid.Row="1"
                            x:Name="indicatorView"
+                           Grid.Column="0"
+                           Grid.ColumnSpan="2"
                            IndicatorColor="LightGray"
                            SelectedIndicatorColor="Gray"
                            HorizontalOptions="CenterAndExpand"
@@ -143,6 +149,8 @@
             <Grid ColumnDefinitions="*,*"
                   RowDefinitions="Auto,*,*"
                   Grid.Row="2"
+                  Grid.Column="0"
+                  Grid.ColumnSpan="2"
                   HorizontalOptions="FillAndExpand"
                   VerticalOptions="FillAndExpand"
                   Padding="20,0">
@@ -314,6 +322,14 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>-->
             </Grid>
+
+            <ffimage:CachedImage Source="{Binding Image}"
+                                 BitmapOptimizations="True"
+                                 Grid.Column="1"
+                                 VerticalOptions="StartAndExpand"
+                                 Margin="0,15,0,0"
+                                 HorizontalOptions="CenterAndExpand"
+                                 Grid.Row="0"/>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

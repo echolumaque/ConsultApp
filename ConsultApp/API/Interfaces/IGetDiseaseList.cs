@@ -1,7 +1,7 @@
 ﻿using Refit;
-using ConsultApp.API.Models;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using ConsultApp.API.Models;
 
 namespace ConsultApp.API.Interfaces
 {

@@ -1,10 +1,8 @@
 ﻿using Android.Views;
-using ConsultApp.Droid.Helpers;
-using ConsultApp.Helpers;
-using Xamarin.Forms;
+using ConsultApp.Helpers.Interfaces;
 using Xamarin.Forms.Platform.Android;
+using Xamarin.Forms;
 
-[assembly: Dependency(typeof(SetStatusBarColorDroid))]
 namespace ConsultApp.Droid.Helpers
 {
     public class SetStatusBarColorDroid : ISetStatusBarColor

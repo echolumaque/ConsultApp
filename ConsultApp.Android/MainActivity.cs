@@ -1,5 +1,4 @@
-﻿using Android;
-using Android.App;
+﻿using Android.App;
 using Android.Content.PM;
 using Android.Content.Res;
 using Android.Graphics;
@@ -8,7 +7,6 @@ using Android.Util;
 using Android.Views;
 using ConsultApp.Droid.Helpers;
 using ConsultApp.Droid.Helpers.Dependencies;
-using ConsultApp.Helpers;
 using ConsultApp.Helpers.Interfaces;
 using Prism;
 using Prism.Ioc;

@@ -12,11 +12,15 @@ using System.Net.Http.Headers;
 using FFImageLoading.Config;
 using Xamarin.Essentials;
 using ConsultApp.Database;
-using ConsultApp.Helpers.Interfaces;
 using SQLite;
 using System;
 using System.Threading.Tasks;
 using System.Linq;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
+using Microsoft.AppCenter.Distribute;
+using Polly;
 
 [assembly: ExportFont("Roboto-Bold.ttf", Alias = "Bold")]
 [assembly: ExportFont("Roboto-Regular.ttf", Alias = "Regular")]
@@ -28,11 +32,9 @@ namespace ConsultApp
 {
     public partial class App
     {
-        private ILocation location { get; }
 
         public App(IPlatformInitializer initializer) : base(initializer)
         {
-            //this.location = location;
         }
 
         protected override async void OnInitialized()
@@ -40,7 +42,15 @@ namespace ConsultApp
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Mzg4MTg2QDMxMzgyZTM0MmUzMGhsWmVpcHBNcUVkZzlIRXVsNHNEcE5rNEJPclMwKzVvaWVwZHp1L0VxTVk9");
             InitializeComponent();
 
-            await NavigationService.NavigateAsync("CustomNavigationPage/HomePage");
+            if (Settings.FirstRun)
+            {
+                await NavigationService.NavigateAsync("CustomNavigationPage/Onboarding");
+                Settings.FirstRun = false;
+            }
+            else
+            {
+                await NavigationService.NavigateAsync("CustomNavigationPage/HomePage");
+            }
 
             httpClient.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
             ImageService.Instance.Initialize(new Configuration
@@ -64,16 +74,25 @@ namespace ConsultApp
             containerRegistry.RegisterForNavigation<DoctorsSchedule, DoctorsScheduleViewModel>();
             containerRegistry.RegisterForNavigation<PendingConsultationPage, PendingConsultationPageViewModel>();
             containerRegistry.RegisterForNavigation<ConsultAppDoctors, ConsultAppDoctorsViewModel>();
+            containerRegistry.RegisterForNavigation<Onboarding, OnboardingViewModel>();
+            containerRegistry.RegisterForNavigation<Register, RegisterViewModel>();
         }
 
+        protected override void OnStart()
+        {
+            const string ios = "b9f253ab-47e9-40bd-892b-f1687efe3ebc";
+            const string android = "382f69c3-84d5-4037-9743-dbab28403e1a";
+            AppCenter.Start($"ios={ios};android={android};", typeof(Analytics), typeof(Crashes), typeof(Distribute));
+            Distribute.CheckForUpdate();
+        }
         //static properties and methods
+        public static readonly Random rnd = new Random();
 
         public static readonly HttpClient httpClient = new HttpClient();
 
         public static Location CurrentLocation = new Location();
 
-        private static readonly Lazy<SQLiteAsyncConnection> dbConnection =
-            new Lazy<SQLiteAsyncConnection>(() => new SQLiteAsyncConnection(SQLiteConstants.DatabasePath, SQLiteConstants.Flags));
+        private static readonly Lazy<SQLiteAsyncConnection> dbConnection = new Lazy<SQLiteAsyncConnection>(() => new SQLiteAsyncConnection(SQLiteConstants.DatabasePath, SQLiteConstants.Flags));
 
         public static SQLiteAsyncConnection ConnectionString = dbConnection.Value;
 
@@ -87,35 +106,9 @@ namespace ConsultApp
             return ConnectionString;
         }
 
-        //private async Task GetLocation()
-        //{
-        //    try
-        //    {
-        //        await Permissions.CheckStatusAsync<Permissions.LocationAlways>();
-        //        await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
-        //        await Permissions.CheckStatusAsync<Permissions.NetworkState>();
-        //        await Permissions.CheckStatusAsync<Permissions.StorageWrite>();
-
-        //        await Permissions.RequestAsync<Permissions.LocationAlways>();
-        //        await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
-        //        await Permissions.RequestAsync<Permissions.NetworkState>();
-        //        await Permissions.RequestAsync<Permissions.StorageWrite>();
-        //        //TODO: ADD EACH PLATFORM IMPLEMENTATION
-        //        await location.DisplayLocationSettingsRequest().ContinueWith(async x => await SetLocation());
-        //    }
-        //    catch (Exception)
-        //    {
-        //        await PopupNavigation.Instance.PushAsync(new LocationError(), true);
-        //    }
-        //}
-
-        //private async Task SetLocation()
-        //{
-        //    App.CurrentLocation = await Geolocation.GetLocationAsync(new GeolocationRequest
-        //    {
-        //        DesiredAccuracy = GeolocationAccuracy.High,
-        //        Timeout = TimeSpan.FromSeconds(10)
-        //    });
-        //}
+        public static async Task RetryPolicy(Func<Task> action)
+        {
+            await Policy.Handle<Exception>().WaitAndRetryAsync(5, tries => TimeSpan.FromSeconds(Math.Pow(2, tries))).ExecuteAsync(action);
+        }
     }
 }

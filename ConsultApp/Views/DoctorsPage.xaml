@@ -10,11 +10,14 @@
              xmlns:localimages="clr-namespace:ConsultApp.Helpers.Images"
              xmlns:circle="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations" 
              xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
+             xmlns:loading="clr-namespace:ConsultApp.Helpers.Loading"
+             Title="Available Doctors"
              x:Class="ConsultApp.Views.DoctorsPage">
 
     <ContentPage.Content>
-        <StackLayout Padding="25,50,25,0"><!--babaguhin magigng '-->
-            <Label Text="{Binding Major,StringFormat='Lets for a doctor with specialty in {0}'}"
+        <StackLayout Padding="25,50,25,0">
+
+            <Label Text="{Binding Major}"
                    FontFamily="Bold"
                    TextColor="Black"
                    FontSize="25"/>

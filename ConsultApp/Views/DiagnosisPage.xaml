@@ -6,19 +6,39 @@
              prism:ViewModelLocator.AutowireViewModel="True"
              BackgroundColor="White"
              Visual="Material"
+             Title="Diagnostics"
              xmlns:fonts="clr-namespace:ConsultApp.Fonts"
+             xmlns:svg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
+             xmlns:localimages="clr-namespace:ConsultApp.Helpers.Images"
              x:Class="ConsultApp.Views.DiagnosisPage">
 
     <ContentPage.Content>
         <StackLayout Padding="10,50,10,0">
-            
-            <Label Text="Based on your symptoms, you may have one of the following:"
-                   TextColor="Black"
-                   FontFamily="Bold"
-                   FontSize="25"/>
+
+            <StackLayout VerticalOptions="CenterAndExpand"
+                         IsVisible="{Binding Empty}"
+                         HorizontalOptions="FillAndExpand">
+            <svg:SvgCachedImage Source="{localimages:ImageResource ConsultApp.Helpers.Images.error2.gif}"
+                                BitmapOptimizations="True"
+                                Aspect="AspectFit"
+                                Scale="1.5"/>
+
+            <Label Text="No available possbile disease based on your symptoms."
+                   FontFamily="Regular"
+                   Margin="0,50"
+                   FontSize="20"
+                   HorizontalTextAlignment="Center"/>
+        </StackLayout>
+
+        <Label Text="Based on your symptoms, you may have one of the following:"
+               TextColor="Black"
+               FontFamily="Bold"
+               FontSize="25"
+               IsVisible="{Binding View}"/>
 
             <FlexLayout Wrap="Wrap"
                         JustifyContent="Start"
+                        IsVisible="{Binding View}"
                         BindableLayout.ItemsSource="{Binding Diseases}">
                 <BindableLayout.ItemTemplate>
                     <DataTemplate>
@@ -42,9 +62,11 @@
             <Label Text="More details of possible disease:"
                    TextColor="Black"
                    FontFamily="Bold"
+                   IsVisible="{Binding View}"
                    FontSize="20"/>
 
             <CollectionView ItemSizingStrategy="MeasureAllItems"
+                            IsVisible="{Binding View}"
                             ItemsSource="{Binding Diseases}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
@@ -161,31 +183,6 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
-
-
-            <!--<Frame HasShadow="True"
-                   HorizontalOptions="End"
-                   VerticalOptions="End"
-                   Padding="10"
-                   Margin="5,10,5,5"
-                   BackgroundColor="#6B77E3">
-                --><!--<Frame.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding DoctorsPageCommand}"
-                                          CommandParameter="asasa gago"/>
-                </Frame.GestureRecognizers>--><!--
-                <Label>
-                    <Label.FormattedText>
-                        <FormattedString>
-                            <Span Text="{x:Static fonts:FontAwesomeIcons.Stethoscope}"
-                                  FontFamily="fa-solid"
-                                  TextColor="White"/>
-                            <Span Text="{Binding MajorPlaceHodler, StringFormat='   Look for {0} specialist'}"
-                                  TextColor="White"
-                                  FontFamily="Regular"/>
-                        </FormattedString>
-                    </Label.FormattedText>
-                </Label>
-            </Frame>-->
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

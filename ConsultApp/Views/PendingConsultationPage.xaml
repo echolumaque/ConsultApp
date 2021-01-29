@@ -10,172 +10,186 @@
              Padding="20,50,20,10"
              Visual="Material"
              xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
+             Title="Your pending consultations"
+             xmlns:customframe="clr-namespace:ConsultApp.Helpers.CustomRenderers"
+             BackgroundColor="White"
+             xmlns:svg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
              x:Class="ConsultApp.Views.PendingConsultationPage">
 
     <StackLayout>
 
-        <Label Text="Your pending consultations:"
-               FontFamily="Bold"
-               FontSize="25"
-               TextColor="Black"/>
+        <StackLayout VerticalOptions="CenterAndExpand"
+                     IsVisible="{Binding Empty}"
+                     HorizontalOptions="FillAndExpand">
+            <svg:SvgCachedImage Source="{localimages:ImageResource ConsultApp.Helpers.Images.error2.gif}"
+                                BitmapOptimizations="True"
+                                Aspect="AspectFit"
+                                Scale="1.5"/>
+
+            <Label Text="No available pending consultation at the moment. Congratulations for being healthy!"
+                   FontFamily="Regular"
+                   Margin="0,50"
+                   FontSize="20"
+                   HorizontalTextAlignment="Center"/>
+        </StackLayout>
 
         <CollectionView ItemsSource="{Binding Pendings}"
                         ItemSizingStrategy="MeasureAllItems"
+                        IsVisible="{Binding View}"
                         VerticalOptions="FillAndExpand"
                         HorizontalOptions="FillAndExpand">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <StackLayout>
-                        <Frame HasShadow="True"
-                               BackgroundColor="#6B77E3"
-                               CornerRadius="20"
+                        <Frame Padding="0"
                                Margin="0,10"
-                               Padding="10">
-                            <Grid ColumnDefinitions=".75*,.25*"
-                                    RowDefinitions="*, *,Auto">
-                                <StackLayout Grid.Column="0"
-                                              Grid.Row="0">
-                                    <Label Text="{Binding Name}"
-                                           FontFamily="Bold"
-                                           FontSize="20"
-                                           TextColor="White"/>
-                                    <Label Text="{Binding Specialization}"
-                                           FontFamily="Regular"
-                                           FontSize="18"
-                                           TextColor="White"/>
-                                    <Label>
-                                        <Label.FormattedText>
-                                            <FormattedString>
-                                                <Span Text="{Binding Hospital, StringFormat='Hospital: {0}'}"
-                                                      FontFamily="Regular"
-                                                      TextColor="White"/>
-                                                <Span Text="{Binding Distance, StringFormat=' ({0:N2} Km)'}"
-                                                       FontFamily="Regular"
-                                                       TextColor="White"/>
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
-                                    <Label Text="{Binding AvailableDay, StringFormat='Availability: {0}'}"
-                                           FontFamily="Regular"
-                                           TextColor="White"/>
-                                    <Label>
-                                        <Label.FormattedText>
-                                            <FormattedString>
-                                                <Span Text="Consultation Date: "
-                                                      TextColor="White"
-                                                      FontFamily="Regular"/>
-                                                <Span Text="{Binding SelectedDay}"
-                                                      TextColor="White"
-                                                      FontFamily="Bold"/>
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
-                                    <Label>
-                                        <Label.FormattedText>
-                                            <FormattedString>
-                                                <Span Text="Created on: "
-                                                       TextColor="White"
-                                                       FontFamily="Regular"/>
-                                                <Span Text="{Binding CreationDate}"
-                                                      TextColor="White"
-                                                      FontFamily="Bold"/>
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
-                                </StackLayout>
-
-                                <StackLayout Grid.Column="0"
-                                             Grid.Row="0"
-                                             Grid.ColumnSpan="2"
-                                             VerticalOptions="StartAndExpand"
-                                             HorizontalOptions="EndAndExpand">
-
-                                    <RelativeLayout HorizontalOptions="CenterAndExpand"
-                                                    VerticalOptions="CenterAndExpand">
-                                        <ffimage:CachedImage Source="{localimages:ImageResource ConsultApp.Helpers.Images.doc2.png}"
-                                                             BitmapOptimizations="True"
-                                                             DownsampleToViewSize="True"
-                                                             HeightRequest="100"
-                                                             HorizontalOptions="CenterAndExpand"
-                                                             VerticalOptions="CenterAndExpand"
-                                                             x:Name="pic"
-                                                             Aspect="AspectFit">
-                                            <ffimage:CachedImage.Transformations>
-                                                <circle:CircleTransformation/>
-                                            </ffimage:CachedImage.Transformations>
-                                        </ffimage:CachedImage>
-
-                                        <BoxView RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, 
-                                            Constant=25, 
-                                            Factor=0,
-                                            Property=X,
-                                            ElementName=pic}"
-                                                    BackgroundColor="Green"
-                                                    IsVisible="{Binding IsAvailable}"
-                                                    CornerRadius="100"
-                                                    Scale="0.5"/>
-
-                                    </RelativeLayout>
-                                </StackLayout>
-
-                                <maps:Map Grid.ColumnSpan="2"
-                                          Grid.Column="0"
-                                          Grid.Row="1"
-                                          IsShowingUser="True"
-                                          HasScrollEnabled="False"
-                                          HasZoomEnabled="True"
-                                          ItemsSource="{Binding Pendings.Pins}">
-                                    <x:Arguments>
-                                        <maps:MapSpan>
-                                            <x:Arguments>
-                                                <maps:Position>
-                                                    <x:Arguments>
-                                                        <x:Double>12.8797</x:Double>
-                                                        <x:Double>121.7740</x:Double>
-                                                    </x:Arguments>
-                                                </maps:Position>
-                                                <x:Double>10</x:Double>
-                                                <x:Double>10</x:Double>
-                                            </x:Arguments>
-                                        </maps:MapSpan>
-                                    </x:Arguments>
-                                    <maps:Map.ItemTemplate>
-                                        <DataTemplate>
-                                            <maps:Pin Position="{Binding Position}"
-                                                      Label="{Binding Label}"
-                                                      Address="{Binding Address}"
-                                                      Type="Place"/>
-                                        </DataTemplate>
-                                    </maps:Map.ItemTemplate>
-                                </maps:Map>
-
-                                <Frame BackgroundColor="White"
-                                       BorderColor="#6B77E3"
-                                       HasShadow="True"
-                                       Grid.Column="0"
-                                       Grid.Row="2"
-                                       Margin="0,10,0,0"
-                                       VerticalOptions="CenterAndExpand"
-                                       HorizontalOptions="EndAndExpand"
-                                       Grid.ColumnSpan="2"
+                               CornerRadius="20">
+                            <SwipeView>
+                                <SwipeView.RightItems>
+                                    <SwipeItems>
+                                        <SwipeItemView Command="{Binding RemoveConsultation}"
+                                                       CommandParameter="{Binding .}">
+                                            <customframe:CustomFrame CornerRadius="0,20,0,20"
+                                                                     BackgroundColor="Red">
+                                                <Label VerticalTextAlignment="Center">
+                                                    <Label.FormattedText>
+                                                        <FormattedString>
+                                                            <Span Text="{x:Static fonts:FontAwesomeIcons.Trash}"
+                                                                  TextColor="White"
+                                                                  FontFamily="fa-solid"/>
+                                                            <Span Text="  REMOVE"
+                                                                  TextColor="white"
+                                                                  FontFamily="Regular"/>
+                                                        </FormattedString>
+                                                    </Label.FormattedText>
+                                                </Label>
+                                            </customframe:CustomFrame>
+                                        </SwipeItemView>
+                                    </SwipeItems>
+                                </SwipeView.RightItems>
+                                <Frame HasShadow="True"
+                                       BackgroundColor="#6B77E3"
                                        Padding="10">
-                                    <Frame.GestureRecognizers>
-                                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
-                                    </Frame.GestureRecognizers>
-                                    <Label>
-                                        <Label.FormattedText>
-                                            <FormattedString>
-                                                <Span Text="{x:Static fonts:FontAwesomeIcons.Trash}"
-                                                      FontFamily="fa-solid"
-                                                      TextColor="#6B77E3"/>
-                                                <Span Text="   Cancel consultation"
-                                                      FontFamily="Regular"
-                                                      TextColor="#6B77E3"/>
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
+                                    <Grid ColumnDefinitions=".75*,.25*"
+                                          RowDefinitions=".30*, .70*">
+                                        <StackLayout Grid.Column="0"
+                                                      Grid.Row="0">
+                                            <Label Text="{Binding Name}"
+                                                   FontFamily="Bold"
+                                                   FontSize="20"
+                                                   TextColor="White"/>
+                                            <Label Text="{Binding Specialization}"
+                                                   FontFamily="Regular"
+                                                   FontSize="18"
+                                                   TextColor="White"/>
+                                            <Label>
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="{Binding Hospital, StringFormat='Hospital: {0}'}"
+                                                              FontFamily="Regular"
+                                                              TextColor="White"/>
+                                                        <Span Text="{Binding Distance, StringFormat=' ({0:N2} Km)'}"
+                                                               FontFamily="Regular"
+                                                               TextColor="White"/>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                            <Label Text="{Binding AvailableDay, StringFormat='Availability: {0}'}"
+                                                   FontFamily="Regular"
+                                                   TextColor="White"/>
+                                            <Label>
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="Consultation Date: "
+                                                              TextColor="White"
+                                                              FontFamily="Regular"/>
+                                                        <Span Text="{Binding SelectedDay}"
+                                                              TextColor="White"
+                                                              FontFamily="Bold"/>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                            <Label>
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="Created on: "
+                                                               TextColor="White"
+                                                               FontFamily="Regular"/>
+                                                        <Span Text="{Binding CreationDate}"
+                                                              TextColor="White"
+                                                              FontFamily="Bold"/>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </StackLayout>
+
+                                        <StackLayout Grid.Column="0"
+                                                     Grid.Row="0"
+                                                     Grid.ColumnSpan="2"
+                                                     VerticalOptions="CenterAndExpand"
+                                                     HorizontalOptions="EndAndExpand">
+
+                                            <RelativeLayout>
+                                                <ffimage:CachedImage Source="{localimages:ImageResource ConsultApp.Helpers.Images.doc2.png}"
+                                                                     BitmapOptimizations="True"
+                                                                     DownsampleToViewSize="True"
+                                                                     HeightRequest="100"
+                                                                     HorizontalOptions="CenterAndExpand"
+                                                                     VerticalOptions="CenterAndExpand"
+                                                                     x:Name="pic"
+                                                                     Aspect="AspectFit">
+                                                    <ffimage:CachedImage.Transformations>
+                                                        <circle:CircleTransformation/>
+                                                    </ffimage:CachedImage.Transformations>
+                                                </ffimage:CachedImage>
+
+                                                <BoxView RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, 
+                                                    Constant=25, 
+                                                    Factor=0,
+                                                    Property=X,
+                                                    ElementName=pic}"
+                                                            BackgroundColor="Green"
+                                                            IsVisible="{Binding IsAvailable}"
+                                                            CornerRadius="100"
+                                                            Scale="0.5"/>
+
+                                            </RelativeLayout>
+                                        </StackLayout>
+
+                                        <maps:Map Grid.ColumnSpan="2"
+                                                  Grid.Column="0"
+                                                  Grid.Row="1"
+                                                  IsShowingUser="True"
+                                                  HasScrollEnabled="False"
+                                                  HasZoomEnabled="True"
+                                                  ItemsSource="{Binding Pins}">
+                                            <x:Arguments>
+                                                <maps:MapSpan>
+                                                    <x:Arguments>
+                                                        <maps:Position>
+                                                            <x:Arguments>
+                                                                <x:Double>12.8797</x:Double>
+                                                                <x:Double>121.7740</x:Double>
+                                                            </x:Arguments>
+                                                        </maps:Position>
+                                                        <x:Double>10</x:Double>
+                                                        <x:Double>10</x:Double>
+                                                    </x:Arguments>
+                                                </maps:MapSpan>
+                                            </x:Arguments>
+                                            <maps:Map.ItemTemplate>
+                                                <DataTemplate>
+                                                    <maps:Pin Position="{Binding Position}"
+                                                              Label="{Binding Label}"
+                                                              Address="{Binding Address}"
+                                                              Type="Place"/>
+                                                </DataTemplate>
+                                            </maps:Map.ItemTemplate>
+                                        </maps:Map>
+
+                                    </Grid>
                                 </Frame>
-                            </Grid>
+                            </SwipeView>
                         </Frame>
                     </StackLayout>
                 </DataTemplate>

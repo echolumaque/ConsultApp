@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="http://prismlibrary.com"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             Visual="Material"
+             xmlns:fonts="clr-namespace:ConsultApp.Fonts"
+             xmlns:ffimage="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:images="clr-namespace:ConsultApp.Helpers.Images"
+             BackgroundColor="White"
+             x:Class="ConsultApp.Views.Onboarding">
+
+    <StackLayout>
+        <IndicatorView SelectedIndicatorColor="#5B00DB"
+                       IndicatorColor="LightGray"
+                       x:Name="indView"
+                       Margin="0,20"
+                       VerticalOptions="CenterAndExpand"
+                       HorizontalOptions="CenterAndExpand"/>
+        
+        <CarouselView ItemsSource="{Binding Onboarding}"
+                      Position="{Binding Position}"
+                      IndicatorView="indView"
+                      VerticalOptions="FillAndExpand"
+                      HorizontalOptions="FillAndExpand">
+            <CarouselView.ItemTemplate>
+                <DataTemplate>
+                    <FlexLayout Direction="Column"
+                                AlignItems="Center"
+                                JustifyContent="SpaceEvenly">
+                        <Label Text="{Binding Title}"
+                               TextColor="Black"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center"
+                               FontSize="25"
+                               FontFamily="Bold"/>
+
+                        <ffimage:CachedImage Source="{Binding Image}"
+                                             BitmapOptimizations="True"
+                                             Aspect="AspectFit"/>
+
+                        <Label Text="{Binding Contents}"
+                               FontFamily="Regular"
+                               HorizontalTextAlignment="Center"
+                               Padding="20,0"
+                               VerticalTextAlignment="Center"
+                               FontSize="20"
+                               TextColor="Black"/>
+
+                        <Frame Padding="15"
+                               VerticalOptions="End"
+                               HorizontalOptions="End"
+                               FlexLayout.AlignSelf="End"
+                               Margin="20,0"
+                               HasShadow="True"
+                               BackgroundColor="#5B00DB">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding NextPage}"/>
+                            </Frame.GestureRecognizers>
+                            <Label>
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="Next   "
+                                              TextColor="White"
+                                              FontFamily="Regular"/>
+                                        <Span Text="{x:Static fonts:FontAwesomeIcons.ArrowRight}"
+                                              FontFamily="fa-solid"
+                                              TextColor="White"/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                            
+                        </Frame>
+                        
+                    </FlexLayout>
+                </DataTemplate>
+            </CarouselView.ItemTemplate>
+        </CarouselView>
+    </StackLayout>
+    
+</ContentPage>

@@ -21,15 +21,15 @@ namespace ConsultApp.Views
             };
             calendar.CustomDayLabels = customDayLabels;
 
-            var vm = BindingContext as DoctorsScheduleViewModel;
+            //var vm = BindingContext as DoctorsScheduleViewModel;
 
-            var blackoutDays = new List<DateTime>();
+            //var blackoutDays = new List<DateTime>();
 
-            if (e.Date.DayOfWeek != vm.DayAvailable)
-            {
-                blackoutDays.Add(e.Date);
-                calendar.BlackoutDates = blackoutDays;
-            }
+            //if (e.Date.DayOfWeek != vm.DayAvailable)
+            //{
+            //    blackoutDays.Add(e.Date);
+            //    calendar.BlackoutDates = blackoutDays;
+            //}
         }
     }
 }

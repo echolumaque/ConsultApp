@@ -4,32 +4,29 @@
              xmlns:prism="http://prismlibrary.com" 
              xmlns:combobox="clr-namespace:Syncfusion.XForms.ComboBox;assembly=Syncfusion.SfComboBox.XForms"
              xmlns:ffimage="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
-             xmlns:fonts="clr-namespace:ConsultApp.Fonts"
+             xmlns:fonts="clr-namespace:ConsultApp.Fonts" 
+             xmlns:loading="clr-namespace:ConsultApp.Helpers.Loading"
              prism:ViewModelLocator.AutowireViewModel="True"
              Visual="Material"
+             Title="Consultation"
              BackgroundColor="White"
              x:Class="ConsultApp.Views.ConsultPage">
 
     <ContentPage.Content>
         <StackLayout Padding="20,50,20,20">
+            <loading:Loading IsVisible="{Binding Loading}"
+                             Scale="2"
+                             VerticalOptions="CenterAndExpand"
+                             HorizontalOptions="CenterAndExpand"/>
 
-            <Label>
-                <Label.FormattedText>
-                    <FormattedString>
-                        <Span Text="Hello Bits, "
-                              FontFamily="Regular"
-                              FontSize="20"
-                              TextColor="Black"/>
-                        <Span Text="&#10; &#10;"/>
-                        <Span Text="What seems to be wrong?"
-                              FontFamily="Bold"
-                              FontSize="30"
-                              TextColor="Black"/>
-                    </FormattedString>
-                </Label.FormattedText>
-            </Label>
+            <Label IsVisible="{Binding ViewsLoaded}"
+                   Text="What seems to be wrong?"
+                   FontFamily="Bold"
+                   TextColor="Black"
+                   FontSize="30"/>
 
             <combobox:SfComboBox HeightRequest="40"
+                                 IsVisible="{Binding ViewsLoaded}"
                                  MultiSelectMode="Token" 
                                  x:Name="combobox"
                                  TokensWrapMode="Wrap"
@@ -75,14 +72,17 @@
                     <combobox:TokenSettings FontSize="16"
                                             BackgroundColor="#646FD4" 
                                             TextColor="White"
-                                            IsCloseButtonVisible="False" 
+                                            IsCloseButtonVisible="True" 
+                                            DeleteButtonColor="Brown"
+                                            SelectedBackgroundColor="#ffffe0" 
                                             CornerRadius="12">
-                    </combobox:TokenSettings>
+                        </combobox:TokenSettings>
                 </combobox:SfComboBox.TokenSettings>
             </combobox:SfComboBox>
-
-            <CollectionView ItemsSource="{Binding SymptomID, Mode=TwoWay}"
+            
+            <CollectionView ItemsSource="{Binding SymptomID}"
                             Margin="0,20,0,0"
+                            IsVisible="{Binding ViewsLoaded}"
                             ItemSizingStrategy="MeasureFirstItem">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
@@ -93,34 +93,26 @@
                                    HasShadow="True"
                                    BackgroundColor="White"
                                    BorderColor="LightGray">
-                                <SwipeView>
-                                    <SwipeView.RightItems>
-                                        <SwipeItems Mode="Execute">
-                                            <SwipeItem Text="REMOVE"
-                                                       Invoked="SwipeItem_Invoked"
-                                                       BackgroundColor="Red"/>
-                                        </SwipeItems>
-                                    </SwipeView.RightItems>
-                                    <StackLayout Orientation="Horizontal"
-                                                    Padding="15">
-                                        <BoxView BackgroundColor="#646FD4"
-                                                    Margin="-16"
-                                                    WidthRequest="20"/>
-                                        <ffimage:CachedImage Source="{Binding Photo}"
-                                                             Aspect="AspectFill"
-                                                             Margin="15,0,0,0"
-                                                             BitmapOptimizations="True"
-                                                             HeightRequest="40"
-                                                             DownsampleToViewSize="True"/>
+                                
+                                <StackLayout Orientation="Horizontal"
+                                                Padding="15">
+                                    <BoxView BackgroundColor="#646FD4"
+                                                Margin="-16"
+                                                WidthRequest="20"/>
+                                    <ffimage:CachedImage Source="{Binding Photo}"
+                                                            Aspect="AspectFill"
+                                                            Margin="15,0,0,0"
+                                                            BitmapOptimizations="True"
+                                                            HeightRequest="40"
+                                                            DownsampleToViewSize="True"/>
 
-                                        <Label Text="{Binding Name}"
-                                               TextColor="Black"
-                                               FontSize="20"
-                                               VerticalTextAlignment="Center"
-                                               FontFamily="Bold"/>
+                                    <Label Text="{Binding Name}"
+                                            TextColor="Black"
+                                            FontSize="20"
+                                            VerticalTextAlignment="Center"
+                                            FontFamily="Bold"/>
 
-                                    </StackLayout>
-                                </SwipeView>
+                                </StackLayout>
                             </Frame>
                         </StackLayout>
                     </DataTemplate>
@@ -130,6 +122,7 @@
             <Frame Padding="10"
                    HasShadow="True"
                    HorizontalOptions="EndAndExpand"
+                   IsVisible="{Binding ViewsLoaded}"
                    BackgroundColor="White"
                    IsEnabled="{Binding IsEnabled}"
                    VerticalOptions="StartAndExpand"

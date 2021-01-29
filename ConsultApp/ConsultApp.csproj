@@ -9,15 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Fonts\fa-brands-400.ttf" />
-    <None Remove="Fonts\fa-regular-400.ttf" />
-    <None Remove="Fonts\fa-solid-900.ttf" />
     <None Remove="Fonts\Font Awesome 5 Brands-Regular-400.otf" />
     <None Remove="Fonts\Font Awesome 5 Free-Regular-400.otf" />
     <None Remove="Fonts\Font Awesome 5 Free-Solid-900.otf" />
     <None Remove="Fonts\Roboto-Bold.ttf" />
     <None Remove="Fonts\Roboto-Regular.ttf" />
     <None Remove="Helpers\Images\asthma.png" />
+    <None Remove="Helpers\Images\avatar.png" />
+    <None Remove="Helpers\Images\avatar1.png" />
     <None Remove="Helpers\Images\backpain.png" />
     <None Remove="Helpers\Images\chestpain.png" />
     <None Remove="Helpers\Images\cough.png" />
@@ -29,21 +28,24 @@
     <None Remove="Helpers\Images\error2.gif" />
     <None Remove="Helpers\Images\fever.png" />
     <None Remove="Helpers\Images\headache.png" />
+    <None Remove="Helpers\Images\icon.png" />
+    <None Remove="Helpers\Images\loading.gif" />
+    <None Remove="Helpers\Images\splash1.gif" />
+    <None Remove="Helpers\Images\splash2.gif" />
     <None Remove="Helpers\Images\sweat.png" />
     <None Remove="Helpers\Images\tired.png" />
     <None Remove="Helpers\Images\weak.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Fonts\fa-brands-400.ttf" />
-    <EmbeddedResource Include="Fonts\fa-regular-400.ttf" />
-    <EmbeddedResource Include="Fonts\fa-solid-900.ttf" />
     <EmbeddedResource Include="Fonts\Font Awesome 5 Brands-Regular-400.otf" />
     <EmbeddedResource Include="Fonts\Font Awesome 5 Free-Regular-400.otf" />
     <EmbeddedResource Include="Fonts\Font Awesome 5 Free-Solid-900.otf" />
     <EmbeddedResource Include="Fonts\Roboto-Bold.ttf" />
     <EmbeddedResource Include="Fonts\Roboto-Regular.ttf" />
     <EmbeddedResource Include="Helpers\Images\asthma.png" />
+    <EmbeddedResource Include="Helpers\Images\avatar.png" />
+    <EmbeddedResource Include="Helpers\Images\avatar1.png" />
     <EmbeddedResource Include="Helpers\Images\backpain.png" />
     <EmbeddedResource Include="Helpers\Images\chestpain.png" />
     <EmbeddedResource Include="Helpers\Images\cough.png" />
@@ -55,12 +57,19 @@
     <EmbeddedResource Include="Helpers\Images\error2.gif" />
     <EmbeddedResource Include="Helpers\Images\fever.png" />
     <EmbeddedResource Include="Helpers\Images\headache.png" />
+    <EmbeddedResource Include="Helpers\Images\icon.png" />
+    <EmbeddedResource Include="Helpers\Images\loading.gif" />
+    <EmbeddedResource Include="Helpers\Images\splash1.gif" />
+    <EmbeddedResource Include="Helpers\Images\splash2.gif" />
     <EmbeddedResource Include="Helpers\Images\sweat.png" />
     <EmbeddedResource Include="Helpers\Images\tired.png" />
     <EmbeddedResource Include="Helpers\Images\weak.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.1.0" />
+    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="4.1.0" />
+    <PackageReference Include="Microsoft.AppCenter.Distribute" Version="4.1.0" />
     <PackageReference Include="Polly" Version="7.2.1" />
     <PackageReference Include="Refit" Version="5.2.4" />
     <PackageReference Include="Rg.Plugins.Popup" Version="2.0.0.10" />
@@ -79,13 +88,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Dialogs\Views\ConfirmConsultation.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Update="Dialogs\Views\LocationError.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Helpers\CustomRenderers\CustomNavigationPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Helpers\Loading\Loading.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\ConsultAppDoctors.xaml">
@@ -106,7 +115,13 @@
     <EmbeddedResource Update="Views\HomePage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Views\Onboarding.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Views\PendingConsultationPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Register.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\SymptomsAndDiseaseInfo.xaml">

@@ -25,20 +25,64 @@ namespace ConsultApp.ViewModels
         {
             var items = parameters["Diseases"] as ObservableCollection<DiagnosisModel>;
             Diseases = new ObservableCollection<DiagnosisModel>(items);
-
+            Loading = false;
             foreach (var item in Diseases)
             {
                 item.DoctorsPageCommand = new DelegateCommand<string>(async (specialty) => await DoctorsPage(specialty));
             }
+
+            if (Diseases.Count == 0)
+            {
+                Empty = true;
+                View = false;
+            }
+            else
+            {
+                Empty = false;
+                View = true;
+            }
+
+            Microsoft.AppCenter.Analytics.Analytics.TrackEvent("DiagnosisPage", new System.Collections.Generic.Dictionary<string, string>
+            {
+                    { "Value", "DiagnosisPageVisits" }
+            });
         }
 
         #region Properties
+
+        private bool empty;
+        public bool Empty
+        {
+            get { return empty; }
+            set { SetProperty(ref empty, value); }
+        }
+
+        private bool view;
+        public bool View
+        {
+            get { return view; }
+            set { SetProperty(ref view, value); }
+        }
 
         private ObservableCollection<DiagnosisModel> diseases;
         public ObservableCollection<DiagnosisModel> Diseases
         {
             get { return diseases; }
             set { SetProperty(ref diseases, value); }
+        }
+
+        private bool loading;
+        public bool Loading
+        {
+            get { return loading; }
+            set { SetProperty(ref loading, value); }
+        }
+
+        private bool viewsLoaded;
+        public bool ViewsLoaded
+        {
+            get { return viewsLoaded; }
+            set { SetProperty(ref viewsLoaded, value); }
         }
         #endregion
 

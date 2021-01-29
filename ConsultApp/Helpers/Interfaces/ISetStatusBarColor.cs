@@ -1,6 +1,6 @@
 ﻿using Xamarin.Forms;
 
-namespace ConsultApp.Helpers
+namespace ConsultApp.Helpers.Interfaces
 {
     public interface ISetStatusBarColor
     {

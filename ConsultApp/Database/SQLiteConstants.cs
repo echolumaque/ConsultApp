@@ -11,7 +11,7 @@ namespace ConsultApp.Database
 
         public static string DatabasePath
         {
-            get => Path.Combine(Xamarin.Essentials.FileSystem.AppDataDirectory, "PendingConsultation.db3");
+            get => Path.Combine(Xamarin.Essentials.FileSystem.AppDataDirectory, "PendingConsultations.db3");
         }
     }
 }

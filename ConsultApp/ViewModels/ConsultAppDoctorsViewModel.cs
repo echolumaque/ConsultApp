@@ -6,7 +6,7 @@ using ConsultApp.API.Models;
 using Xamarin.Forms;
 using Xamarin.Essentials;
 using Xamarin.Forms.Maps;
-using ConsultApp.Helpers;
+using ConsultApp.Helpers.Interfaces;
 
 namespace ConsultApp.ViewModels
 {
@@ -24,6 +24,8 @@ namespace ConsultApp.ViewModels
 
         public override void OnNavigatedTo(INavigationParameters parameters)
         {
+            Loading = true;
+            ViewsLoaded = false;
             ConsultAppDoctors = new ObservableCollection<DoctorsAndSpecializationsModel>(buffer);
 
             string[] hospitals = { "Saint Luke's Medical Center", "University of Santo Tomas Hospital", "Makati Medical Center", "The Medical City", "Manila Doctors Hospital" ,"Ospital ng Makati",
@@ -31,11 +33,13 @@ namespace ConsultApp.ViewModels
 
             DayOfWeek[] days = { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday };
 
+            Loading = false;
+            ViewsLoaded = true;
+
             foreach (var Doctors in ConsultAppDoctors)
             {
-                var rnd = new Random();
-                Doctors.Hospital = hospitals[rnd.Next(hospitals.Length)];
-                Doctors.DaysAvailable = days[rnd.Next(days.Length)];
+                Doctors.Hospital = hospitals[App.rnd.Next(hospitals.Length)];
+                Doctors.DaysAvailable = days[App.rnd.Next(days.Length)];
 
                 switch (Doctors.Hospital)
                 {
@@ -196,6 +200,12 @@ namespace ConsultApp.ViewModels
                         break;
                 }
             }
+
+
+            Microsoft.AppCenter.Analytics.Analytics.TrackEvent("ConsultAppDoctorsPage", new System.Collections.Generic.Dictionary<string, string>
+            {
+                    { "Value", "ConsultAppDoctorsPageVisits" }
+            });
         }
 
         #region Properties
@@ -467,6 +477,20 @@ namespace ConsultApp.ViewModels
         {
             get { return selectedIndex; }
             set { SetProperty(ref selectedIndex, value); }
+        }
+
+        private bool loading;
+        public bool Loading
+        {
+            get { return loading; }
+            set { SetProperty(ref loading, value); }
+        }
+
+        private bool viewsLoaded;
+        public bool ViewsLoaded
+        {
+            get { return viewsLoaded; }
+            set { SetProperty(ref viewsLoaded, value); }
         }
 
         #endregion

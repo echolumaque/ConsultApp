@@ -5,8 +5,10 @@ using Prism.Navigation;
 using Refit;
 using ConsultApp.API.Interfaces;
 using ConsultApp.API;
-using ConsultApp.Helpers;
 using Xamarin.Forms;
+using ConsultApp.Helpers.Interfaces;
+using Microsoft.AppCenter.Analytics;
+using System.Collections.Generic;
 
 namespace ConsultApp.ViewModels
 {
@@ -27,8 +29,19 @@ namespace ConsultApp.ViewModels
 
         public override async void OnNavigatedTo(INavigationParameters parameters)
         {
+            Loading = true;
+            ViewsLoaded = false;
+            
             var disease = parameters["disease"] as DiseaseInfoModel;
-            await GetInfo(disease.ID);
+            await App.RetryPolicy(async () => await GetInfo(disease.ID));
+
+            Loading = false;
+            ViewsLoaded = true;
+
+            Analytics.TrackEvent("SymptomsAndDiseaseInfoPage", new Dictionary<string, string>
+            {
+                    { "Value", "SymptomsAndDiseaseInfoPageVisits" }
+            });
         }
 
         #region Properties
@@ -72,6 +85,20 @@ namespace ConsultApp.ViewModels
         {
             get { return possibleSymptoms; }
             set { SetProperty(ref possibleSymptoms, value); }
+        }
+
+        private bool loading;
+        public bool Loading
+        {
+            get { return loading; }
+            set { SetProperty(ref loading, value); }
+        }
+
+        private bool viewsLoaded;
+        public bool ViewsLoaded
+        {
+            get { return viewsLoaded; }
+            set { SetProperty(ref viewsLoaded, value); }
         }
         #endregion
 

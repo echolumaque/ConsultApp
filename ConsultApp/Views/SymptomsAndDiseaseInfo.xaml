@@ -1,9 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:prism="http://prismlibrary.com"
+             xmlns:prism="http://prismlibrary.com" 
+             xmlns:loading="clr-namespace:ConsultApp.Helpers.Loading"
              prism:ViewModelLocator.AutowireViewModel="True"
              Padding="10,50,10,10"
+             BackgroundColor="White"
+             Title="ConsultApp Disease Database"
              Visual="Material"
              x:Class="ConsultApp.Views.SymptomsAndDiseaseInfo">
 
@@ -12,7 +15,9 @@
         <ScrollView Grid.Row="0">
             <FlexLayout Direction="Column"
                         JustifyContent="SpaceEvenly">
-                <StackLayout>
+                <loading:Loading IsVisible="{Binding Loading}"
+                                 Scale="2"/>
+                <StackLayout IsVisible="{Binding ViewsLoaded}">
                     <Label>
                         <Label.FormattedText>
                             <FormattedString>
@@ -44,15 +49,18 @@
                        TextColor="Black"
                        FontFamily="Bold"
                        Margin="0,20,0,10"
+                       IsVisible="{Binding ViewsLoaded}"
                        FontSize="30"/>
 
                 <Label Text="{Binding Cause}"
                        FontSize="16"
+                       IsVisible="{Binding ViewsLoaded}"
                        FontFamily="Regular"/>
 
                 <Label Text="{Binding Symptoms, StringFormat='List of possible symptoms: {0}'}"
                        FontSize="16"
                        Margin="0,20,0,10"
+                       IsVisible="{Binding ViewsLoaded}"
                        TextColor="Black"
                        FontFamily="Regular"/>
 
@@ -60,6 +68,7 @@
                        FontFamily="Regular"
                        TextColor="Black"
                        Margin="0,5"
+                       IsVisible="{Binding ViewsLoaded}"
                        FontSize="16"/>
 
             </FlexLayout>
@@ -67,6 +76,7 @@
         <Button Text="Go Back"
                 VerticalOptions="CenterAndExpand"
                 BackgroundColor="#6B79E4"
+                IsVisible="{Binding ViewsLoaded}"
                 Command="{Binding GoBack}"
                 Grid.Row="1"/>
     </Grid>

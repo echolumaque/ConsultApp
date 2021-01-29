@@ -27,6 +27,8 @@ namespace ConsultApp.ViewModels
 
         public override async void Initialize(INavigationParameters parameters)
         {
+            Loading = true;
+            ViewsLoaded = false;
             var doctor = parameters["doctor"] as ObservableCollection<DoctorsAndSpecializationsModel>;
             Doctor = doctor[0].Doctor;
             Specialization = doctor[0].Specialization;
@@ -38,9 +40,14 @@ namespace ConsultApp.ViewModels
             longitude = doctor[0].MapPins[0].Location.Longitude;
             label = doctor[0].MapPins[0].Label;
             address = doctor[0].MapPins[0].Address;
+            Loading = false;
+            ViewsLoaded = true;
 
-            await App.CreateDatabaseTable<PendingConsultationsModel>().ConfigureAwait(false);
-            await App.CreateDatabaseTable<Pins>().ConfigureAwait(false);
+            Microsoft.AppCenter.Analytics.Analytics.TrackEvent("DoctorSchedulePage", new System.Collections.Generic.Dictionary<string, string>
+            {
+                    { "Value", "DoctorSchedulePageVisits" }
+            });
+            await App.RetryPolicy(async () => await App.CreateDatabaseTable<PendingConsultationsModel>().ConfigureAwait(false));
         }
 
         #region Properties
@@ -49,6 +56,7 @@ namespace ConsultApp.ViewModels
         private string label;
         private string address;
         private string consultationDate;
+        public bool Online => DayAvailable.Equals(DateTime.Now.DayOfWeek) ? true : false;
 
         private string doctor;
         public string Doctor
@@ -85,11 +93,35 @@ namespace ConsultApp.ViewModels
             set { SetProperty(ref dayAvailable, value); }
         }
 
+        private bool loading;
+        public bool Loading
+        {
+            get { return loading; }
+            set { SetProperty(ref loading, value); }
+        }
+
+        private bool viewsLoaded;
+        public bool ViewsLoaded
+        {
+            get { return viewsLoaded; }
+            set { SetProperty(ref viewsLoaded, value); }
+        }
+
         #endregion
 
         #region Methods
 
-        private void SelectDate(CalendarTappedEventArgs selectedDate) => consultationDate = selectedDate.DateTime.ToString("MMMM dd, yyyy");
+        private void SelectDate(CalendarTappedEventArgs selectedDate)
+        {
+            consultationDate = selectedDate.DateTime.ToString("MMMM dd, yyyy");
+            if (DayAvailable != selectedDate.DateTime.DayOfWeek && selectedDate.DateTime < DateTime.Now)
+            {
+                Prism.PrismApplicationBase.Current.MainPage.DisplayAlert
+                    ($"{Doctor} is not available on the selected day",
+                    $"{Doctor} is only available every {DayAvailable}. Please select your vacant available day every {DayAvailable} on the future in order to schedule a consultation.",
+                    "Okay");
+            }
+        } 
 
         private async Task AddToPendingConsultation()
         {
@@ -104,42 +136,27 @@ namespace ConsultApp.ViewModels
                     SelectedDay = consultationDate,
                     Specialization = Specialization,
                     CreationDate = DateTime.Now.ToString("MMMM dd, yyyy hh:mm tt"),
-                };
-
-                var pins = new Pins()
-                {
                     Latitude = latitude,
                     Longitude = longitude,
                     Label = label,
                     Address = address,
                 };
 
-                //bad request solved using polly, map distances
-                var findDuplicate = await App.ConnectionString.QueryAsync<PendingConsultationsModel>
-                    ("SELECT SelectedDay FROM PendingConsultationsModel GROUP BY SelectedDay HAVING COUNT(*) > 1");
-
-                if (findDuplicate.Count > 1)
+                if (DayAvailable == DateTime.Parse(consultationDate).DayOfWeek && DateTime.Parse(consultationDate) > DateTime.Now)
                 {
-                    toast.ShowToast($"You already have scheduled consultation with {Doctor} on {consultationDate}.");
+                    await App.RetryPolicy(async () => await App.ConnectionString.InsertAsync(pendingConsultation));
+                    toast.ShowToast("Successfully scheduled consultation!");
+                    await navigationService.GoBackToRootAsync();
+                    Xamarin.Essentials.Preferences.Set("navigatable", true);
                 }
                 else
                 {
-                    await App.ConnectionString.InsertAsync(pendingConsultation);
-                    await App.ConnectionString.InsertAsync(pins);
-                    toast.ShowToast("Successfully scheduled consultation!");
-                    await navigationService.GoBackToRootAsync();
+                    toast.ShowToast($"{Doctor} is only available every {DayAvailable}. Please select your vacant date for every {DayAvailable} in order to schedule a consultation.");
                 }
             }
             catch (Exception)
             {
-                 var findDuplicate = await App.ConnectionString.QueryAsync<PendingConsultationsModel>
-                    ("SELECT SelectedDay FROM PendingConsultationsModel GROUP BY SelectedDay HAVING COUNT(*) > 1");
-
-                if (findDuplicate.Count > 1)
-                {
-                    toast.ShowToast($"You already have scheduled consultation with {Doctor} on {consultationDate}.");
-                }
-
+                toast.ShowToast("Please select a date.");
             }
         }
         #endregion

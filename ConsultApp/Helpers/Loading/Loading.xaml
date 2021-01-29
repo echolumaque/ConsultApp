@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:svg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
+             Visual="Material"
+             xmlns:images="clr-namespace:ConsultApp.Helpers.Images"
+             x:Class="ConsultApp.Helpers.Loading.Loading">
+    <ContentView.Content>
+        <StackLayout>
+            <svg:SvgCachedImage Source="{images:ImageResource ConsultApp.Helpers.Images.splash1.gif}"
+                                BitmapOptimizations="True"
+                                Aspect="AspectFit"
+                                IsVisible="{Binding IsBusy}"/>
+        </StackLayout>
+    </ContentView.Content>
+</ContentView>

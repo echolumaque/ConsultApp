@@ -7,6 +7,7 @@
 	<style name="MainTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
 		<!--If you are using revision 22.1 please use just windowNoTitle. Without android:-->
 		<item name="windowNoTitle">true</item>
+		<item name="android:windowFullscreen">true</item>
 		<!--We will be using the toolbar so no need to show ActionBar-->
 		<item name="windowActionBar">false</item>
 		<!-- Set theme colors from https://aka.ms/material-colors -->
@@ -16,25 +17,18 @@
 		<item name="colorPrimaryDark">#FFFFFF</item>
 		<!-- colorAccent is used as the default value for colorControlActivated
          which is used to tint widgets -->
-		<item name="colorAccent">#FF4081</item>
+		<item name="colorAccent">#000000</item>
 		<item name="android:windowLightStatusBar">true</item>
 		<!-- You can also set colorControlNormal, colorControlActivated
          colorControlHighlight and colorSwitchThumbNormal. -->
 		<item name="windowActionModeOverlay">true</item>
 		<item name="android:windowAnimationStyle">@null</item>
-
+		<item name="android:navigationBarColor">@android:color/white</item>
+		<item name="android:windowLightNavigationBar">true</item>
 		<item name="android:datePickerDialogTheme">@style/AppCompatDialogStyle</item>
 	</style>
 
 	<style name="AppCompatDialogStyle" parent="Theme.AppCompat.Light.Dialog">
-		<item name="colorAccent">#FF4081</item>
+		<item name="colorAccent">#000000</item>
 	</style>
-
-	<!--<style name="MainTheme.Splash" parent="Theme.AppCompat.Light.NoActionBar">
-    <item name="android:windowBackground">@drawable/splash_screen</item>
-    <item name="android:windowNoTitle">true</item>
-    <item name="android:windowFullscreen">true</item>
-    <item name="android:windowContentOverlay">@null</item>
-    <item name="android:windowActionBar">true</item>
-  </style>-->
 </resources>

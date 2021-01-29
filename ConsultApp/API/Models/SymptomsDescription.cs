@@ -16,6 +16,5 @@ namespace ConsultApp.API.Models
         public string PossibleSymptoms { get; set; }
         [JsonProperty("TreatmentDescription")]
         public string TreatmentDescription { get; set; }
-        //https://sandbox-healthservice.priaid.ch/issues/15/info?token=e&language=en-gb
     }
 }
