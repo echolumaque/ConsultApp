@@ -25,27 +25,35 @@ namespace ConsultApp.ViewModels
 
         public override async void OnNavigatedTo(INavigationParameters parameters)
         {
-            if (await App.ConnectionString.Table<PendingConsultationsModel>().CountAsync() > 0)
+            try
             {
-                Empty = false;
-                View = true;
-                Pendings = new ObservableCollection<PendingConsultationsModel>(await App.ConnectionString.Table<PendingConsultationsModel>().ToListAsync());
-                foreach (var item in Pendings)
+                if (await App.ConnectionString.Table<PendingConsultationsModel>().CountAsync() > 0)
                 {
-                    item.RemoveConsultation = new DelegateCommand<PendingConsultationsModel>(async (pending) => await RemovePendings(pending));
-
-                    item.Pins = new ObservableCollection<Pins>
+                    Empty = false;
+                    View = true;
+                    Pendings = new ObservableCollection<PendingConsultationsModel>(await App.ConnectionString.Table<PendingConsultationsModel>().ToListAsync());
+                    foreach (var item in Pendings)
                     {
-                        new Pins
+                        item.RemoveConsultation = new DelegateCommand<PendingConsultationsModel>(async (pending) => await RemovePendings(pending));
+
+                        item.Pins = new ObservableCollection<Pins>
                         {
-                            Label = item.Label,
-                            Address = item.Address,
-                            Position = new Xamarin.Forms.Maps.Position(item.Latitude, item.Longitude),
-                        }
-                    };
+                            new Pins
+                            {
+                                Label = item.Label,
+                                Address = item.Address,
+                                Position = new Xamarin.Forms.Maps.Position(item.Latitude, item.Longitude),
+                            }
+                        };
+                    }
+                }
+                else
+                {
+                    Empty = true;
+                    View = false;
                 }
             }
-            else
+            catch (System.Exception)
             {
                 Empty = true;
                 View = false;
@@ -75,6 +83,7 @@ namespace ConsultApp.ViewModels
             set { SetProperty(ref view, value); }
         }
 
+      
         #endregion
 
         #region Methods

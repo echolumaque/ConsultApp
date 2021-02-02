@@ -41,6 +41,7 @@ namespace ConsultApp.ViewModels
 
         public HomePageViewModel(INavigationService navigationService, ISetStatusBarColor setStatusBarColor, ILocation location, IToast toast) : base(navigationService)
         {
+            Views = true;
             this.setStatusBarColor = setStatusBarColor;
             this.setStatusBarColor.SetStatusBarColor(Color.FromHex("E6EDFF"));
 
@@ -78,8 +79,8 @@ namespace ConsultApp.ViewModels
             ChangeCarouselPosition();
 
             ConsultationCommand = new DelegateCommand(async () => await this.navigationService.NavigateAsync("ConsultPage"));
-            PendingConsultationCommand = new DelegateCommand(async () => await PendingConsultation());
-            ConsultAppDoctorsCommand = new DelegateCommand(async () => await this.navigationService.NavigateAsync("ConsultAppDoctors"));
+            PendingConsultationCommand = new DelegateCommand(async () => await PendingConsultationPage());
+            ConsultAppDoctorsCommand = new DelegateCommand(async () => await ConsultAppDoctorsPage());
             AboutUsCommand = new DelegateCommand(async () => await AboutUs());
 
             Time = DateTime.Now.Hour > 0 && DateTime.Now.Hour < 12 ? Time = "Good morning," : DateTime.Now.Hour > 11 && DateTime.Now.Hour < 19 ? Time = "Good afternoon," : Time = "Good evening,";
@@ -110,8 +111,22 @@ namespace ConsultApp.ViewModels
                 toast.ShowToast("Could not connect to server. Please make sure that you have an internet connection and restart the application");
             }
         }
-      
+
         #region Properties
+
+        private bool loading;
+        public bool Loading
+        {
+            get { return loading; }
+            set { SetProperty(ref loading, value); }
+        }
+
+        private bool views;
+        public bool Views
+        {
+            get { return views; }
+            set { SetProperty(ref views, value); }
+        }
 
         private ObservableCollection<DiseaseInfoModel> disease;
         public ObservableCollection<DiseaseInfoModel> Disease
@@ -243,15 +258,22 @@ namespace ConsultApp.ViewModels
             }
         }
 
-        private async Task PendingConsultation()
+        private async Task PendingConsultationPage()
         {
-            if (Preferences.Get("navigatable", false) == true)
-                await navigationService.NavigateAsync("PendingConsultationPage");
-            else
-                toast.ShowToast("Your don't have any pending consultations.");
-
+            Loading = true;
+            Views = false;
+            await navigationService.NavigateAsync("PendingConsultationPage");
+            Loading = false;
+            Views = true;
         }
-
+        private async Task ConsultAppDoctorsPage()
+        {
+            Loading = true;
+            Views = false;
+            await navigationService.NavigateAsync("ConsultAppDoctors");
+            Loading = false;
+            Views = true;
+        }
         private async Task AboutUs()
         {
             await Prism.PrismApplicationBase.Current.MainPage.DisplayAlert

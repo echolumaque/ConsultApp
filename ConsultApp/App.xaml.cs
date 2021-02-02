@@ -110,5 +110,10 @@ namespace ConsultApp
         {
             await Policy.Handle<Exception>().WaitAndRetryAsync(5, tries => TimeSpan.FromSeconds(Math.Pow(2, tries))).ExecuteAsync(action);
         }
+
+        public static string[] hospitals = { "Saint Luke's Medical Center", "University of Santo Tomas Hospital", "Makati Medical Center", "The Medical City", "Manila Doctors Hospital" ,"Ospital ng Makati",
+            "Pasig General Hospital", "Rizal Medical Center", "Mandaluyong Medical Center", "Asian Hospital and Medical Center", "Olivarez General Hospital"};
+
+        public static DayOfWeek[] days = { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday };
     }
 }

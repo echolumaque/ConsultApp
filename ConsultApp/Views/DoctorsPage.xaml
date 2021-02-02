@@ -17,12 +17,19 @@
     <ContentPage.Content>
         <StackLayout Padding="25,50,25,0">
 
+            <loading:Loading IsVisible="{Binding Loading}"
+                             Scale="2"
+                             VerticalOptions="CenterAndExpand"
+                             HorizontalOptions="CenterAndExpand"/>
+
             <Label Text="{Binding Major}"
                    FontFamily="Bold"
+                   IsVisible="{Binding ViewsLoaded}"
                    TextColor="Black"
                    FontSize="25"/>
 
             <Frame HasShadow="True"
+                   IsVisible="{Binding ViewsLoaded}"
                    BorderColor="LightGray"
                    BackgroundColor="White"
                    CornerRadius="30"
@@ -47,6 +54,7 @@
 
             <CollectionView ItemsSource="{Binding DocsWithMajor}"
                             ItemSizingStrategy="MeasureAllItems"
+                            IsVisible="{Binding ViewsLoaded}"
                             Margin="-10,0">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>

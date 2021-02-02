@@ -161,6 +161,8 @@ namespace ConsultApp.ViewModels
         {
             try
             {
+                ViewsLoaded = false;
+                Loading = true;
                 await App.RetryPolicy(async () =>
                 {
                     var casting = SymptomID.Cast<SymptomsModel>();
@@ -177,6 +179,8 @@ namespace ConsultApp.ViewModels
                     };
                     await navigationService.NavigateAsync("DiagnosisPage", parameters);
                 });
+                ViewsLoaded = true;
+                Loading = false;
             }
             catch (Exception)
             {

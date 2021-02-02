@@ -2,14 +2,14 @@
 using System.Linq;
 using ConsultApp.API.Models;
 using Prism.Navigation;
-using Prism.Commands;
+using System.Collections.Generic;
 using ConsultApp.Helpers.Interfaces;
 using Xamarin.Forms;
-using System;
 using System.Threading.Tasks;
 using System.Threading;
 using Xamarin.Forms.Maps;
 using Xamarin.Essentials;
+using Prism.Commands;
 
 namespace ConsultApp.ViewModels
 {
@@ -23,13 +23,18 @@ namespace ConsultApp.ViewModels
         }
 
         public override void OnNavigatedTo(INavigationParameters parameters)
-        {   
+        {
+            Loading = true;
+            ViewsLoaded = false;
             var specialty = parameters["Major"] as string;
             Major = $"Let's look for a doctor with specialty in {Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(specialty)}";
             DocsWithMajor = new ObservableCollection<DoctorsAndSpecializationsModel>(Triage.Where(x => x.Specialization.Equals(specialty)));
             AssignAvailabilityAndHospital();
 
-            Microsoft.AppCenter.Analytics.Analytics.TrackEvent("DoctorPage", new System.Collections.Generic.Dictionary<string, string>
+            Loading = false;
+            ViewsLoaded = true;
+
+            Microsoft.AppCenter.Analytics.Analytics.TrackEvent("DoctorPage", new Dictionary<string, string>
             {
                     { "Value", "DoctorPageVisits" }
             });
@@ -302,185 +307,236 @@ namespace ConsultApp.ViewModels
 
         private void AssignAvailabilityAndHospital()
         {
-            string[] hospitals = { "Saint Luke's Medical Center", "University of Santo Tomas Hospital", "Makati Medical Center", "The Medical City", "Manila Doctors Hospital" ,"Ospital ng Makati",
-            "Pasig General Hospital", "Rizal Medical Center", "Mandaluyong Medical Center", "Asian Hospital and Medical Center", "Olivarez General Hospital"};
-            
-            DayOfWeek[] days = { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday};
-
             foreach (var Doctors in Triage)
             {
-                Doctors.Hospital = hospitals[App.rnd.Next(hospitals.Length)];
-                Doctors.DaysAvailable = days[App.rnd.Next(days.Length)];
-                Doctors.DoctorsSchedule = new DelegateCommand (async () => await GotoDoctorsAvailabilityPage());
-
-                switch (Doctors.Hospital)
+                var dict = new Dictionary<int, DoctorsAndSpecializationsModel>
                 {
-                    case "Saint Luke's Medical Center":
-                        var hosp = new Location(14.5549, 121.0482);
-                        Doctors.Distance = Location.CalculateDistance(hosp, App.CurrentLocation, DistanceUnits.Kilometers);
-                        Doctors.MapPins = new ObservableCollection<MapPinModel>
+                    {
+                        0,
+                        new DoctorsAndSpecializationsModel
                         {
-                            new MapPinModel
+                            Hospital = "Saint Luke's Medical Center",
+                            Distance = Location.CalculateDistance(14.5549, 121.0482, App.CurrentLocation, DistanceUnits.Kilometers),
+                            MapPins = new ObservableCollection<MapPinModel>
                             {
-                                Location = new Position(hosp.Latitude, hosp.Longitude),
-                                Label = hospitals[0],
-                                Address = "St. Luke’s Medical Center is recognized as the leading and most respected healthcare institution in the Philippines. Its two facilities in Quezon City and Global City, Taguig are at par with the most advanced hospitals around the world. A testament to St. Luke's world class quality medical service is its accreditation with, and affiliation to, prestigious international organizations."
-                            }
-                        };
-                        break;
+                                new MapPinModel
+                                {
+                                    Location = new Position(14.5549, 121.0482),
+                                    Label = App.hospitals[0],
+                                    Address = "St. Luke’s Medical Center is recognized as the leading and most respected healthcare institution in the Philippines. Its two facilities in Quezon City and Global City, Taguig are at par with the most advanced hospitals around the world. A testament to St. Luke's world class quality medical service is its accreditation with, and affiliation to, prestigious international organizations.",
+                                },
+                            },
+                            DaysAvailable = App.days[App.rnd.Next(App.days.Length)],
 
-                    case "University of Santo Tomas Hospital":
-                        hosp = new Location(14.6114, 120.9902);
-                        Doctors.Distance = Location.CalculateDistance(hosp, App.CurrentLocation, DistanceUnits.Kilometers);
-                        Doctors.MapPins = new ObservableCollection<MapPinModel>
+                        }
+                    },
+                    {
+                        1,
+                        new DoctorsAndSpecializationsModel
                         {
-                            new MapPinModel
+                            Hospital = "University of Santo Tomas Hospital",
+                            Distance = Location.CalculateDistance(14.6114, 120.9902, App.CurrentLocation, DistanceUnits.Kilometers),
+                            MapPins = new ObservableCollection<MapPinModel>
                             {
-                                Location = new Position(hosp.Latitude, hosp.Longitude),
-                                Label = hospitals[1],
-                                Address = "The University of Santo Tomas Hospital (simply UST Hospital or USTH) is a hospital located at the University of Santo Tomas. The hospital has two divisions, a clinical teaching hospital that offers inexpensive medical care for indigent patients and a private hospital for patients with financial means, which is partially used to subsidize the clinical division."
-                            }
-                        };
-                        break;
-
-                    case "Makati Medical Center":
-                        hosp = new Location(14.5590, 121.0146);
-                        Doctors.Distance = Location.CalculateDistance(hosp, App.CurrentLocation, DistanceUnits.Kilometers);
-                        Doctors.MapPins = new ObservableCollection<MapPinModel>
+                                new MapPinModel
+                                {
+                                    Location = new Position(14.6114, 120.9902),
+                                    Label = App.hospitals[1],
+                                    Address = "The University of Santo Tomas Hospital (simply UST Hospital or USTH) is a hospital located at the University of Santo Tomas. The hospital has two divisions, a clinical teaching hospital that offers inexpensive medical care for indigent patients and a private hospital for patients with financial means, which is partially used to subsidize the clinical division.",
+                                },
+                            },
+                            DaysAvailable = App.days[App.rnd.Next(App.days.Length)],
+                        }
+                    },
+                    {
+                        2,
+                        new DoctorsAndSpecializationsModel
                         {
-                            new MapPinModel
+                            Hospital = "Makati Medical Center",
+                            Distance = Location.CalculateDistance(14.5590, 121.0146, App.CurrentLocation, DistanceUnits.Kilometers),
+                            MapPins = new ObservableCollection<MapPinModel>
                             {
-                                Location = new Position(hosp.Latitude, hosp.Longitude),
-                                Label = hospitals[2],
-                                Address = "Makati Medical Center, also known as Makati Med, is a tertiary hospital in Makati, Metro Manila, Philippines with more than 600 beds."
-                            }
-                        };
-                        break;
+                                new MapPinModel
+                                {
+                                    Location = new Position(14.5590, 121.0146),
+                                    Label = App.hospitals[2],
+                                    Address = "Makati Medical Center, also known as Makati Med, is a tertiary hospital in Makati, Metro Manila, Philippines with more than 600 beds."
+                                },
+                            },
+                            DaysAvailable = App.days[App.rnd.Next(App.days.Length)],
 
-                    case "The Medical City":
-                        hosp = new Location(14.5895, 121.0693);
-                        Doctors.Distance = Location.CalculateDistance(hosp, App.CurrentLocation, DistanceUnits.Kilometers);
-                        Doctors.MapPins = new ObservableCollection<MapPinModel>
+                        }
+                    },
+                    {
+                        3,
+                        new DoctorsAndSpecializationsModel
                         {
-                            new MapPinModel
+                            Hospital = "The Medical City",
+                            Distance = Location.CalculateDistance(14.5895, 121.0693, App.CurrentLocation, DistanceUnits.Kilometers),
+                            MapPins = new ObservableCollection<MapPinModel>
                             {
-                                Location = new Position(hosp.Latitude, hosp.Longitude),
-                                Label = hospitals[3],
-                                Address = "The Medical City has defined for itself the value proposition: 'Where Patients are Partners.' This phrase finds its fullest meaning when the patient is viewed not as a problem to be solved or a charge to be cared for, but as a partner in his own health."
-                            }
-                        };
-                        break;
-
-                    case "Manila Doctors Hospital":
-                        hosp = new Location(14.5820, 120.9829);
-                        Doctors.Distance = Location.CalculateDistance(hosp, App.CurrentLocation, DistanceUnits.Kilometers);
-                        Doctors.MapPins = new ObservableCollection<MapPinModel>
+                                new MapPinModel
+                                {
+                                    Location = new Position(14.5895, 121.0693),
+                                    Label = App.hospitals[3],
+                                    Address = "The Medical City has defined for itself the value proposition: 'Where Patients are Partners.' This phrase finds its fullest meaning when the patient is viewed not as a problem to be solved or a charge to be cared for, but as a partner in his own health."
+                                },
+                            },
+                            DaysAvailable = App.days[App.rnd.Next(App.days.Length)],
+                        }
+                    },
+                    {
+                        4,
+                        new DoctorsAndSpecializationsModel
                         {
-                            new MapPinModel
+                            Hospital = "Manila Doctors Hospital",
+                            Distance = Location.CalculateDistance(14.5820, 120.9829, App.CurrentLocation, DistanceUnits.Kilometers),
+                            MapPins = new ObservableCollection<MapPinModel>
                             {
-                                Location = new Position(hosp.Latitude, hosp.Longitude),
-                                Label = hospitals[4],
-                                Address = "Manila Doctors Hospital, simply referred to as MaDocs, is a tertiary hospital located in Ermita, Manila, Philippines. It was founded in the City of Manila in 1956 by the group of doctors. The hospital is currently owned by the Manila Medical Services, Inc.",
-                            }
-                        };
-                        break;
+                                new MapPinModel
+                                {
+                                    Location = new Position(14.5820, 120.9829),
+                                    Label = App.hospitals[4],
+                                    Address = "Manila Doctors Hospital, simply referred to as MaDocs, is a tertiary hospital located in Ermita, Manila, Philippines. It was founded in the City of Manila in 1956 by the group of doctors. The hospital is currently owned by the Manila Medical Services, Inc.",
+                                },
+                            },
+                            DaysAvailable = App.days[App.rnd.Next(App.days.Length)],
 
-                    case "Ospital ng Makati":
-                        hosp = new Location(14.5465, 121.0618);
-                        Doctors.Distance = Location.CalculateDistance(hosp, App.CurrentLocation, DistanceUnits.Kilometers);
-
-                        Doctors.MapPins = new ObservableCollection<MapPinModel>
+                        }
+                    },
+                    {
+                        5,
+                        new DoctorsAndSpecializationsModel
                         {
-                            new MapPinModel
+                            Hospital = "Ospital ng Makati",
+                            Distance = Location.CalculateDistance(14.5465, 121.0618, App.CurrentLocation, DistanceUnits.Kilometers),
+                            MapPins = new ObservableCollection<MapPinModel>
                             {
-                                Location = new Position(hosp.Latitude, hosp.Longitude),
-                                Label = hospitals[5],
-                                Address = "Ospital ng Makati",
-                            }
-                        };
-                        break;
-
-                    case "Pasig General Hospital":
-                        hosp = new Location(14.5722, 121.0994);
-                        Doctors.Distance = Location.CalculateDistance(hosp, App.CurrentLocation, DistanceUnits.Kilometers);
-                        Doctors.MapPins = new ObservableCollection<MapPinModel>
+                                new MapPinModel
+                                {
+                                    Location = new Position(14.5465, 121.0618),
+                                    Label = App.hospitals[5],
+                                    Address = "Ospital ng Makati",
+                                },
+                            },
+                            DaysAvailable = App.days[App.rnd.Next(App.days.Length)],
+                        }
+                    },
+                    {
+                        6,
+                        new DoctorsAndSpecializationsModel
                         {
-                            new MapPinModel
+                            Hospital = "Pasig General Hospital",
+                            Distance = Location.CalculateDistance(14.5722, 121.0994, App.CurrentLocation, DistanceUnits.Kilometers),
+                            MapPins = new ObservableCollection<MapPinModel>
                             {
-                                Location = new Position(hosp.Latitude, hosp.Longitude),
-                                Label = hospitals[6],
-                                Address = "Pasig City General Hospital",
-                            }
-                        };
-                        break;
+                                new MapPinModel
+                                {
+                                    Location = new Position(14.5722, 121.09942),
+                                    Label = App.hospitals[6],
+                                     Address = "Pasig City General Hospital",
+                                },
+                            },
+                            DaysAvailable = App.days[App.rnd.Next(App.days.Length)],
 
-                    case "Rizal Medical Center":
-                        hosp = new Location(14.5642, 121.0659);
-                        Doctors.Distance = Location.CalculateDistance(hosp, App.CurrentLocation, DistanceUnits.Kilometers);
-                        Doctors.MapPins = new ObservableCollection<MapPinModel>
+                        }
+                    },
+                    {
+                        7,
+                        new DoctorsAndSpecializationsModel
                         {
-                            new MapPinModel
+                            Hospital = "Rizal Medical Center",
+                            Distance = Location.CalculateDistance(14.5642, 121.0659, App.CurrentLocation, DistanceUnits.Kilometers),
+                            MapPins = new ObservableCollection<MapPinModel>
                             {
-                                Location = new Position(hosp.Latitude, hosp.Longitude),
-                                Label = hospitals[7],
-                                Address = "Rizal Medical Center",
-                            }
-                        };
-                        break;
-
-                    case "Mandaluyong Medical Center":
-                        hosp = new Location(14.5763, 121.0353);
-                        Doctors.Distance = Location.CalculateDistance(hosp, App.CurrentLocation, DistanceUnits.Kilometers);
-
-                        Doctors.MapPins = new ObservableCollection<MapPinModel>
+                                new MapPinModel
+                                {
+                                    Location = new Position(14.5642, 121.0659),
+                                    Label = App.hospitals[7],
+                                    Address = "Rizal Medical Center",
+                                },
+                            },
+                            DaysAvailable = App.days[App.rnd.Next(App.days.Length)],
+                        }
+                    },
+                    {
+                        8,
+                        new DoctorsAndSpecializationsModel
                         {
-                            new MapPinModel
+                            Hospital = "Mandaluyong Medical Center",
+                            Distance = Location.CalculateDistance(14.5763, 121.0353, App.CurrentLocation, DistanceUnits.Kilometers),
+                            MapPins = new ObservableCollection<MapPinModel>
                             {
-                                Location = new Position(hosp.Latitude, hosp.Longitude),
-                                Label = hospitals[8],
-                                Address = "Mandaluyong Medical Center",
-                            }
-                        };
-                        break;
+                                new MapPinModel
+                                {
+                                    Location = new Position(14.5763, 121.0353),
+                                    Label = App.hospitals[8],
+                                    Address = "Mandaluyong Medical Center",
+                                },
+                            },
+                            DaysAvailable = App.days[App.rnd.Next(App.days.Length)],
 
-                    case "Asian Hospital and Medical Center":
-                        hosp = new Location(14.4135, 121.0435);
-                        Doctors.Distance = Location.CalculateDistance(hosp, App.CurrentLocation, DistanceUnits.Kilometers);
-                        Doctors.MapPins = new ObservableCollection<MapPinModel>
+                        }
+                    },
+                    {
+                        9,
+                        new DoctorsAndSpecializationsModel
                         {
-                            new MapPinModel
+                            Hospital = "Asian Hospital and Medical Center",
+                            Distance = Location.CalculateDistance(14.4135, 121.0435, App.CurrentLocation, DistanceUnits.Kilometers),
+                            MapPins = new ObservableCollection<MapPinModel>
                             {
-                                Location = new Position(hosp.Latitude, hosp.Longitude),
-                                Label = hospitals[9],
-                                Address = "The Asian Hospital and Medical Center, established on March 15, 2002 with Jorge Garcia, MD, an alumnus of the Faculty of Medicine & Surgery of the University of Santo Tomas, as its founding chairman, is the first private tertiary hospital built in the southern part of Metro Manila.",
-                            }
-                        };
-                        break;
+                                new MapPinModel
+                                {
+                                    Location = new Position(14.4135, 121.0435),
+                                    Label = App.hospitals[9],
+                                    Address = "The Asian Hospital and Medical Center, established on March 15, 2002 with Jorge Garcia, MD, an alumnus of the Faculty of Medicine & Surgery of the University of Santo Tomas, as its founding chairman, is the first private tertiary hospital built in the southern part of Metro Manila.",
+                                },
+                            },
+                            DaysAvailable = App.days[App.rnd.Next(App.days.Length)],
+                        }
+                    },
+                    {
+                        10,
+                        new DoctorsAndSpecializationsModel
+                        {
+                            Hospital = "Olivarez General Hospital",
+                            Distance = Location.CalculateDistance(14.4792298, 120.9968424, App.CurrentLocation, DistanceUnits.Kilometers),
+                            MapPins = new ObservableCollection<MapPinModel>
+                            {
+                                new MapPinModel
+                                {
+                                    Location = new Position(14.4792298, 120.9968424),
+                                    Label = App.hospitals[10],
+                                    Address = "Olivarez General Hospital"
+                                },
+                            },
+                            DaysAvailable = App.days[App.rnd.Next(App.days.Length)],
 
-                    case "Olivarez General Hospital":
-                        hosp = new Location(14.4792298, 120.9968424);
-                        Doctors.Distance = Location.CalculateDistance(hosp, App.CurrentLocation, DistanceUnits.Kilometers);
-                        Doctors.MapPins = new ObservableCollection<MapPinModel>
-                        {
-                            new MapPinModel
-                            {
-                                Location = new Position(hosp.Latitude, hosp.Longitude),
-                                Label = hospitals[10],
-                                Address = "Olivarez General Hospital"
-                            }
-                        };
-                        break;
-                }
+                        }
+                    },
+                };
+
+                var random = App.rnd.Next(dict.Count);
+                Doctors.Hospital = dict[random].Hospital;
+                Doctors.DaysAvailable = dict[random].DaysAvailable;
+                Doctors.Distance = dict[random].Distance;
+                Doctors.MapPins = dict[random].MapPins;
+                Doctors.DoctorsSchedule = new DelegateCommand(async () => await GotoDoctorsAvailabilityPage());
             }
         }
 
         private async Task GotoDoctorsAvailabilityPage()
         {
+            Loading = true;
+            ViewsLoaded = false;
             var parameters = new NavigationParameters
             {
                 { "doctor", DocsWithMajor }
             };
             await navigationService.NavigateAsync("DoctorsSchedule", parameters);
+            ViewsLoaded = true;
+            Loading = false;
         }
         #endregion
     }

@@ -23,9 +23,10 @@ namespace ConsultApp.ViewModels
 
         public override void OnNavigatedTo(INavigationParameters parameters)
         {
+            Loading = true;
+            ViewsLoaded = false;
             var items = parameters["Diseases"] as ObservableCollection<DiagnosisModel>;
             Diseases = new ObservableCollection<DiagnosisModel>(items);
-            Loading = false;
             foreach (var item in Diseases)
             {
                 item.DoctorsPageCommand = new DelegateCommand<string>(async (specialty) => await DoctorsPage(specialty));
@@ -34,13 +35,16 @@ namespace ConsultApp.ViewModels
             if (Diseases.Count == 0)
             {
                 Empty = true;
-                View = false;
+                ViewsLoaded = false;
             }
             else
             {
                 Empty = false;
-                View = true;
+                ViewsLoaded = true;
             }
+
+            Loading = false;
+            ViewsLoaded = true;
 
             Microsoft.AppCenter.Analytics.Analytics.TrackEvent("DiagnosisPage", new System.Collections.Generic.Dictionary<string, string>
             {
@@ -55,13 +59,6 @@ namespace ConsultApp.ViewModels
         {
             get { return empty; }
             set { SetProperty(ref empty, value); }
-        }
-
-        private bool view;
-        public bool View
-        {
-            get { return view; }
-            set { SetProperty(ref view, value); }
         }
 
         private ObservableCollection<DiagnosisModel> diseases;
@@ -89,11 +86,15 @@ namespace ConsultApp.ViewModels
         #region Methods
         private async Task DoctorsPage(string specialty)
         {
+            Loading = true;
+            ViewsLoaded = false;
             var parameters = new NavigationParameters
             {
                 { "Major", specialty }
             };
             await navigationService.NavigateAsync("DoctorsPage", parameters);
+            ViewsLoaded = true;
+            Loading = false;
         }
         #endregion
     }

@@ -41,26 +41,19 @@ namespace ConsultApp.Droid
                 Window.AddFlags(WindowManagerFlags.LayoutInScreen);
                 Window.ClearFlags(WindowManagerFlags.Fullscreen);
             }
-
+            else
+            {
+                Window.SetStatusBarColor(Color.Rgb(230, 237, 255));
+                Window.Attributes.LayoutInDisplayCutoutMode = LayoutInDisplayCutoutMode.Never;
+                Window.AddFlags(WindowManagerFlags.LayoutInScreen);
+                Window.ClearFlags(WindowManagerFlags.Fullscreen);
+            }
             InitFontScale();
 
             LoadApplication(new App(new AndroidInitializer()));
         }
 
-        //protected override void OnStart()
-        //{
-        //    base.OnStart();
-
-        //    if ((int)Build.VERSION.SdkInt >= 23)
-        //    {
-        //        if (CheckSelfPermission(Manifest.Permission.AccessFineLocation) != Permission.Granted
-        //            || CheckSelfPermission(Manifest.Permission.AccessCoarseLocation) != Permission.Granted)
-        //        {
-        //            RequestPermissions(Permissions, RequestLocationId);
-        //        }
-        //    }
-        //}
-
+       
         public override void OnBackPressed() => Rg.Plugins.Popup.Popup.SendBackPressed(base.OnBackPressed);
 
 

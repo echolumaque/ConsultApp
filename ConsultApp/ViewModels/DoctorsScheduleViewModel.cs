@@ -111,17 +111,7 @@ namespace ConsultApp.ViewModels
 
         #region Methods
 
-        private void SelectDate(CalendarTappedEventArgs selectedDate)
-        {
-            consultationDate = selectedDate.DateTime.ToString("MMMM dd, yyyy");
-            if (DayAvailable != selectedDate.DateTime.DayOfWeek && selectedDate.DateTime < DateTime.Now)
-            {
-                Prism.PrismApplicationBase.Current.MainPage.DisplayAlert
-                    ($"{Doctor} is not available on the selected day",
-                    $"{Doctor} is only available every {DayAvailable}. Please select your vacant available day every {DayAvailable} on the future in order to schedule a consultation.",
-                    "Okay");
-            }
-        } 
+        private void SelectDate(CalendarTappedEventArgs selectedDate) => consultationDate = selectedDate.DateTime.ToString("MMMM dd, yyyy");
 
         private async Task AddToPendingConsultation()
         {
@@ -144,10 +134,9 @@ namespace ConsultApp.ViewModels
 
                 if (DayAvailable == DateTime.Parse(consultationDate).DayOfWeek && DateTime.Parse(consultationDate) > DateTime.Now)
                 {
-                    await App.RetryPolicy(async () => await App.ConnectionString.InsertAsync(pendingConsultation));
+                    await App.ConnectionString.InsertAsync(pendingConsultation);
                     toast.ShowToast("Successfully scheduled consultation!");
                     await navigationService.GoBackToRootAsync();
-                    Xamarin.Essentials.Preferences.Set("navigatable", true);
                 }
                 else
                 {
@@ -156,6 +145,7 @@ namespace ConsultApp.ViewModels
             }
             catch (Exception)
             {
+
                 toast.ShowToast("Please select a date.");
             }
         }
